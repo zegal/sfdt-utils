@@ -4,7 +4,9 @@ import typescript from 'rollup-plugin-typescript'
 export default {
     input: {
         index: 'src/index.tsx',
-        processInlines: 'src/processInlines.tsx'
+        populate: 'src/populate.tsx',
+        processInlines: 'src/processInlines.tsx',
+        updateBookmarkContent: 'src/updateBookmarkContent.tsx'
     },
     output: [
         // {

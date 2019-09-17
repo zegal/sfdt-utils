@@ -1,5 +1,6 @@
 export {default as processInlines} from './processInlines'
 export {default as populate} from './populate'
+export {default as updateBookmarkContent} from './updateBookmarkContent'
 
 // @todo:
 // is selection empty

@@ -1,6 +1,6 @@
 {
   "private": false,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
@@ -30,6 +30,10 @@
     "prepublish": "yarn build"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "babel-jest": "^24.9.0",
+    "lodash": "^4.17.15",
     "rollup-plugin-terser": "^5.1.2"
   }
 }
