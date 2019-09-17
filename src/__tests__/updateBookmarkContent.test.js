@@ -13,7 +13,7 @@ const documentEditor = {
 }
 
 describe('updateBookmarkContent', function() {
-	test('', function() {
+	test('coming soon', function() {
 		updateBookmarkContent('one', 'C', documentEditor)
 	})
 })

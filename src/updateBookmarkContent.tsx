@@ -17,9 +17,6 @@ const updater: (name: string, content: string, documentEditor: any) => boolean =
 	documentEditor.selection.selectBookmark(name)
 	documentEditor.editor.insertText(content)
 
-	console.log('name', name)
-	console.log('content', content)
-
 	return true
 }
 
