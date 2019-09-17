@@ -1,0 +1,35 @@
+{
+  "private": false,
+  "version": "0.0.6",
+  "name": "sfdt-utils",
+  "description": "SFDT Utils",
+  "author": "Adam Tombleson <rekarnar@gmail.com>",
+  "main": "index.js",
+  "files": [
+    "*.js",
+    "!rollup.config.js"
+  ],
+  "repository": "https://github.com/zegal/sfdt-utils.git",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@types/jest": "^24.0.18",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
+    "jest": "^24.9.0",
+    "react-docgen-typescript-loader": "^3.2.0",
+    "rollup": "^1.21.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "ts-jest": "^24.1.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.6.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -cw",
+    "prepublish": "yarn build"
+  },
+  "dependencies": {
+    "rollup-plugin-terser": "^5.1.2"
+  }
+}
