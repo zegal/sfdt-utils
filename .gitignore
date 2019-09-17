@@ -23,15 +23,8 @@ coverage
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-build
-
 # Dependency directories
 node_modules/
-
-# TypeScript v1 declaration files
-typings/
 
 # Optional npm cache directory
 .npm
@@ -52,4 +45,4 @@ typings/
 .env
 
 # build files go in root
-*.js
+# *.js
