@@ -1,0 +1,9 @@
+{
+	"include": [
+		"./src/*"
+	],
+	"exclude": ["node_modules", "types"],
+	"typeRoots": [
+		"./types/sfdt.d.ts"
+	]
+}
