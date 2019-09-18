@@ -6,7 +6,8 @@ export default {
         index: 'src/index.tsx',
         populate: 'src/populate.tsx',
         processInlines: 'src/processInlines.tsx',
-        updateBookmarkContent: 'src/updateBookmarkContent.tsx'
+        updateBookmarkContent: 'src/updateBookmarkContent.tsx',
+        insertBookmark: 'src/insertBookmark.tsx'
     },
     output: [
         // {

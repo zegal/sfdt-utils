@@ -1,5 +1,5 @@
 const hasBookmark: (name: string, documentEditor: any) => boolean = (name, documentEditor) => {
-	return documentEditor.getBookmarks().filter((bookmark) => bookmark === name)
+	return !!documentEditor.getBookmarks().find((bookmark) => bookmark === name)
 }
 
 export default hasBookmark

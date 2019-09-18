@@ -42,7 +42,7 @@ export default (data, sfdt) => {
 			// if (processing[inline.name]) {
 				if (!doneProcessing[currentlyProcessing]) {
 					debug && console.warn('----replacing', newInline)
-					if (data[currentlyProcessing] !== undefined) {
+					if (data[currentlyProcessing] !== undefined || data[currentlyProcessing] !== '') {
 						newInline.text = data[currentlyProcessing] + ' '
 
 						if (newInline.characterFormat) {
@@ -56,6 +56,7 @@ export default (data, sfdt) => {
 				} else {
 					// no else, but just a comment to make it clear
 					// we are dropping this line
+					// because we only use one child inside a bookmark
 				}
 
 				return
@@ -81,6 +82,8 @@ export default (data, sfdt) => {
 		})
 
 		// console.log('Processing results:', {processing, doneProcessing})
+
+		dataMode = false
 
 		return newInlines
 	}
