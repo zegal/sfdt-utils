@@ -1,5 +1,6 @@
-import {secureEval} from 'secure-eval';
+import {secureEval} from 'secure-eval'
 import {each, isNumber} from 'lodash'
+import updateBookmarkContent from './updateBookmarkContent'
 
 const toggleBookmark = (name: string, data: any, condition: string, sfdt: any) => {
 	console.log('toggleBookmark name', name)
@@ -25,13 +26,15 @@ const toggleBookmark = (name: string, data: any, condition: string, sfdt: any) =
 		}, '*')
 	}
 	`
-
 	console.log('hax', hax)
 
 	secureEval(hax).then((evalResult) => {
 		console.log('evil()', evalResult)
 		if (evalResult.result) {
 			// toggle field
+			updateBookmarkContent()
+		} else {
+			updateBookmarkContent('', sfdt)
 		}
 	})
 
