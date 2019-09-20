@@ -1,8 +1,8 @@
-const debug = false
-
 import process from './processInlines'
 
-export default (data, sfdt) => {
+const debug = false
+
+export default (data, sfdt, prefix = 'DATA::') => {
 	debug && console.log('data, sfdt', {data, sfdt})
 
 	const processInlines = (inlines) => {
@@ -25,7 +25,7 @@ export default (data, sfdt) => {
 			if (inline.bookmarkType === 1) {
 				processing[inline.name] = false
 				debug && console.log('Stopping processing', inline.name, inline)
-				if (inline.name.includes('DATA::')) {
+				if (inline.name.includes(prefix)) {
 					dataMode = false
 				}
 
@@ -64,7 +64,7 @@ export default (data, sfdt) => {
 
 			// bookmark start
 			if (inline.bookmarkType === 0) {
-				if (inline.name.includes('DATA::')) {
+				if (inline.name.includes(prefix)) {
 					dataMode = true
 				}
 
@@ -82,8 +82,6 @@ export default (data, sfdt) => {
 		})
 
 		// console.log('Processing results:', {processing, doneProcessing})
-
-		dataMode = false
 
 		return newInlines
 	}

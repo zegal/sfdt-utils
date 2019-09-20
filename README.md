@@ -22,3 +22,8 @@ Note: this is why all the files are in the root folder (so we dont need a path f
 
 ...
 
+
+## To run tests:
+
+```
+```

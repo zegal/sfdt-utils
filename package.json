@@ -34,6 +34,8 @@
     "@babel/preset-typescript": "^7.6.0",
     "babel-jest": "^24.9.0",
     "lodash": "^4.17.15",
-    "rollup-plugin-terser": "^5.1.2"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "secure-eval": "^0.4.1"
   }
 }
