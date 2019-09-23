@@ -1,7 +1,7 @@
 // import {sfdt as sfdtType} from './types'
 import hasBookmark from './hasBookmark'
 
-const debug = true
+const debug = false
 
 /**
 * Update a bookmark

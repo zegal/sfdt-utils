@@ -1,6 +1,5 @@
 import typescript from 'rollup-plugin-typescript'
 // import terser from 'rollup-plugin-terser'
-import resolve from 'rollup-plugin-node-resolve';
 
 export default {
     input: {
@@ -10,10 +9,12 @@ export default {
         updateBookmarkContent: 'src/updateBookmarkContent.tsx',
         insertBookmark: 'src/insertBookmark.tsx',
         toggleBookmark: 'src/toggleBookmark.tsx',
+        getSFDTjson: 'src/getSFDTjson.tsx',
+        getSFDTstring: 'src/getSFDTstring.tsx',
+        queryBookmark: 'src/queryBookmark.tsx',
     },
     external: [
         'lodash',
-        // 'secure-eval'
     ],
     output: [
         // {
@@ -26,10 +27,6 @@ export default {
         }
     ],
 	plugins: [
-        resolve({
-            extensions: ['.ts', '.js'],
-            only: ['secure-eval'],
-        }),
 		// terser(),
 		typescript()
 	]

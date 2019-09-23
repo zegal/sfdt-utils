@@ -1,4 +1,7 @@
+import getSFDT from './utils'
+
 import populate from '../populate'
+
 import get from 'lodash/get'
 
 const data = {
@@ -19,13 +22,7 @@ const inlines = [{
 	text: 'ending',
 }]
 
-const sfdt = {
-	sections: [{
-		blocks: [{
-			inlines
-		}]
-	}]
-}
+const sfdt = getSFDT(inlines)
 
 const getInlines = (sfdt, position = 0) => {
 	return get(sfdt, `sections[${position}].blocks[${position}].inlines`, [])

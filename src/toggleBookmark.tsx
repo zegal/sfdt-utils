@@ -1,44 +1,84 @@
-import {secureEval} from 'secure-eval'
-import {each, isNumber} from 'lodash'
+import {map} from 'lodash'
 import updateBookmarkContent from './updateBookmarkContent'
+import process from './processInlines'
+import {
+	isMatchingBookmark,
+	isBookmarkStart,
+	isBookmarkEnd,
+} from './queryBookmark'
 
-const toggleBookmark = (name: string, data: any, condition: string, sfdt: any) => {
+const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 	console.log('toggleBookmark name', name)
-	console.log('condition', condition)
-	console.log('data', data)
+	console.log('toggleBookmark mode', toggleOn ? 'on' : 'off')
 
-	let context = ''
-	each(data, (value, key) => {
-		context += `
-			const ${key} = ${isNumber(value) ? value : ('"' + value + '"')}
-		`
-	})
+	if (toggleOn) {
+		// toggle field on
+		const processInlines = (inlines) => {
+			const newInlines: any[] = []
 
-	// console.log('context', context)
+			let inMatchingBookmark = false
 
-	const hax = `
-	{
-		${context}
+			inlines.forEach((inline) => {
+				let defaultAdd = true
 
-		window.parent.postMessage({
-			type: 'secure-eval-iframe-result',
-			result: (${condition})
-		}, '*')
-	}
-	`
-	console.log('hax', hax)
+				if (isMatchingBookmark(inline, name)) {
+					if (isBookmarkEnd(inline)) {
+						inMatchingBookmark = false
+					}
 
-	secureEval(hax).then((evalResult) => {
-		console.log('evil()', evalResult)
-		if (evalResult.result) {
-			// toggle field
-			updateBookmarkContent()
-		} else {
-			updateBookmarkContent('', sfdt)
+					if (isBookmarkStart(inline)) {
+						inMatchingBookmark = true
+					}
+				}
+
+				if (inMatchingBookmark) {
+					if (inline.fieldType === 2) {
+						defaultAdd = false
+					}
+
+					if (inline.hasFieldEnd === true) {
+						defaultAdd = false
+					}
+				}
+
+				if (defaultAdd) {
+					newInlines.push(inline)
+				}
+
+			})
+
+			return newInlines
 		}
-	})
 
-	console.log('sfdt', sfdt)
+		process(sfdt, processInlines)
+	} else {
+		// toggle field off
+		const processInlines = (inlines) => {
+			const newInlines: any[] = []
+
+			inlines.forEach((inline) => {
+				if (isBookmarkEnd(inline)) {
+					newInlines.push({
+						fieldType: 2,
+					})
+				}
+
+				newInlines.push(inline)
+
+				if (isBookmarkStart(inline)) {
+					newInlines.push({
+						'hasFieldEnd': true,
+					})
+				}
+			})
+
+			return newInlines
+		}
+
+		process(sfdt, processInlines)
+	}
+
+	return sfdt
 }
 
 export default toggleBookmark
