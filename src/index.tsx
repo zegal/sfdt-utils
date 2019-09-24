@@ -4,6 +4,7 @@ export {default as processInlines} from './processInlines'
 export {default as updateBookmarkContent} from './updateBookmarkContent'
 export {default as insertBookmark} from './insertBookmark'
 export {default as toggleBookmark} from './toggleBookmark'
+export {default as bookmarkHighlight} from './bookmarkHighlight'
 
 import {
 	isMatchingBookmark,

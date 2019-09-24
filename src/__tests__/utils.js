@@ -1,3 +1,6 @@
+import get from 'lodash/get'
+import uniqueId from 'lodash/uniqueId'
+
 export const getSFDT = (inlines) => {
 	console.log('inlines', inlines)
 
@@ -11,6 +14,20 @@ export const getSFDT = (inlines) => {
 
 	return sfdt
 
+}
+
+export const getBookmark = () => {
+	const name = '_bm_' + uniqueId()
+
+	return [{
+		bookmarkType: 0,
+		name: 'DATA::' + name,
+	}, {
+		text: 'REPLACE-ME-' + name,
+	}, {
+		bookmarkType: 1,
+		name: 'DATA::' + name,
+	}]
 }
 
 export const getInlines = () => {
@@ -33,4 +50,8 @@ export const getInlines = () => {
 	return inlines
 }
 
-export const getFirstInlines = (sfdt) => sfdt.sections[0].blocks[0].inlines
+export const getFirstInlines = (sfdt) => getInline(0)
+
+export const getInline = (sfdt, position = 0) => {
+	return get(sfdt, `sections[${position}].blocks[${position}].inlines`, [])
+}

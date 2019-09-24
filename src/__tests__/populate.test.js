@@ -1,43 +1,29 @@
-import getSFDT from './utils'
+import {
+	getSFDT,
+	getInline,
+	getInlines,
+} from './utils'
 
 import populate from '../populate'
-
-import get from 'lodash/get'
 
 const data = {
 	'DATA::K1': '123'
 }
 
-const inlines = [{
-	text: 'starting',
-}, {
-	bookmarkType: 0,
-	name: 'DATA::K1',
-}, {
-	text: 'REPLACE-ME',
-}, {
-	bookmarkType: 1,
-	name: 'DATA::K1',
-}, {
-	text: 'ending',
-}]
+const inlines = getInlines()
 
 const sfdt = getSFDT(inlines)
 
-const getInlines = (sfdt, position = 0) => {
-	return get(sfdt, `sections[${position}].blocks[${position}].inlines`, [])
-}
-
 describe('SFDT Parser', function() {
 	test('populate', function() {
-		const orignalLength = getInlines(sfdt).length
+		const orignalLength = getInline(sfdt).length
 
 		// run function we are testing
 		const result = populate(data, sfdt)
 		// console.log('result', result)
 
 		// get results we want to look at
-		const currentInlines = getInlines(result)
+		const currentInlines = getInline(result)
 		// console.log('result', currentInlines)
 
 		// make sure we get the same amount of data back, no additions.
@@ -57,14 +43,14 @@ describe('SFDT Parser', function() {
 			}]
 		}
 
-		const orignalLength = getInlines(sfdtWithData).length
+		const orignalLength = getInline(sfdtWithData).length
 		sfdtWithData.sections[0].blocks[0].inlines[2].text = '123'
 
 		const result = populate(data, sfdtWithData)
 		// console.log('result', result)
 
 		// get results we want to look at
-		const currentInlines = getInlines(result)
+		const currentInlines = getInline(result)
 		// console.log('result', currentInlines)
 
 		// make sure we get the same amount of data back, no additions.

@@ -8,8 +8,8 @@ import {
 } from './queryBookmark'
 
 const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
-	console.log('toggleBookmark name', name)
-	console.log('toggleBookmark mode', toggleOn ? 'on' : 'off')
+	// console.log('toggleBookmark name', name)
+	// console.log('toggleBookmark mode', toggleOn ? 'on' : 'off')
 
 	if (toggleOn) {
 		// toggle field on
@@ -32,6 +32,7 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 				}
 
 				if (inMatchingBookmark) {
+					// console.log('FOUND, DOING TOGGLE ON')
 					if (inline.fieldType === 2) {
 						defaultAdd = false
 					}
@@ -56,16 +57,24 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		const processInlines = (inlines) => {
 			const newInlines: any[] = []
 
+			let inMatchingBookmark = false
+
 			inlines.forEach((inline) => {
-				if (isBookmarkEnd(inline)) {
+				if (isMatchingBookmark(inline, name)) {
+					// console.log('Matched:', name)
+					inMatchingBookmark = true
+				}
+
+				if (isBookmarkEnd(inline) && inMatchingBookmark) {
 					newInlines.push({
 						fieldType: 2,
 					})
+					inMatchingBookmark = false
 				}
 
 				newInlines.push(inline)
 
-				if (isBookmarkStart(inline)) {
+				if (isBookmarkStart(inline) && inMatchingBookmark) {
 					newInlines.push({
 						'hasFieldEnd': true,
 					})

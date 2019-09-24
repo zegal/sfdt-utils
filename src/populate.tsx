@@ -1,6 +1,6 @@
 import process from './processInlines'
 
-const debug = false
+const debug = true
 
 export default (data, sfdt, prefix = 'DATA::') => {
 	debug && console.log('data, sfdt', {data, sfdt})
@@ -41,8 +41,9 @@ export default (data, sfdt, prefix = 'DATA::') => {
 			if (dataMode) {
 			// if (processing[inline.name]) {
 				if (!doneProcessing[currentlyProcessing]) {
-					debug && console.warn('----replacing', newInline)
-					if (data[currentlyProcessing] !== undefined || data[currentlyProcessing] !== '') {
+					debug && console.log('Replacing:', newInline, data[currentlyProcessing])
+					if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
+						console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
 						newInline.text = data[currentlyProcessing] + ' '
 
 						if (newInline.characterFormat) {
