@@ -1,6 +1,6 @@
 import process from './processInlines'
 
-const debug = true
+const debug = false
 
 export default (data, sfdt, prefix = 'DATA::') => {
 	debug && console.log('data, sfdt', {data, sfdt})
