@@ -1,6 +1,8 @@
 export {default as populate} from './populate'
 export {default as processInlines} from './processInlines'
 
+export {default as getCurrentSelection} from './getCurrentSelection'
+
 export {default as updateBookmarkContent} from './updateBookmarkContent'
 export {default as insertBookmark} from './insertBookmark'
 export {default as toggleBookmark} from './toggleBookmark'

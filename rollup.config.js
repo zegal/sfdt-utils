@@ -3,27 +3,24 @@ import typescript from 'rollup-plugin-typescript'
 
 export default {
     input: {
-        index: 'src/index.tsx',
-        populate: 'src/populate.tsx',
-        processInlines: 'src/processInlines.tsx',
+        index: 'src/index.ts',
+        populate: 'src/populate.ts',
+        processInlines: 'src/processInlines.ts',
+        getCurrentSelection: 'src/getCurrentSelection.ts',
 
-        updateBookmarkContent: 'src/updateBookmarkContent.tsx',
-        insertBookmark: 'src/insertBookmark.tsx',
-        toggleBookmark: 'src/toggleBookmark.tsx',
-        queryBookmark: 'src/queryBookmark.tsx',
-        bookmarkHighlight: 'src/bookmarkHighlight.tsx',
+        updateBookmarkContent: 'src/updateBookmarkContent.ts',
+        insertBookmark: 'src/insertBookmark.ts',
+        toggleBookmark: 'src/toggleBookmark.ts',
+        queryBookmark: 'src/queryBookmark.ts',
+        bookmarkHighlight: 'src/bookmarkHighlight.ts',
 
-        getSFDTjson: 'src/getSFDTjson.tsx',
-        getSFDTstring: 'src/getSFDTstring.tsx',
+        getSFDTjson: 'src/getSFDTjson.ts',
+        getSFDTstring: 'src/getSFDTstring.ts',
     },
     external: [
         'lodash',
     ],
     output: [
-        // {
-        //     dir: 'esm',
-        //     format: 'esm'
-        // },
         {
             dir: '.',
             format: 'cjs'
