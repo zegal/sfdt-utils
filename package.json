@@ -1,6 +1,6 @@
 {
   "private": false,
-  "version": "0.0.10",
+  "version": "0.0.11",
   "name": "sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
@@ -27,7 +27,32 @@
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -cw",
+    "test": "yarn jest --coverage",
     "prepublish": "yarn build"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "**/src/*.{ts,js}",
+      "!**/node_modules/**"
+    ],
+    "coverageReporters": [
+      "json-summary",
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 50,
+        "statements": 50,
+        "functions": 50,
+        "branches": 40
+      }
+    }
   },
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
