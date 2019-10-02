@@ -59,25 +59,46 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 			let inMatchingBookmark = false
 
-			inlines.forEach((inline) => {
+			inlines.forEach((inline, index) => {
+				const nextInline = inlines[index + 1]
+				const prevInline = inlines[index - 1]
+
 				if (isMatchingBookmark(inline, name)) {
 					// console.log('Matched:', name)
 					inMatchingBookmark = true
 				}
 
 				if (isBookmarkEnd(inline) && inMatchingBookmark) {
-					newInlines.push({
-						fieldType: 2,
-					})
+					if (prevInline && (prevInline.fieldType === undefined)) {
+						// console.log('ADDING end')
+						newInlines.push({
+							fieldType: 2,
+						})
+					}
+
+					// make sure to only add once
+					// so we toggle this flag after anytime we match the end of the bookmark
 					inMatchingBookmark = false
 				}
 
 				newInlines.push(inline)
 
 				if (isBookmarkStart(inline) && inMatchingBookmark) {
-					newInlines.push({
-						'hasFieldEnd': true,
-					})
+
+					// check to see if bookmark is already off
+					// and if so we dont need to add another 'off' flag
+					if (nextInline && (nextInline.fieldType === undefined)) {
+						// console.log('ADDING start')
+						newInlines.push({
+							'hasFieldEnd': true,
+
+							// these are added automatically by SF if they are not here
+							// so we add them in here manually now too so that tests can check for em
+							'characterFormat': {},
+							'fieldType': 0,
+						})
+					}
+
 				}
 			})
 
