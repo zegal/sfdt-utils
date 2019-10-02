@@ -43,7 +43,7 @@ export default (data, sfdt, prefix = 'DATA::') => {
 				if (!doneProcessing[currentlyProcessing]) {
 					debug && console.log('Replacing:', newInline, data[currentlyProcessing])
 					if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
-						console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
+						// console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
 						newInline.text = data[currentlyProcessing] + ' '
 
 						if (newInline.characterFormat) {

@@ -70,7 +70,7 @@ describe('toggleBookmark', function() {
 		})
 	})
 
-	describe.only('Nested + Toggle off x2', function() {
+	describe('Nested + Toggle off x2', function() {
 		const nestedBookmarkSfdt = getSFDT(false, list2Inlines)
 
 		test('Toggle off x2', function() {
