@@ -23,6 +23,7 @@ export {
 export {default as getSFDTjson} from './getSFDTjson'
 export {default as getSFDTstring} from './getSFDTstring'
 
+export {default as showCaret} from './showCaret'
 // @todo:
 
 // is selection empty
