@@ -45,4 +45,5 @@ node_modules/
 .env
 
 # build files go in root
-# *.js
+*.js
+!rollup.config.js
