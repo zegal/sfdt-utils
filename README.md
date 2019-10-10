@@ -14,20 +14,29 @@ Eg:
 import toggleBookmark from 'sfdt-utils/toggleBookmark'
 ```
 
+There are two groups of functions:
+
+1. Operations on SFDT objects directly
+2. Batched calls to the document editor API
+
+
+
 ## API
 
-### Has Bookmark
+### Has Bookmark - Detect if a bookmark exists
 
 ```
 /**
 * @param {String} name - Bookmark name
 * @param {Object} documentEditor - Instance of the SF document editor
+*
 * @returns {Boolean} - True if the bookmark exists in the editor
 */
+
 hasBookmark(name, documentEditor)
 ```
 
-### Toggle Bookmark
+### Toggle Bookmark - Hide or show the content of a bookmark
 
 ```
 /**
@@ -37,6 +46,7 @@ hasBookmark(name, documentEditor)
 *
 * @returns {Object} updatedSFDT
 */
+
 const updatedSFDT = toggleBookmark(SFDT, bookmarkName, toggleOn)
 ```
 

@@ -7,6 +7,15 @@ import {
 	isBookmarkEnd,
 } from './queryBookmark'
 
+/**
+* Toggle Bookmark - Hide or show the content of a bookmark
+*
+* @param {Object} SFDT - The SF SFDT JSON object
+* @param {String} bookmarkName - Bookmark to toggle on or off
+* @param {Boolean} toggleOn - True to show bookmark content, false to hide it
+*
+* @returns {Object} updatedSFDT
+*/
 const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 	// console.log('toggleBookmark name', name)
 	// console.log('toggleBookmark mode', toggleOn ? 'on' : 'off')

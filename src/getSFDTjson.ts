@@ -1,4 +1,6 @@
-
+/**
+* @param {Object} documentEditor - Instance of the SF document editor
+*/
 export default ({documentEditor}) => {
 	return documentEditor.saveAsBlob('Sfdt').then(async (blob) => {
 		// console.log('blob', blob)

@@ -1,5 +1,8 @@
 import getSFDTjson from './getSFDTjson'
 
+/**
+* @param {Object} documentEditor - Instance of the SF document editor
+*/
 export default ({documentEditor, sections = false}) => {
 	return getSFDTjson({documentEditor}).then((json) => {
 		if (json.error) {

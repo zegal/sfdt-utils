@@ -9,8 +9,13 @@ const debug = false
 /**
 * Insert a bookmark at the currently selected point in the editor
 *
-* @param {String}  -
-* @returns {String}
+* @param {Object} options - {
+*                         	bookmarkName: String = Name of the bookmark to insert
+*                         	highlightColor?: String =  Hex code of background: eg: '#FFFFFF'
+*                         	bookmarkContent?: string = Change contents of the bookmark to this string
+*                         }
+*
+* @returns {Object} documentEditor
 */
 const insertBookmark: (options: options, documentEditor: any) => void = (options, documentEditor) => {
 	debug && console.log('Bookmark name:', options.bookmarkName)
