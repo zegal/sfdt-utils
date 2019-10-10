@@ -11,21 +11,34 @@ Here we have compiled a group of utils so that we can easily do some more advanc
 Eg:
 
 ```
-import processInlines from 'sfdt-utils/processInlines'
+import toggleBookmark from 'sfdt-utils/toggleBookmark'
 ```
-
-Note: this is why all the files are in the root folder (so we dont need a path for importing)
 
 ## API
 
-### Process Inlines
+### Has Bookmark
 
-...
+```
+/**
+* @param {String} name - Bookmark name
+* @param {Object} documentEditor - Instance of the SF document editor
+* @returns {Boolean} - True if the bookmark exists in the editor
+*/
+hasBookmark(name, documentEditor)
+```
 
-### Populate
+### Toggle Bookmark
 
-...
-
+```
+/**
+* @param {Object} SFDT - The SF SFDT JSON object
+* @param {String} bookmarkName - Bookmark to toggle on or off
+* @param {Boolean} toggleOn - True to show bookmark content, false to hide it
+*
+* @returns {Object} updatedSFDT
+*/
+const updatedSFDT = toggleBookmark(SFDT, bookmarkName, toggleOn)
+```
 
 ## To run tests:
 
