@@ -1,10 +1,13 @@
-# sfdt-utils
+# sfdt-utils - Util functions for working with SFDT objects
 
-`Util functions for working with SFDT objects`
-
-Working with SFDT is hard and the JS API from SF provides us the basics to do that.
+Working with SFDT is hard and the JS API from SF provides us only the basics to do that.
 
 Here we have compiled a group of utils so that we can easily do some more advanced things.
+
+There are two groups of functions:
+
+1. Operations on SFDT objects directly, eg: toggleBookmark
+2. Batched calls to the document editor API, eg: hasBookmark
 
 ## Usage:
 
@@ -13,13 +16,6 @@ Eg:
 ```
 import toggleBookmark from 'sfdt-utils/toggleBookmark'
 ```
-
-There are two groups of functions:
-
-1. Operations on SFDT objects directly
-2. Batched calls to the document editor API
-
-
 
 ## API
 
