@@ -1,5 +1,3 @@
-import {map} from 'lodash'
-import updateBookmarkContent from './updateBookmarkContent'
 import process from './processInlines'
 import {
 	isMatchingBookmark,
