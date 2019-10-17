@@ -6,7 +6,9 @@ export default {
         index: 'src/index.ts',
         populate: 'src/populate.ts',
         processInlines: 'src/processInlines.ts',
+
         getCurrentSelection: 'src/getCurrentSelection.ts',
+        unselect: 'src/unselect.ts',
 
         updateBookmarkContent: 'src/updateBookmarkContent.ts',
         insertBookmark: 'src/insertBookmark.ts',
