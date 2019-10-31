@@ -20,10 +20,54 @@ import toggleBookmark from 'sfdt-utils/toggleBookmark'
 ## API
 
 ### bookmarkAction
+
+```
+/**
+* @param {String}  -
+*/
+
+bookmarkAction()
+```
+
 ### bookmarkHighlight
+
+```
+/**
+* @param {String}  -
+*/
+
+bookmarkHighlight()
+```
+
 ### getCurrentSelection
+
+```
+/**
+* @param {String}  -
+*/
+
+getCurrentSelection()
+```
+
 ### getSFDTjson
+
+```
+/**
+* @param {String}  -
+*/
+
+getSFDTjson()
+```
+
 ### getSFDTstring
+
+```
+/**
+* @param {String}  -
+*/
+
+getSFDTstring()
+```
 
 ### Has Bookmark - Detect if a bookmark exists
 
@@ -35,7 +79,7 @@ import toggleBookmark from 'sfdt-utils/toggleBookmark'
 * @returns {Boolean} - True if the bookmark exists in the editor
 */
 
-hasBookmark(name, documentEditor)
+hasBookmark('my-bookmark-name', documentEditor)
 ```
 
 ### insertBookmark
@@ -55,7 +99,7 @@ hasBookmark(name, documentEditor)
 * @returns {Object} updatedSFDT
 */
 
-const updatedSFDT = toggleBookmark(SFDT, bookmarkName, toggleOn)
+const updatedSFDT = toggleBookmark(SFDT, 'my-bookmark-name', true)
 
 ```
 ### unselect
@@ -68,7 +112,7 @@ const updatedSFDT = toggleBookmark(SFDT, bookmarkName, toggleOn)
 * @param {String} documentEditor - live documentEditor object
 */
 
-updateBookmarkContent(name, content, documentEditor)
+updateBookmarkContent('my-bookmark-name', 'new content!', documentEditor)
 
 ```
 
