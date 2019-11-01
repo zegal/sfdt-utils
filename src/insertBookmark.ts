@@ -1,3 +1,5 @@
+import bookmarkHighlight from './bookmarkHighlight'
+
 type options = {
 	bookmarkName: string;
 	bookmarkContent: string;
@@ -20,13 +22,15 @@ const debug = false
 const insertBookmark: (options: options, documentEditor: any) => void = (options, documentEditor) => {
 	debug && console.log('Bookmark name:', options.bookmarkName)
 
-	// need to highlight first, before insert text
-	if (options.highlightColor) {
-		debug && console.log('Adding highlight:', options.highlightColor)
-		documentEditor.selection.characterFormat.highlightColor = options.highlightColor
-	}
-
 	documentEditor.editor.insertBookmark(options.bookmarkName)
+
+	if (options.highlightColor) {
+		// NOTE: setTimeout is required, else sometimes this will not apply highlight properly
+		setTimeout(() => {
+			// 	debug && console.log('Adding highlight:', options.highlightColor)
+			bookmarkHighlight(options.bookmarkName, documentEditor, options.highlightColor)
+		}, 0)
+	}
 
 	if (options.bookmarkContent) {
 		debug && console.log('Bookmark content:', options.bookmarkContent)
