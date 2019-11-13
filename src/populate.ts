@@ -1,3 +1,4 @@
+// DEPRECATED, use sfdt/blocksProcess
 import process from './processInlines'
 
 const debug = false

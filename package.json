@@ -1,6 +1,6 @@
 {
   "private": false,
-  "version": "0.0.15",
+  "version": "0.1.0",
   "name": "sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
@@ -59,6 +59,7 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-typescript": "^7.6.0",
     "@syncfusion/ej2-documenteditor": "^17.3.16",
+    "@types/lodash": "^4.14.146",
     "babel-jest": "^24.9.0",
     "lodash": "^4.17.15",
     "rollup-plugin-node-resolve": "^5.2.0",

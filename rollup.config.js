@@ -19,6 +19,8 @@ export default {
         getSFDTjson: 'src/getSFDTjson.ts',
         getSFDTstring: 'src/getSFDTstring.ts',
         showCaret: 'src/showCaret.ts',
+
+        SFDTbookmarkHighlight: 'src/sfdt/bookmarkHighlight.ts',
     },
     external: [
         'lodash',

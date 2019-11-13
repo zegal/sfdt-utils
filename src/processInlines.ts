@@ -1,4 +1,4 @@
-
+// DEPRECATED, use sfdt/blocksProcess
 export default (sfdt, callback) => {
 	if (!sfdt.sections) {
 		console.warn('Missing: sfdt.sections', sfdt)

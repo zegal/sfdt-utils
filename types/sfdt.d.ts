@@ -1,3 +1,14 @@
+interface inline {
+	characterFormat?: any
+	name?: string
+	bookmarkType?: number
+}
+
+interface blocks {
+	paragraphFormat: any
+	inlines: inline[]
+}
+
 interface sfdt {
 	sections: any;
 }

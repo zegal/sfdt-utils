@@ -25,8 +25,10 @@ export {default as getSFDTjson} from './getSFDTjson'
 export {default as getSFDTstring} from './getSFDTstring'
 
 export {default as showCaret} from './showCaret'
-// @todo:
 
+// export {default as SFDTbookmarkHighlight} from './sfdt/bookmarkHighlight'
+
+// @todo:
 // is selection empty
 // let selection: string = documentEditor.selection.text;
 // if (!documentEditor.selection.isEmpty && /\S/.test(selection)) {
