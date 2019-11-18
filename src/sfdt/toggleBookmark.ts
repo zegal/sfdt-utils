@@ -4,7 +4,7 @@ import {
 	isMatchingBookmark,
 	isBookmarkStart,
 	isBookmarkEnd,
-} from './queryBookmark'
+} from '../queryBookmark'
 
 /**
 * Toggle Bookmark - Hide or show the content of a bookmark
