@@ -1,7 +1,7 @@
 {
   "private": false,
-  "version": "0.1.0",
-  "name": "sfdt-utils",
+  "version": "0.2.0",
+  "name": "@zegal/sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
   "main": "index.js",
@@ -9,9 +9,21 @@
     "*.js",
     "!rollup.config.js"
   ],
-  "repository": "https://github.com/zegal/sfdt-utils.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zegal/sfdt-utils.git"
+  },
   "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
   "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-typescript": "^7.6.0",
+    "@syncfusion/ej2-documenteditor": "^17.3.16",
+    "@types/lodash": "^4.14.146",
+    "babel-jest": "^24.9.0",
     "@babel/core": "^7.6.0",
     "@types/jest": "^24.0.18",
     "awesome-typescript-loader": "^5.2.1",
@@ -22,6 +34,8 @@
     "rollup-plugin-typescript": "^1.0.1",
     "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
     "typescript": "^3.6.3"
   },
   "scripts": {
@@ -54,15 +68,13 @@
       }
     }
   },
-  "dependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/preset-env": "^7.6.0",
-    "@babel/preset-typescript": "^7.6.0",
-    "@syncfusion/ej2-documenteditor": "^17.3.16",
-    "@types/lodash": "^4.14.146",
-    "babel-jest": "^24.9.0",
-    "lodash": "^4.17.15",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.2"
-  }
+  "bugs": {
+    "url": "https://github.com/zegal/sfdt-utils/issues"
+  },
+  "homepage": "https://github.com/zegal/sfdt-utils#readme",
+  "keywords": [
+    "syncfusion",
+    "sfdt",
+    "zegal"
+  ]
 }

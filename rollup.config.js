@@ -15,6 +15,7 @@ export default {
         toggleBookmark: 'src/toggleBookmark.ts',
         queryBookmark: 'src/queryBookmark.ts',
         bookmarkHighlight: 'src/bookmarkHighlight.ts',
+        removeBookmarkAndHighlight: 'src/removeBookmarkAndHighlight.ts',
 
         getSFDTjson: 'src/getSFDTjson.ts',
         getSFDTstring: 'src/getSFDTstring.ts',
