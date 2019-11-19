@@ -2,33 +2,60 @@ export {default as populate} from './sfdt/populate'
 export {default as processInlines} from './sfdt/processInlines'
 export {default as toggleBookmark} from './sfdt/toggleBookmark'
 
-export {default as getCurrentSelection} from './getCurrentSelection'
-export {default as unselect} from './unselect'
-
-export {default as updateBookmarkContent} from './updateBookmarkContent'
-export {default as insertBookmark} from './insertBookmark'
-export {default as bookmarkHighlight} from './bookmarkHighlight'
+import unsafe_getCurrentSelection from './getCurrentSelection'
+import unsafe_unselect from './unselect'
+import unsafe_showCaret from './showCaret'
 
 import {
-	isMatchingBookmark,
-	isBookmarkStart,
-	isBookmarkEnd,
+	isMatchingBookmark as unsafe_isMatchingBookmark,
+	isBookmarkStart as unsafe_isBookmarkStart,
+	isBookmarkEnd as unsafe_isBookmarkEnd,
 } from './queryBookmark'
-
-export {
-	isMatchingBookmark,
-	isBookmarkStart,
-	isBookmarkEnd,
-}
 
 export {default as getSFDTjson} from './getSFDTjson'
 export {default as getSFDTstring} from './getSFDTstring'
 
-export {default as showCaret} from './showCaret'
+import unsafe_updateBookmarkContent from './updateBookmarkContent'
+import unsafe_insertBookmark from './insertBookmark'
+import unsafe_bookmarkHighlight from './bookmarkHighlight'
+import unsafe_gotoBookmark from './bookmarkNavigate'
 
-// export {default as SFDTbookmarkHighlight} from './sfdt/bookmarkHighlight'
+const safe = (callback) => (...args) => {
+	try {
+		return callback(...args)
+	} catch (error) {
+		console.error('SF Error:', error)
+	}
+}
 
-// @todo:
-// is selection empty
+const updateBookmarkContent = safe(unsafe_updateBookmarkContent)
+const insertBookmark = safe(unsafe_insertBookmark)
+const bookmarkHighlight = safe(unsafe_bookmarkHighlight)
+const gotoBookmark = safe(unsafe_gotoBookmark)
+
+const isMatchingBookmark = safe(unsafe_isMatchingBookmark)
+const isBookmarkStart = safe(unsafe_isBookmarkStart)
+const isBookmarkEnd = safe(unsafe_isBookmarkEnd)
+
+const getCurrentSelection = safe(unsafe_getCurrentSelection)
+const unselect = safe(unsafe_unselect)
+const showCaret = safe(unsafe_showCaret)
+
+export {
+	updateBookmarkContent,
+	insertBookmark,
+	bookmarkHighlight,
+	gotoBookmark,
+
+	isMatchingBookmark,
+	isBookmarkStart,
+	isBookmarkEnd,
+
+	getCurrentSelection,
+	unselect,
+	showCaret,
+}
+
+// feature to add - is selection empty:
 // let selection: string = documentEditor.selection.text;
 // if (!documentEditor.selection.isEmpty && /\S/.test(selection)) {
