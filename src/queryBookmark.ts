@@ -1,6 +1,7 @@
 // @todo: fix when we get an sfdt type
 type inlineObject = any;
 
+// is inlineObject a bookmark?
 export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean = (inlineObject) => {
 	if (inlineObject.bookmarkType !== undefined) {
 		return inlineObject
@@ -9,6 +10,7 @@ export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean 
 	return false
 }
 
+// see if inlineObject is a bookmark matching the one we are checking for
 export const isMatchingBookmark = (inlineObject, name) => {
 	const matched = isBookmark(inlineObject)
 
@@ -19,6 +21,7 @@ export const isMatchingBookmark = (inlineObject, name) => {
 	return false
 }
 
+// is inlineObject a bookmark start object
 export const isBookmarkStart = (inlineObject) => {
 	const matched = isBookmark(inlineObject)
 
@@ -29,6 +32,7 @@ export const isBookmarkStart = (inlineObject) => {
 	return false
 }
 
+// is inlineObject a bookmark end object
 export const isBookmarkEnd = (inlineObject) => {
 	const matched = isBookmark(inlineObject)
 

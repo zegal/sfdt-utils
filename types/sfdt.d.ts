@@ -1,20 +1,22 @@
-interface inline {
-	characterFormat?: any
-	name?: string
+type inline = {
+	characterFormat?: any,
+	name?: string,
+	text?: string,
 	bookmarkType?: number
 }
 
-interface blocks {
-	paragraphFormat: any
+type block = {
+	paragraphFormat: any,
 	inlines: inline[]
 }
 
-interface sfdt {
-	sections: any;
+type section = {
+	blocks?: block[],
+	headersFooters?: any,
+}
+
+type sfdt = {
+	sections?: section[],
 }
 
 // declare const sfdt: sfdt
-
-// type sfdt = {
-// 	sections: any;
-// }
