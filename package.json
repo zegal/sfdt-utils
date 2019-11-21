@@ -1,6 +1,6 @@
 {
   "private": false,
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "@zegal/sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
@@ -15,27 +15,34 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@syncfusion/ej2-react-documenteditor": "^17.3.28",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.7.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-typescript": "^7.6.0",
     "@syncfusion/ej2-documenteditor": "^17.3.16",
-    "@types/lodash": "^4.14.146",
-    "babel-jest": "^24.9.0",
-    "@babel/core": "^7.6.0",
+    "@syncfusion/ej2-react-base": "^17.3.27",
     "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.146",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "jest": "^24.9.0",
+    "react": "^16.12.0",
     "react-docgen-typescript-loader": "^3.2.0",
+    "react-dom": "^16.12.0",
     "rollup": "^1.21.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-typescript": "^1.0.1",
     "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.2",
     "typescript": "^3.6.3"
   },
   "scripts": {
@@ -46,7 +53,11 @@
   },
   "jest": {
     "testMatch": [
-      "**/__tests__/*.test.js"
+      "**/__tests__/*.test.{js,jsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
     ],
     "collectCoverageFrom": [
       "**/src/*.{ts,js}",

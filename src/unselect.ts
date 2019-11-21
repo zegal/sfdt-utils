@@ -1,5 +1,6 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
 
-const unselect = (documentEditor) => {
+const unselect = (documentEditor: DocumentEditor) => {
 	documentEditor.selection.moveToLineEnd()
 }
 

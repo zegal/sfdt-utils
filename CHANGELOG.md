@@ -1,3 +1,7 @@
+# 0.2.2
+
+- add removeBookmarkAndHighlight into main export
+
 # 0.2.1
 
 - Add safe wrapper for all utils exported from root

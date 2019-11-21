@@ -1,3 +1,5 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 import hasBookmark from './hasBookmark'
 
 const debug = false
@@ -8,7 +10,7 @@ const debug = false
 * @param {String} name - name of bookmark
 * @param {Object} documentEditor - live documentEditor object
 */
-const action: (name: string, action: any, documentEditor: any) => boolean = (name, action, documentEditor) => {
+const action: (name: string, action: any, documentEditor: DocumentEditor) => boolean = (name, action, documentEditor) => {
 	if (!documentEditor) {
 		console.error('documentEditor is not ready.', documentEditor)
 		return false

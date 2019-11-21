@@ -1,3 +1,5 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 import bookmarkHighlight from './bookmarkHighlight'
 
 type options = {
@@ -19,7 +21,7 @@ const debug = false
 *
 * @returns {Object} documentEditor
 */
-const insertBookmark: (options: options, documentEditor: any) => void = (options, documentEditor) => {
+const insertBookmark: (options: options, documentEditor: DocumentEditor) => void = (options, documentEditor) => {
 	debug && console.log('Bookmark name:', options.bookmarkName)
 
 	documentEditor.editor.insertBookmark(options.bookmarkName)

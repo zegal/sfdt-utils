@@ -1,3 +1,5 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 /**
 * Has Bookmark - Detect if a bookmark exists
 *
@@ -6,7 +8,7 @@
 *
 * @returns {Boolean} - True if the bookmark exists in the editor
 */
-const hasBookmark: (name: string, documentEditor: any) => boolean = (name, documentEditor) => {
+const hasBookmark: (name: string, documentEditor: DocumentEditor) => boolean = (name, documentEditor) => {
 	return !!documentEditor.getBookmarks().find((bookmark: string) => bookmark === name)
 }
 

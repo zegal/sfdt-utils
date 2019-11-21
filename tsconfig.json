@@ -3,6 +3,15 @@
 		"./src/*"
 	],
 	"exclude": ["node_modules", "types"],
+	"compilerOptions": {
+		"jsx": "react",
+		"lib": [
+			"dom",
+			"esnext"
+		],
+		"module": "esnext",
+		"esModuleInterop": true
+	},
 	"typeRoots": [
 		"./types/sfdt.d.ts"
 	]

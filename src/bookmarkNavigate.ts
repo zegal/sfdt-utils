@@ -1,4 +1,6 @@
-const gotoBookmark = (bookmark: string, documentEditor: any) => {
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
+const gotoBookmark = (bookmark: string, documentEditor: DocumentEditor) => {
 	documentEditor.selection.navigateBookmark(bookmark)
 }
 

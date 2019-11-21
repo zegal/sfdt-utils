@@ -1,6 +1,8 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 import hasBookmark from './hasBookmark'
 
-export default function remove(bookmarkName: string, documentEditor): boolean {
+export default function remove(bookmarkName: string, documentEditor: DocumentEditor): boolean {
 	if (hasBookmark(bookmarkName, documentEditor)) {
 		// trying to clear selection
 		documentEditor.selection.selectBookmark(bookmarkName);

@@ -1,3 +1,5 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 import action from './bookmarkAction'
 
 /**
@@ -5,7 +7,7 @@ import action from './bookmarkAction'
 * @param {Object} documentEditor - Instance of the SF document editor
 * @param {String} colour -
 */
-export default (name: string, documentEditor: any, colour: string = '') => {
+export default (name: string, documentEditor: DocumentEditor, colour: string = '') => {
 	action(name, ({selection}) => {
 		selection.characterFormat.highlightColor = colour
 	}, documentEditor)

@@ -1,9 +1,16 @@
+import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+
 import getSFDTjson from './getSFDTjson'
 
 /**
 * @param {Object} documentEditor - Instance of the SF document editor
 */
-export default ({documentEditor, sections = false}) => {
+interface Props {
+	documentEditor: DocumentEditor
+	sections: boolean
+}
+
+export default ({documentEditor, sections = false}): Props => {
 	return getSFDTjson({documentEditor}).then((json) => {
 		if (json.error) {
 			return 'There was an error with your json'
