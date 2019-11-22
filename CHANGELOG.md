@@ -1,3 +1,7 @@
+# 0.2.4
+
+ - insert bookmark updates text if none given
+
 # 0.2.2
 
 - add removeBookmarkAndHighlight into main export

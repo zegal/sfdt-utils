@@ -6,6 +6,7 @@ type options = {
 	bookmarkName: string;
 	bookmarkContent: string;
 	highlightColor?: string;
+	noForceUpdate?: boolean
 }
 
 const debug = false
@@ -18,8 +19,7 @@ const debug = false
 *                         	highlightColor?: String =  Hex code of background: eg: '#FFFFFF'
 *                         	bookmarkContent?: string = Change contents of the bookmark to this string
 *                         }
-*
-* @returns {Object} documentEditor
+* @param {Object} documentEditor
 */
 const insertBookmark: (options: options, documentEditor: DocumentEditor) => void = (options, documentEditor) => {
 	debug && console.log('Bookmark name:', options.bookmarkName)
@@ -37,6 +37,13 @@ const insertBookmark: (options: options, documentEditor: DocumentEditor) => void
 	if (options.bookmarkContent) {
 		debug && console.log('Bookmark content:', options.bookmarkContent)
 		documentEditor.editor.insertText(options.bookmarkContent)
+	} else {
+
+		// option here because this will break if selection is paragraph, eg: lose paragraph formatting
+		if (!options.noForceUpdate) {
+			// update text to stop formatting bug
+			documentEditor.editor.insertText(documentEditor.selection.text)
+		}
 	}
 
 }
