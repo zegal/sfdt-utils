@@ -1,5 +1,7 @@
 import process from './bookmarkProcess'
 
+import SFDTType from '../../types/sfdt'
+
 /*
 * Change the highlights of bookmark(s) contents
 *
@@ -9,7 +11,7 @@ import process from './bookmarkProcess'
 *
 * eg: bookmarkHighlight(sfdt, ['bookmark_id'], '#ff0000') // red
 */
-export default (sfdt, bookmarks, highlightColor = '') => {
+export default (sfdt: SFDTType, bookmarks: string[], highlightColor = '') => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {

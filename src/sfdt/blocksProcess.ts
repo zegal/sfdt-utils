@@ -56,7 +56,7 @@ export const processBlock = (block: any, callbackInline: TCallback, callbackBloc
 //  - rows            // for tables
 //  - inlines         // for inline content
 //  - characterFormat
-export const processBlocks = (parent, callback) => {
+export const processBlocks = (parent: any, callback: TCallback) => {
 	if (!parent.sections) {
 		// console.warn('Missing: sections', parent)
 		return false

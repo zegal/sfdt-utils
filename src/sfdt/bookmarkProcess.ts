@@ -13,16 +13,22 @@ import {
 	// get,
 } from 'lodash'
 
+import SFDTType, {block as BlockType} from '../../types/sfdt'
+
 import {processSFDT, processBlock} from './blocksProcess'
 import {isBookmarkStart, isBookmarkEnd} from '../queryBookmark'
 
 const debug = false
 
-export default (sfdt, bookmarks, doInlineMatchingAction, doBlockMatchingAction) => {
+export default (sfdt: SFDTType, bookmarks: string[], doInlineMatchingAction: (block: BlockType) => void, doBlockMatchingAction: (block: BlockType) => void) => {
 	let currentlyInsideBookmarks = [] // at top, so we can process bookmarks that span blocks
 
-	return processSFDT(sfdt, (block) => {
-		const callbackBlock = (block) => {
+	if (!sfdt) {
+		return
+	}
+
+	return processSFDT(sfdt, (block: BlockType) => {
+		const callbackBlock = (block: BlockType) => {
 			// console.log('Checking block:', block)
 			if (intersection(bookmarks, currentlyInsideBookmarks).length > 0) {
 				// console.log('Inside!', {highlightColor: get(block, 'characterFormat.highlightColor')}, {intersection: intersection(bookmarks, currentlyInsideBookmarks)})
