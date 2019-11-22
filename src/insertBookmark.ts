@@ -1,6 +1,7 @@
 import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
 
 import bookmarkHighlight from './bookmarkHighlight'
+import unselect from './unselect'
 
 type options = {
 	bookmarkName: string;
@@ -41,8 +42,8 @@ const insertBookmark: (options: options, documentEditor: DocumentEditor) => void
 
 		// option here because this will break if selection is paragraph, eg: lose paragraph formatting
 		if (!options.noForceUpdate) {
-			// update text to stop formatting bug
-			documentEditor.editor.insertText(documentEditor.selection.text)
+			// update something to stop formatting bug
+			unselect(documentEditor)
 		}
 	}
 

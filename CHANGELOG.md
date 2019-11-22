@@ -1,3 +1,8 @@
+# 0.2.5
+
+ - revert 0.2.4 text update
+ - insert bookmark moves selection to fix formatting bug
+
 # 0.2.4
 
  - insert bookmark updates text if none given
