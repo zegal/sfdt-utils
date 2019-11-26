@@ -23,7 +23,7 @@ const debug = false
 * @param {Object} documentEditor
 */
 const insertBookmark: (options: options, documentEditor: DocumentEditor) => void = (options, documentEditor) => {
-	debug && console.log('Bookmark name:', options.bookmarkName)
+	debug && console.log('Bookmark info:', {name: options.bookmarkName, update: options.noForceUpdate, text: options.bookmarkContent})
 
 	documentEditor.editor.insertBookmark(options.bookmarkName)
 
@@ -39,8 +39,6 @@ const insertBookmark: (options: options, documentEditor: DocumentEditor) => void
 		debug && console.log('Bookmark content:', options.bookmarkContent)
 		documentEditor.editor.insertText(options.bookmarkContent)
 	} else {
-
-		// option here because this will break if selection is paragraph, eg: lose paragraph formatting
 		if (!options.noForceUpdate) {
 			// update something to stop formatting bug
 			unselect(documentEditor)
