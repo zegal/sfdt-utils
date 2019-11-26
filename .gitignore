@@ -47,4 +47,5 @@ node_modules/
 # build files go in root
 *.js
 !**/__tests__/**
+!jest.setup.js
 !rollup.config.js
