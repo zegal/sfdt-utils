@@ -1,4 +1,5 @@
 // DEPRECATED, use sfdt/blocksProcess
+import last from 'lodash/last'
 import process from './processInlines'
 
 const debug = false
@@ -70,7 +71,8 @@ export default (data, sfdt, prefix = 'DATA::') => {
 					dataMode = true
 				}
 
-				currentlyProcessing = inline.name
+				// process bookmark name
+				currentlyProcessing = last(inline.name.split("::"))
 
 				processing[inline.name] = true
 				// keep bookmark start tag
