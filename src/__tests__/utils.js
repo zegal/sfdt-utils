@@ -38,6 +38,20 @@ export const getBookmark = (id) => {
 	}]
 }
 
+export const getConditionalBookmark = (id) => {
+	const name = id || '_bm_' + uniqueId()
+
+	return [{
+		bookmarkType: 0,
+		name: `COND::${name}`
+	},
+	...getBookmark('K1'),
+	{
+		bookmarkType: 1,
+		name: `COND::${name}`
+	}]
+}
+
 export const getInlines = () => {
 	// console.log('extras', extras)
 
