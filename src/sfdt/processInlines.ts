@@ -20,9 +20,9 @@ export default (sfdt, callback) => {
 			block.inlines = callback(block.inlines)
 		})
 
-		if (get(section, "headersFooters")) {
-      for (let eachKey in section.headersFooters) {
-        const child = section.headersFooters[eachKey];
+		if (get(section, 'headersFooters')) {
+			for (let eachKey in section.headersFooters) {
+      	const child = section.headersFooters[eachKey];
 
         if (child.blocks) {
           child.blocks.forEach(block => {
