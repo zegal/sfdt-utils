@@ -28,7 +28,7 @@ class Stack {
    * Underflow if stack is empty
    */
   pop() {
-    if (this.items.length == 0) return "Underflow";
+    if (this.items.length === 0) return -1;
     return this.items.pop();
   }
 
@@ -48,15 +48,15 @@ class Stack {
    * Return true if stack is empty
    */
   isEmpty() {
-    return this.items.length == 0;
+    return this.items.length === 0;
   }
 
   /**
    * Print the complete stack
    */
   printStack() {
-    var str = "";
-    for (var i = 0; i < this.items.length; i++) str += this.items[i] + " ";
+    var str = '';
+    for (var i = 0; i < this.items.length; i++) str += this.items[i] + '';
     return str;
   }
 }

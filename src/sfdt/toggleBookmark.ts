@@ -4,44 +4,50 @@ import {
 	isMatchingBookmark,
 	isBookmarkStart,
 	isBookmarkEnd,
+	isToggleObject,
+	isToggleEnd,
+	isToggleStart,
+	isConditionalBookmark
 } from '../queryBookmark'
 import Stack from '../stack'
 
-const makeToggleOff = (inlines, name) => {
-  const newInlines = []; // Should act as queue for getting new list of inlines
+export const makeToggleOff = (inlines: any[], name: String) => {
+  const newInlines: any[] = []; // Should act as queue for getting new list of inlines
   const stackOfBookmarks = new Stack(); // will be used to find relationship of bookmarks
-  let toggleOffAtIndex = null;
+  let toggleOffAtIndex = null; // will be used to track toggle off object index at bookmark block
 
   inlines.forEach((inline, index) => {
     const nextInline = inlines[index + 1];
     const prevInline = inlines[index - 1];
 
-    if (!(inline.fieldType || inline.hasFieldEnd)) {
+		// add in newInline is inline isn't toggle object
+    if (!isToggleObject(inline)) {
       newInlines.push(inline);
     }
 
-    if (inline.name && inline.name.split("::").includes("COND")) {
-      const isSameBookmark = isMatchingBookmark(inline, name);
+		// if we have conditional bookmark, then we need to find
+		// either we can toggle off condition or not
+    if (isConditionalBookmark(inline)) {
+			const isSameBookmark = isMatchingBookmark(inline, name);
+
+			// for every starting bookmark, we push in stack
+			// and for every ending bookmar, we pop out from stack
+			// this help us to find relation between bookmark block
+			// if parent is toggle off then we don't have to toggle off any child
       if (isBookmarkStart(inline)) {
         stackOfBookmarks.push(inline);
 
-        if (isSameBookmark) {
-          if (toggleOffAtIndex === null) {
-            toggleOffAtIndex = stackOfBookmarks.peekAt();
-          } else if (stackOfBookmarks.peekAt() <= toggleOffAtIndex) {
-            toggleOffAtIndex = stackOfBookmarks.peekAt();
-          }
-        }
+        if (isSameBookmark && (toggleOffAtIndex === null || stackOfBookmarks.peekAt() <= toggleOffAtIndex)) {
+          toggleOffAtIndex = stackOfBookmarks.peekAt();
+				}
 
-        if (inline.hasFieldEnd || inline.fieldType === 2) {
-          if (stackOfBookmarks.peekAt() <= toggleOffAtIndex) {
-            toggleOffAtIndex = stackOfBookmarks.peekAt();
-          }
+        if (isToggleObject(inline) && stackOfBookmarks.peekAt() <= toggleOffAtIndex) {
+          toggleOffAtIndex = stackOfBookmarks.peekAt();
         }
 
         if (
           nextInline &&
-          nextInline.hasFieldEnd === undefined &&
+          !isToggleStart(nextInline) &&
           toggleOffAtIndex === stackOfBookmarks.peekAt()
         ) {
           newInlines.push({
@@ -53,7 +59,7 @@ const makeToggleOff = (inlines, name) => {
         if (
           isSameBookmark &&
           prevInline &&
-          !prevInline.fieldType &&
+          !isToggleEnd(prevInline) &&
           stackOfBookmarks.peekAt() <= toggleOffAtIndex
         ) {
           const lastIndex = newInlines.findIndex((el, index) => {
@@ -75,7 +81,7 @@ const makeToggleOff = (inlines, name) => {
     }
 
     // already available, need to decide to keep it or remove it
-    if (inline.hasFieldEnd || inline.fieldType) {
+    if (isToggleObject(inline)) {
       if (toggleOffAtIndex === null) {
         newInlines.push(inline);
         toggleOffAtIndex = stackOfBookmarks.peekAt();

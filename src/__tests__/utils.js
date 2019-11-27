@@ -24,31 +24,17 @@ export const getSFDT = (inlines, extraBlocks) => {
 
 }
 
-export const getBookmark = (id) => {
+export const getBookmark = (id, prefix = 'DATA::') => {
 	const name = id || '_bm_' + uniqueId()
 
 	return [{
 		bookmarkType: 0,
-		name: 'DATA::' + name,
+		name: `${prefix}${name}`,
 	}, {
 		text: 'REPLACE-ME-' + name,
 	}, {
 		bookmarkType: 1,
-		name: 'DATA::' + name,
-	}]
-}
-
-export const getConditionalBookmark = (id) => {
-	const name = id || '_bm_' + uniqueId()
-
-	return [{
-		bookmarkType: 0,
-		name: `COND::${name}`
-	},
-	...getBookmark('K1'),
-	{
-		bookmarkType: 1,
-		name: `COND::${name}`
+		name: `${prefix}${name}`,
 	}]
 }
 

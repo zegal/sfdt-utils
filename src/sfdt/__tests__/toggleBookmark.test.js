@@ -1,4 +1,4 @@
-import toggleBookmark from '../toggleBookmark'
+import toggleBookmark, {makeToggleOff} from '../toggleBookmark'
 
 import list2Inlines from './fixtures/list-2'
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff'
@@ -9,7 +9,6 @@ import {
 	getInlines,
 	getFirstInlines,
 	getBookmark,
-	getConditionalBookmark
 } from '../../__tests__/utils'
 
 const inlines = getInlines()
@@ -18,39 +17,36 @@ const bookmarkType = 'COND'
 const uuid = 'K1'
 const name = `${bookmarkType}::${uuid}`
 
-
 describe('toggleBookmark', function() {
 	describe('Simple', function() {
 		test('Toggle off', function() {
-			const sfdt = getSFDT(inlines.concat(getConditionalBookmark(uuid)))
-			// console.log('sfdt', JSON.stringify(sfdt, null, 2))
+			const sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')))
 			const ourInlinesBeforeToggle = getFirstInlines(sfdt)
-			expect(ourInlinesBeforeToggle.length).toEqual(10)
+			expect(ourInlinesBeforeToggle.length).toEqual(8)
 
 			const result = toggleBookmark(sfdt, name, false)
 
 			const ourInlinesAfterToggle = getFirstInlines(result)
 			// console.log('result', ourInlinesAfterToggle)
 
-			expect(ourInlinesAfterToggle.length).toEqual(12)
-
+			expect(ourInlinesAfterToggle.length).toEqual(10)
 			expect(ourInlinesAfterToggle[6].hasFieldEnd).toEqual(true)
-			expect(ourInlinesAfterToggle[10].fieldType).toEqual(2)
+			expect(ourInlinesAfterToggle[8].fieldType).toEqual(2)
 		})
 
 		test('Toggle on', function() {
-			const sfdt = getSFDT(inlines.concat(getConditionalBookmark(uuid)))
+			const sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')))
 			const toggledSfdt = toggleBookmark(sfdt, name, false)
 
 			const initialInlines = getFirstInlines(toggledSfdt)
-			expect(initialInlines.length).toEqual(12)
+			expect(initialInlines.length).toEqual(10)
 
 			const result = toggleBookmark(sfdt, name, true)
 
 			const ourInlines = getFirstInlines(result)
 			// console.log('result', ourInlines)
 
-			expect(ourInlines.length).toEqual(10)
+			expect(ourInlines.length).toEqual(8)
 		})
 	})
 
@@ -134,4 +130,8 @@ describe('toggleBookmark', function() {
 			expect(toggledOffInlines2.length).toEqual(10)
 		})
 	})
+})
+
+describe('makeToggleOff', () => {
+
 })
