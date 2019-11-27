@@ -19,6 +19,7 @@ import unsafe_updateBookmarkContent from './updateBookmarkContent'
 import unsafe_insertBookmark from './insertBookmark'
 import unsafe_bookmarkHighlight from './bookmarkHighlight'
 import unsafe_gotoBookmark from './bookmarkNavigate'
+import unsafe_bookmarksSelected from './bookmarksSelected'
 import unsafe_removeBookmarkAndHighlight from './removeBookmarkAndHighlight'
 
 const safe = (callback) => (...args) => {
@@ -38,6 +39,7 @@ const removeBookmarkAndHighlight = safe(unsafe_removeBookmarkAndHighlight)
 const isMatchingBookmark = safe(unsafe_isMatchingBookmark)
 const isBookmarkStart = safe(unsafe_isBookmarkStart)
 const isBookmarkEnd = safe(unsafe_isBookmarkEnd)
+const bookmarksSelected = safe(unsafe_bookmarksSelected)
 
 const getCurrentSelection = safe(unsafe_getCurrentSelection)
 const unselect = safe(unsafe_unselect)
@@ -48,6 +50,7 @@ export {
 	insertBookmark,
 	bookmarkHighlight,
 	gotoBookmark,
+	bookmarksSelected,
 	removeBookmarkAndHighlight,
 
 	isMatchingBookmark,

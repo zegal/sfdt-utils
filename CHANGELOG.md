@@ -1,3 +1,7 @@
+# 0.2.6
+
+ - add bookmarks selected to safely call 'documentEditor.selection.bookmarks'
+
 # 0.2.5
 
  - revert 0.2.4 text update
