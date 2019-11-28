@@ -10,10 +10,10 @@ import {
 	isMatchingBookmark as unsafe_isMatchingBookmark,
 	isBookmarkStart as unsafe_isBookmarkStart,
 	isBookmarkEnd as unsafe_isBookmarkEnd,
-	isToggleStart as unsafe_isToggleStart,
-	isToggleEnd as unsafe_isToggleEnd,
-	isToggleObject as unsafe_isToggleObject,
-	isConditionalBookmark as unsafe_isConditionalBookmark,
+	isToggleStart,
+	isToggleEnd,
+	isToggleObject,
+	isConditionalBookmark,
 } from './queryBookmark'
 
 export {default as getSFDTjson} from './getSFDTjson'
@@ -43,10 +43,6 @@ const removeBookmarkAndHighlight = safe(unsafe_removeBookmarkAndHighlight)
 const isMatchingBookmark = safe(unsafe_isMatchingBookmark)
 const isBookmarkStart = safe(unsafe_isBookmarkStart)
 const isBookmarkEnd = safe(unsafe_isBookmarkEnd)
-const isToggleStart = safe(unsafe_isToggleStart)
-const isToggleEnd = safe(unsafe_isToggleEnd)
-const isToggleObject = safe(unsafe_isToggleObject)
-const isConditionalBookmark = safe(unsafe_isConditionalBookmark)
 const bookmarksSelected = safe(unsafe_bookmarksSelected)
 
 const getCurrentSelection = safe(unsafe_getCurrentSelection)
