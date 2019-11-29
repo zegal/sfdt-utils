@@ -16,6 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "@syncfusion/ej2-react-documenteditor": "^17.3.28",
+    "@syncfusion/ej2-documenteditor": "^17.2.40",
+    "jszip": "~2.4.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {

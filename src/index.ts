@@ -2,7 +2,7 @@ export {default as populate} from './sfdt/populate'
 export {default as processInlines} from './sfdt/processInlines'
 export {default as toggleBookmark} from './sfdt/toggleBookmark'
 
-export {WordExport} from './sfdtHelper/'
+export {default as WordExport} from './sfdtHelper/'
 
 import unsafe_getCurrentSelection from './getCurrentSelection'
 import unsafe_unselect from './unselect'
