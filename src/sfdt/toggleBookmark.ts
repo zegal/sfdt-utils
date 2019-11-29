@@ -46,6 +46,7 @@ export const makeToggleOff = (inlines: any[], name: String) => {
         }
 
         if (
+          isSameBookmark &&
           nextInline &&
           !isToggleStart(nextInline) &&
           toggleOffAtIndex === stackOfBookmarks.peekAt()
@@ -108,44 +109,49 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 	// console.log('toggleBookmark mode', toggleOn ? 'on' : 'off')
 
 	if (toggleOn) {
-		// toggle field on
-		const processInlines = (inlines) => {
-			const newInlines: any[] = []
+    // toggle field on
+    const processInlines = inlines => {
+      const newInlines: any[] = []
 
-			let inMatchingBookmark = false
+      let inMatchingBookmark = false
 
-			inlines.forEach((inline) => {
-				let defaultAdd = true
+      inlines.forEach((inline, index) => {
+        let defaultAdd = true
+        const nextInline = inlines[index + 1]
+        const prevInline = inlines[index - 1]
 
-				if (isMatchingBookmark(inline, name)) {
-					if (isBookmarkEnd(inline)) {
-						inMatchingBookmark = false
-					}
+        const isSameBookmark = isMatchingBookmark(inline, name)
+        if (isSameBookmark) {
+          if (isBookmarkEnd(inline)) {
+            inMatchingBookmark = false;
+          }
 
-					if (isBookmarkStart(inline)) {
-						inMatchingBookmark = true
-					}
-				}
+          if (isBookmarkStart(inline)) {
+            inMatchingBookmark = true;
+          }
+        }
 
-				if (inMatchingBookmark) {
-					// console.log('FOUND, DOING TOGGLE ON')
-					if (inline.fieldType === 2) {
-						defaultAdd = false
-					}
+        if (inMatchingBookmark) {
+          // console.log("FOUND, DOING TOGGLE ON");
+          if (inline.fieldType === 2 && isMatchingBookmark(nextInline, name)) {
+            defaultAdd = false
+          }
 
-					if (inline.hasFieldEnd === true) {
-						defaultAdd = false
-					}
-				}
+          if (
+            inline.hasFieldEnd === true &&
+            isMatchingBookmark(prevInline, name)
+          ) {
+            defaultAdd = false
+          }
+        }
 
-				if (defaultAdd) {
-					newInlines.push(inline)
-				}
+        if (defaultAdd) {
+          newInlines.push(inline)
+        }
+      });
 
-			})
-
-			return newInlines
-		}
+      return newInlines;
+    };
 
 		process(sfdt, processInlines)
 	} else {

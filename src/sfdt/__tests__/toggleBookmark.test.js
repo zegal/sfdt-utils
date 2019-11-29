@@ -1,4 +1,4 @@
-import toggleBookmark, {makeToggleOff} from '../toggleBookmark'
+import toggleBookmark from '../toggleBookmark'
 
 import list2Inlines from './fixtures/list-2'
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff'
@@ -132,6 +132,4 @@ describe('toggleBookmark', function() {
 	})
 })
 
-describe('makeToggleOff', () => {
 
-})
