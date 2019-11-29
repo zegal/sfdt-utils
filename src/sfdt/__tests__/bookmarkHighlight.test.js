@@ -10,6 +10,17 @@ const NOT_DONE = '#FFC0CB'
 const DONE = ''
 
 describe('SFDT: Bookmark highlight', () => {
+	it('should preserve other formatting', () => {
+		const data = getData()
+		const bookmarks = ['DATA::UUID::1', 'DATA::UUID::2']
+
+		expect(data.sections[0].blocks[0].inlines[2].characterFormat.bold).toEqual(true)
+
+		bookmarkHighlight(data, bookmarks)
+
+		expect(data.sections[0].blocks[0].inlines[2].characterFormat.bold).toEqual(true)
+	})
+
 	it('should work for nested bookmarks', () => {
 		const data = getData()
 		const bookmarks = ['DATA::UUID::1', 'DATA::UUID::2']

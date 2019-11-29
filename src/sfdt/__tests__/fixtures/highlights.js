@@ -22,7 +22,8 @@ export const firstBlock = {
 		{
 			"characterFormat": {
 				"highlightColor": "#FFC0CB",
-				"bidi": false
+				"bidi": false,
+				"bold": true,
 			},
 			"text": "one coloured line from bm 1"
 		},

@@ -15,17 +15,20 @@ export default (sfdt: SFDTType, bookmarks: string[], highlightColor = '') => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {
-		if (inline.characterFormat && inline.characterFormat.highlightColor) {
-			// console.log('Smoking colour.')
-			inline.characterFormat.highlightColor = highlightColor
-		} else {
-			inline.characterFormat = {highlightColor}
+		if (!inline.characterFormat) {
+			inline.characterFormat = {}
 		}
+		// console.log('Smoking colour.')
+		inline.characterFormat.highlightColor = highlightColor
 
 		return inline
 	}
 
 	const processBlock = (block) => {
+		if (!block.characterFormat) {
+			block.characterFormat = {}
+		}
+
 		if (block.characterFormat) {
 			block.characterFormat.highlightColor = highlightColor
 		}
