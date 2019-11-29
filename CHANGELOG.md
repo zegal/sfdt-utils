@@ -1,3 +1,10 @@
+# 0.2.8
+ - update toggle bookmark logic
+
+# 0.2.7
+
+ - export types
+
 # 0.2.6
 
  - add bookmarks selected to safely call 'documentEditor.selection.bookmarks'
