@@ -120,16 +120,16 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
         const nextInline = inlines[index + 1]
         const prevInline = inlines[index - 1]
 
-        const isSameBookmark = isMatchingBookmark(inline, name)
-        if (isSameBookmark) {
-          if (isBookmarkEnd(inline)) {
-            inMatchingBookmark = false;
-          }
+        // const isSameBookmark = isMatchingBookmark(inline, name)
+        // if (isSameBookmark) {
+        //   if (isBookmarkEnd(inline)) {
+        //     inMatchingBookmark = false;
+        //   }
 
-          if (isBookmarkStart(inline)) {
-            inMatchingBookmark = true;
-          }
-        }
+        //   if (isBookmarkStart(inline)) {
+        //     inMatchingBookmark = true;
+        //   }
+        // }
 
           // console.log("FOUND, DOING TOGGLE ON");
         if (inline.fieldType === 2 && isMatchingBookmark(nextInline, name)) {

@@ -3,7 +3,7 @@ type inlineObject = any;
 
 // is inlineObject a bookmark?
 export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean = (inlineObject) => {
-	if (inlineObject.bookmarkType !== undefined) {
+	if (inlineObject && inlineObject.bookmarkType !== undefined) {
 		return inlineObject
 	}
 
