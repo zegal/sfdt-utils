@@ -3,12 +3,14 @@ import toggleBookmark from '../toggleBookmark'
 import list2Inlines from './fixtures/list-2'
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff'
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff'
+import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt'
 
 import {
 	getSFDT,
 	getInlines,
 	getFirstInlines,
 	getBookmark,
+	getInline
 } from '../../__tests__/utils'
 
 const inlines = getInlines()
@@ -128,6 +130,40 @@ describe('toggleBookmark', function() {
 			const toggledOff2 = toggleBookmark(toggledOff, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false)
 			const toggledOffInlines2 = getFirstInlines(toggledOff2)
 			expect(toggledOffInlines2.length).toEqual(10)
+		})
+	})
+
+
+	describe('Bookmark start and ending in different inlines', function() {
+		test("Toggle on", function() {
+			const firstInline = getInline(bookmarkStartEndingInDifferentInline, 0)
+			const lastInline = getInline(bookmarkStartEndingInDifferentInline, 0, 2)
+
+			expect(firstInline[2].hasFieldEnd).toBe(true)
+			expect(lastInline[1].fieldType).toBe(2)
+
+			const toggleOff = toggleBookmark(bookmarkStartEndingInDifferentInline, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', true)
+			const firstInlineAfterToggle = getInline(toggleOff, 0)
+			const lastInlineAfterToggle = getInline(toggleOff, 0, 2)
+			// console.log('Toggle after', firstInlineAfterToggle, lastInlineAfterToggle)
+
+			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined()
+			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined()
+		})
+
+		test("Toggle off", function() {
+			const toggleOn = toggleBookmark(bookmarkStartEndingInDifferentInline, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', true)
+			const firstInlineAfterToggle = getInline(toggleOn, 0)
+			const lastInlineAfterToggle = getInline(toggleOn, 0, 2)
+			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined()
+			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined()
+			// console.log('Toggle off', JSON.stringify(toggleOff, null, 2))
+
+			const toggleOff = toggleBookmark(bookmarkStartEndingInDifferentInline, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', false)
+			const firstInlineAfterToggleOn = getInline(toggleOff, 0)
+			const lastInlineAfterToggleOn = getInline(toggleOff, 0, 2)
+			expect(firstInlineAfterToggleOn[2].hasFieldEnd).toBeTruthy()
+			expect(lastInlineAfterToggleOn[1].fieldType).toBe(2)
 		})
 	})
 })

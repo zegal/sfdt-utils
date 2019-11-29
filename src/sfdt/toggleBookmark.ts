@@ -131,18 +131,16 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
           }
         }
 
-        if (inMatchingBookmark) {
           // console.log("FOUND, DOING TOGGLE ON");
-          if (inline.fieldType === 2 && isMatchingBookmark(nextInline, name)) {
-            defaultAdd = false
-          }
+        if (inline.fieldType === 2 && isMatchingBookmark(nextInline, name)) {
+          defaultAdd = false
+        }
 
-          if (
-            inline.hasFieldEnd === true &&
-            isMatchingBookmark(prevInline, name)
-          ) {
-            defaultAdd = false
-          }
+        if (
+          inline.hasFieldEnd === true &&
+          isMatchingBookmark(prevInline, name)
+        ) {
+          defaultAdd = false
         }
 
         if (defaultAdd) {

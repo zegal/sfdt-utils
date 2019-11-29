@@ -58,6 +58,9 @@ export const getInlines = () => {
 
 export const getFirstInlines = (sfdt) => getInline(sfdt, 0)
 
-export const getInline = (sfdt, position = 0) => {
-	return get(sfdt, `sections[${position}].blocks[${position}].inlines`, [])
+export const getInline = (sfdt, position = 0, blockPosition) => {
+	if (!blockPosition) {
+		blockPosition = position
+	}
+	return get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`, [])
 }
