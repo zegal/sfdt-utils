@@ -1,12 +1,13 @@
 {
   "private": false,
-  "version": "0.2.6",
+  "version": "0.2.7",
   "name": "@zegal/sfdt-utils",
   "description": "SFDT Utils",
   "author": "Adam Tombleson <rekarnar@gmail.com>",
   "main": "index.js",
   "files": [
     "*.js",
+    "types/*.d.ts",
     "!rollup.config.js"
   ],
   "repository": {
