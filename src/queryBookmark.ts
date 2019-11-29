@@ -21,6 +21,11 @@ export const isMatchingBookmark = (inlineObject, name) => {
 	return false
 }
 
+export const isConditionalBookmark = (inlineObject, prefix = 'COND') => {
+	const {name} = inlineObject
+	return (isBookmark(inlineObject) && name && name.split('::').includes(prefix)) ? true : false
+}
+
 // is inlineObject a bookmark start object
 export const isBookmarkStart = (inlineObject) => {
 	const matched = isBookmark(inlineObject)
@@ -41,4 +46,16 @@ export const isBookmarkEnd = (inlineObject) => {
 	}
 
 	return false
+}
+
+export const isToggleStart = (inlineObject) => {
+	return inlineObject.hasFieldEnd ? true : false
+}
+
+export const isToggleEnd = (inlineObject) => {
+	return inlineObject.fieldType === 2 ? true : false
+}
+
+export const isToggleObject = (inlineObject) => {
+	return isToggleStart(inlineObject) || isToggleEnd(inlineObject)
 }

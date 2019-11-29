@@ -10,6 +10,10 @@ import {
 	isMatchingBookmark as unsafe_isMatchingBookmark,
 	isBookmarkStart as unsafe_isBookmarkStart,
 	isBookmarkEnd as unsafe_isBookmarkEnd,
+	isToggleStart,
+	isToggleEnd,
+	isToggleObject,
+	isConditionalBookmark,
 } from './queryBookmark'
 
 export {default as getSFDTjson} from './getSFDTjson'
@@ -56,6 +60,10 @@ export {
 	isMatchingBookmark,
 	isBookmarkStart,
 	isBookmarkEnd,
+	isToggleStart,
+	isToggleEnd,
+	isToggleObject,
+	isConditionalBookmark,
 
 	getCurrentSelection,
 	unselect,
