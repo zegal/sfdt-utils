@@ -3,8 +3,10 @@ import {inline} from '../types/sfdt'
 type inlineObject = inline;
 
 // is inlineObject a bookmark?
-export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean = (inlineObject) => {
-	if (inlineObject && inlineObject.bookmarkType !== undefined) {
+export const isBookmark: (inlineObject?: inlineObject) => inlineObject | boolean = (inlineObject) => {
+	if (!inlineObject) return false;
+
+	if (inlineObject.bookmarkType !== undefined) {
 		return inlineObject
 	}
 
