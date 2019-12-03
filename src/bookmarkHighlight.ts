@@ -1,4 +1,4 @@
-import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+import {DocumentEditor} from '../types/documentEditor'
 
 import action from './bookmarkAction'
 

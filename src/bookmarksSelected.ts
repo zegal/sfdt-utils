@@ -1,4 +1,4 @@
-import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+import {DocumentEditor} from '../types/documentEditor'
 
 const whichBookmarksAreCurrentlySelected = (documentEditor: DocumentEditor, action: (bookmarks: string[]) => any) => {
 	const bookmarks = documentEditor.selection.bookmarks
