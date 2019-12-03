@@ -1,4 +1,6 @@
 import get from 'lodash/get'
+import isArray from 'lodash/isArray'
+import isObject from 'lodash/isObject'
 import uniqueId from 'lodash/uniqueId'
 
 export const getSFDT = (inlines, extraBlocks) => {
@@ -58,9 +60,23 @@ export const getInlines = () => {
 
 export const getFirstInlines = (sfdt) => getInline(sfdt, 0)
 
-export const getInline = (sfdt, position = 0, blockPosition) => {
+export const getInline = (sfdt, position = 0, blockPosition,
+	option = {
+		rowPosition: 0,
+		cellPosition: 0,
+		blockPositionInCell: 0
+}) => {
 	if (!blockPosition) {
 		blockPosition = position
 	}
-	return get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`, [])
+
+	const inlines = get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`)
+
+	if (isArray(inlines)) {
+		return get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`, [])
+	}
+
+	if (isObject(inlines)) {
+		return get(inlines, `rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}]`)
+	}
 }

@@ -1,3 +1,4 @@
+import get from 'lodash/get'
 import {
 	getSFDT,
 	getInline,
@@ -66,10 +67,12 @@ describe('Populate', () => {
 	test('inject data in table', () => {
 		const sfdtWithInlines = getSFDT(tableInlines)
 		const data = {
-			"DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks": "Monday"
+			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks': 'Monday'
 		}
 
-		const result = populate(data, sfdtWithInlines)
-		console.log('RESULT after populate----------', JSON.stringify(result, null, 2))
+		const updatedSfdt = populate(data, sfdtWithInlines)
+
+		const updatedBlockAfterPopulate = getInline(updatedSfdt, 0, 0, {rowPosition: 0, cellPosition: 2, blockPositionInCell: 0})
+		expect(get(updatedBlockAfterPopulate, `inlines[1].text`)).toEqual('Monday ')
 	})
 })
