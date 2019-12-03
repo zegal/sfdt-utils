@@ -1,5 +1,4 @@
-import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
-
+import {DocumentEditor} from '../types/documentEditor'
 import hasBookmark from './hasBookmark'
 
 const debug = false

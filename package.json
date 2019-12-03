@@ -16,7 +16,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@syncfusion/ej2-react-documenteditor": "^17.3.28",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
@@ -25,8 +24,6 @@
     "@babel/plugin-transform-react-jsx": "^7.7.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-typescript": "^7.6.0",
-    "@syncfusion/ej2-documenteditor": "^17.3.16",
-    "@syncfusion/ej2-react-base": "^17.3.27",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.146",
     "awesome-typescript-loader": "^5.2.1",
