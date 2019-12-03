@@ -1,8 +1,11 @@
-// @todo: fix when we get an sfdt type
-type inlineObject = any;
+import get from 'lodash/get'
+import {inline} from '../types/sfdt'
+type inlineObject = inline;
 
 // is inlineObject a bookmark?
-export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean = (inlineObject) => {
+export const isBookmark: (inlineObject?: inlineObject) => inlineObject | boolean = (inlineObject) => {
+	if (!inlineObject) return false;
+
 	if (inlineObject.bookmarkType !== undefined) {
 		return inlineObject
 	}
@@ -14,7 +17,7 @@ export const isBookmark: (inlineObject: inlineObject) => inlineObject | boolean 
 export const isMatchingBookmark = (inlineObject, name) => {
 	const matched = isBookmark(inlineObject)
 
-	if (matched && matched.name === name) {
+	if (get(matched, 'name') === name) {
 		return matched
 	}
 
@@ -30,7 +33,7 @@ export const isConditionalBookmark = (inlineObject, prefix = 'COND') => {
 export const isBookmarkStart = (inlineObject) => {
 	const matched = isBookmark(inlineObject)
 
-	if (matched && matched.bookmarkType === 0) {
+	if (get(matched, 'bookmarkType') === 0) {
 		return matched
 	}
 
@@ -41,7 +44,7 @@ export const isBookmarkStart = (inlineObject) => {
 export const isBookmarkEnd = (inlineObject) => {
 	const matched = isBookmark(inlineObject)
 
-	if (matched && matched.bookmarkType === 1) {
+	if (get(matched, 'bookmarkType') === 1) {
 		return matched
 	}
 
@@ -49,11 +52,11 @@ export const isBookmarkEnd = (inlineObject) => {
 }
 
 export const isToggleStart = (inlineObject) => {
-	return inlineObject.hasFieldEnd ? true : false
+	return get(inlineObject, 'hasFieldEnd') ? true : false
 }
 
 export const isToggleEnd = (inlineObject) => {
-	return inlineObject.fieldType === 2 ? true : false
+	return get(inlineObject, 'fieldType') === 2 ? true : false
 }
 
 export const isToggleObject = (inlineObject) => {

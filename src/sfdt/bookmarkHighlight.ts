@@ -15,6 +15,8 @@ export default (sfdt: SFDTType, bookmarks: string[], highlightColor = '') => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {
+		// we don't want to loose format on highlight
+		// helps to reserve text format on highlight
 		if (!inline.characterFormat) {
 			inline.characterFormat = {}
 		}
