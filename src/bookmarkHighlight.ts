@@ -7,8 +7,11 @@ import action from './bookmarkAction'
 * @param {Object} documentEditor - Instance of the SF document editor
 * @param {String} colour -
 */
-export default (name: string, documentEditor: DocumentEditor, colour: string = '') => {
-	action(name, ({selection}) => {
-		selection.characterFormat.highlightColor = colour
-	}, documentEditor)
+export default function bookmarkHightlight(name: string, documentEditor: DocumentEditor, colour: string = '') {
+	action(name,
+		({selection}) => {
+			selection.characterFormat.highlightColor = colour
+		},
+		documentEditor
+	)
 }

@@ -1,9 +1,10 @@
 import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
+import ISfdt from '../types/sfdt'
 
 /**
 * @param {Object} documentEditor - Instance of the SF document editor
 */
-export default ({documentEditor}: {documentEditor: DocumentEditor}) => {
+export default function getSFDTjson({documentEditor}: {documentEditor: DocumentEditor}): Promise<ISfdt> {
 	return documentEditor.saveAsBlob('Sfdt').then(async (blob) => {
 		// console.log('blob', blob)
 		// https://developer.mozilla.org/en-US/docs/Web/API/Blob#Example_for_extracting_data_from_a_Blob

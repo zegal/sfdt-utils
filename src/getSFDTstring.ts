@@ -2,15 +2,15 @@ import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
 
 import getSFDTjson from './getSFDTjson'
 
+interface Props {
+	documentEditor: DocumentEditor
+	sections?: boolean
+}
+
 /**
 * @param {Object} documentEditor - Instance of the SF document editor
 */
-interface Props {
-	documentEditor: DocumentEditor
-	sections: boolean
-}
-
-export default ({documentEditor, sections = false}): Props => {
+export default function getSFDTstring({documentEditor, sections = false}: Props): Promise<string> {
 	return getSFDTjson({documentEditor}).then((json) => {
 		if (json.error) {
 			return 'There was an error with your json'

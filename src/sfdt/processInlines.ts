@@ -1,5 +1,5 @@
 // DEPRECATED, use sfdt/blocksProcess
-export default (sfdt, callback) => {
+export default function processInlines(sfdt, callback) {
 	if (!sfdt.sections) {
 		console.warn('Missing: sfdt.sections', sfdt)
 		return false

@@ -1,12 +1,3 @@
-/*
-* Do something to the content of a list of bookmarks
-*
-* @param {object} sfdt - The raw SFDT
-* @param {array} bookmarks - List of bookmark id's to change contents of
-* @param {func} action - Action to perform
-*
-*/
-
 import {
 	without,
 	intersection,
@@ -20,7 +11,20 @@ import {isBookmarkStart, isBookmarkEnd} from '../queryBookmark'
 
 const debug = false
 
-export default (sfdt: SFDTType, bookmarks: string[], doInlineMatchingAction: (block: BlockType) => void, doBlockMatchingAction: (block: BlockType) => void) => {
+/**
+* Do something to the content of a list of bookmarks
+*
+* @param {object} sfdt - The raw SFDT
+* @param {array} bookmarks - List of bookmark id's to change contents of
+* @param {func} action - Action to perform
+*
+*/
+export default function bookmarkProcess(
+	sfdt: SFDTType,
+	bookmarks: string[],
+	doInlineMatchingAction: (block: BlockType) => void,
+	doBlockMatchingAction: (block: BlockType) => void
+) {
 	let currentlyInsideBookmarks = [] // at top, so we can process bookmarks that span blocks
 
 	if (!sfdt) {

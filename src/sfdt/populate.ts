@@ -3,7 +3,7 @@ import process from './processInlines'
 
 const debug = false
 
-export default (data, sfdt, prefix = 'DATA::') => {
+export default function populate(data, sfdt, prefix = 'DATA::') {
 	debug && console.log('data, sfdt', {data, sfdt})
 
 	const processInlines = (inlines) => {
