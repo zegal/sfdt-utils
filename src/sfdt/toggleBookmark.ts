@@ -11,7 +11,7 @@ import {
 } from '../queryBookmark'
 import Stack from '../stack'
 
-export const makeToggleOff = (inlines: any[], name: String) => {
+const makeToggleOff = (inlines: any[], name: String) => {
   const newInlines: any[] = []; // Should act as queue for getting new list of inlines
   const stackOfBookmarks = new Stack(); // will be used to find relationship of bookmarks
   let toggleOffAtIndex = null; // will be used to track toggle off object index at bookmark block
