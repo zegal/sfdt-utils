@@ -54,7 +54,7 @@
   },
   "jest": {
     "testMatch": [
-      "**/__tests__/*.test.{js,jsx}"
+      "**/__tests__/*.test.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [

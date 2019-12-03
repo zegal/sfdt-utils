@@ -1,8 +1,10 @@
 export type inline = {
 	characterFormat?: any,
+	paragraphFormat?: any,
 	name?: string,
 	text?: string,
-	bookmarkType?: number
+	bookmarkType?: number,
+	inlines?: any[]
 }
 
 export type block = {

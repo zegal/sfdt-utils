@@ -31,7 +31,7 @@ export const makeToggleOff = (inlines: any[], name: String) => {
 			const isSameBookmark = isMatchingBookmark(inline, name);
 
 			// for every starting bookmark, we push in stack
-			// and for every ending bookmar, we pop out from stack
+			// and for every ending bookmark, we pop out from stack
 			// this help us to find relation between bookmark block
 			// if parent is toggle off then we don't have to toggle off any child
       if (isBookmarkStart(inline)) {
@@ -113,31 +113,21 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
     const processInlines = inlines => {
       const newInlines: any[] = []
 
-      let inMatchingBookmark = false
-
       inlines.forEach((inline, index) => {
         let defaultAdd = true
         const nextInline = inlines[index + 1]
         const prevInline = inlines[index - 1]
 
-        const isSameBookmark = isMatchingBookmark(inline, name)
-        if (isSameBookmark) {
-          if (isBookmarkEnd(inline)) {
-            inMatchingBookmark = false;
-          }
-
-          if (isBookmarkStart(inline)) {
-            inMatchingBookmark = true;
-          }
-        }
-
-          // console.log("FOUND, DOING TOGGLE ON");
-        if (inline.fieldType === 2 && isMatchingBookmark(nextInline, name)) {
+        // console.log("FOUND, DOING TOGGLE ON");
+        // don't add in newInlines if inline is toggleEnd inline object
+        // and nextInline is matching bookmark
+        // i.e fieldType is 2 or hasFieldEnd is true
+        if (isToggleEnd(inline) && isMatchingBookmark(nextInline, name)) {
           defaultAdd = false
         }
 
         if (
-          inline.hasFieldEnd === true &&
+          isToggleStart(inline) &&
           isMatchingBookmark(prevInline, name)
         ) {
           defaultAdd = false
