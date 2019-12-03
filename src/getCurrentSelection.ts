@@ -1,6 +1,4 @@
-import {DocumentEditor} from '@syncfusion/ej2-documenteditor'
-
-import action from './bookmarkAction'
+import {DocumentEditor} from '../types/documentEditor'
 
 const getCurrentSelection = (documentEditor: DocumentEditor): string => {
 	return documentEditor.editor.selection.text
