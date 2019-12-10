@@ -4,12 +4,9 @@ import {
   isMatchingBookmark,
   isBookmarkStart,
   isBookmarkEnd,
-  isToggleObject,
   isToggleEnd,
-  isToggleStart,
-  isConditionalBookmark
+  isToggleStart
 } from '../queryBookmark';
-import Stack from '../stack';
 
 // export const makeToggleOff = (inlines: any[], name: String) => {
 //   const newInlines: any[] = []; // Should act as queue for getting new list of inlines
