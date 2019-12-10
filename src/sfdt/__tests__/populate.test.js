@@ -1,8 +1,10 @@
+import get from 'lodash/get'
 import {
 	getSFDT,
 	getInline,
 	getInlines,
 } from '../../__tests__/utils'
+import tableInlines from './fixtures/tableInlines'
 
 import populate from '../populate'
 
@@ -58,5 +60,19 @@ describe('SFDT Parser', function() {
 
 		// check replacement went well
 		expect(currentInlines[2].text).toEqual('123 ')
+	})
+})
+
+describe('Populate', () => {
+	test('inject data in table', () => {
+		const sfdtWithInlines = getSFDT(tableInlines)
+		const data = {
+			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks': 'Monday'
+		}
+
+		const updatedSfdt = populate(data, sfdtWithInlines)
+
+		const updatedBlockAfterPopulate = getInline(updatedSfdt, 0, 0, {rowPosition: 0, cellPosition: 2, blockPositionInCell: 0})
+		expect(get(updatedBlockAfterPopulate, `inlines[1].text`)).toEqual('Monday ')
 	})
 })
