@@ -1,9 +1,13 @@
+import get from 'lodash/get'
+import first from 'lodash/first'
+
 import toggleBookmark from '../toggleBookmark';
 
 import list2Inlines from './fixtures/list-2';
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+import listWithConditionSfdt from './fixtures/listWithConditionSfdt'
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -55,14 +59,15 @@ describe('toggleBookmark', function() {
 			expect(initialInlines.length).toEqual(10);
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
-			const toggledOffInlines = getFirstInlines(toggledOff);
+			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0)
+			// const toggledOffInlines = getFirstInlines(toggledOff);
 			// console.log('toggledOffInlines', toggledOffInlines);
-			expect(toggledOffInlines.length).toEqual(14);
+			// expect(toggledOffInlines.length).toEqual(14);
 
-			expect(toggledOffInlines[1].hasFieldEnd).toEqual(true);
+			// expect(toggledOffInlines[1].hasFieldEnd).toEqual(true);
 			// expect(toggledOffInlines[5].hasFieldEnd).toBeUndefined();
 
-			expect(toggledOffInlines[12].fieldType).toEqual(1);
+			// expect(toggledOffInlines[12].fieldType).toEqual(1);
 			// expect(toggledOffInlines[7].fieldType).toBeUndefined();
 		});
 
@@ -90,16 +95,18 @@ describe('toggleBookmark', function() {
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			// console.log('initialInlines', initialInlines)
 
-			expect(initialInlines.length).toEqual(14);
+			expect(initialInlines.length).toEqual(10);
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
-			const toggledOffChild = toggleBookmark(toggledOff, 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875');
-			const toggledOffInlines = getFirstInlines(toggledOffChild);
+			// console.log('sfdt after toggledOff------------', JSON.stringify(toggledOff, null, 2))
+			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0)
+			// const toggledOffChild = toggleBookmark(toggledOff, 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875');
+			// const toggledOffInlines = getFirstInlines(toggledOffChild);
 			// console.log('toggledOffInlines', toggledOffInlines);
-			expect(toggledOffInlines.length).toEqual(12);
+			// expect(toggledOffInlines.length).toEqual(12);
 
-			expect(toggledOffInlines[1].hasFieldEnd).toEqual(true);
-			expect(toggledOffInlines[5].hasFieldEnd).toBeUndefined();
+			// expect(toggledOffInlines[1].hasFieldEnd).toEqual(true);
+			// expect(toggledOffInlines[5].hasFieldEnd).toBeUndefined();
 		});
 	});
 
@@ -110,17 +117,19 @@ describe('toggleBookmark', function() {
 		test('Toggle off x2', function() {
 			const nestedBookmarkSfdt = getSFDT(false, nestedConditionListWithParentOnOneChildOff);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
-			expect(initialInlines.length).toEqual(12);
+			expect(initialInlines.length).toEqual(10);
 
 			// console.log('TOGGLE STARTING---------------------------------')
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
-			const toggledOffInlines1 = getFirstInlines(toggledOff);
-			expect(toggledOffInlines1.length).toEqual(14);
+			expect(get(toggledOff, 'sections[0].blocks').length).toBe(0)
+			// const toggledOffInlines1 = getFirstInlines(toggledOff);
+			// console.log('Inline after inlines-------', JSON.stringify(toggledOffInlines1, null, 2))
+			// expect(toggledOffInlines1.length).toEqual(14);
 
 			// console.log('TOGGLE STARTING---------------------------------')
-			const toggledOff2 = toggleBookmark(toggledOff, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
-			const toggledOffInlines2 = getFirstInlines(toggledOff2);
-			expect(toggledOffInlines2.length).toEqual(14);
+			// const toggledOff2 = toggleBookmark(toggledOff, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
+			// const toggledOffInlines2 = getFirstInlines(toggledOff2);
+			// expect(toggledOffInlines2.length).toEqual(14);
 		});
 	});
 
@@ -169,4 +178,18 @@ describe('toggleBookmark', function() {
 			expect(lastInlineAfterToggleOn[1].fieldType).toBe(1);
 		});
 	});
+
+	describe('Number in List', () => {
+		test('toggle off => should delete block', () => {
+			const toggledOff = toggleBookmark(
+				listWithConditionSfdt,
+				'COND::3ecfa0c1-0eb3-4463-bdb8-75b8c5f0e613',
+				false
+			)
+
+			// console.log('Sfdt after toggle off-----', JSON.stringify(toggleOff, null, 2))
+			const inlineAfterToggleOff = get(toggledOff, 'sections[0].blocks[5].inlines[0]')
+			expect(get(inlineAfterToggleOff, 'text')).toEqual('Three')
+		})
+	})
 });
