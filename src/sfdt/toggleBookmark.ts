@@ -1,5 +1,6 @@
 // DEPRECATED, use sfdt/blocksProcess
 import process from './processInlines';
+import canUseListCondition from './canUseListCondition'
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
 
 // export const makeToggleOff = (inlines: any[], name: String) => {
@@ -136,7 +137,9 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 			return newInlines;
 		};
 
-		process(sfdt, processInlines);
+		const processListBlock = () => true
+
+		process(sfdt, processInlines, processListBlock);
 	} else {
 		// toggle field off
 		const processInlines = (inlines) => {
@@ -191,7 +194,14 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		// 	return makeToggleOff(inlines, name)
 		// }
 
-		process(sfdt, processInlines);
+		const processListBlock = (block) => {
+			if (canUseListCondition(block, name)) {
+				return false
+			}
+			return true
+		}
+
+		process(sfdt, processInlines, processListBlock);
 	}
 
 	return sfdt;
