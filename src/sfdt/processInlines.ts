@@ -2,7 +2,7 @@ import get from "lodash/get";
 import filter from "lodash/filter"
 
 // DEPRECATED, use sfdt/blocksProcess
-export default (sfdt, callback, numberConditionCallback) => {
+export default (sfdt, callback, listConditionCallback = (arg) => true) => {
   if (!sfdt.sections) {
     console.warn('Missing: sfdt.sections', sfdt);
     return false;
@@ -18,7 +18,7 @@ export default (sfdt, callback, numberConditionCallback) => {
         return true
       }
 
-      const canAddBlock = numberConditionCallback(block)
+      const canAddBlock = listConditionCallback(block)
       if (!canAddBlock) {
         return false
       } else {
