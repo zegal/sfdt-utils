@@ -1,7 +1,8 @@
 // DEPRECATED, use sfdt/blocksProcess
 import process from './processInlines';
-import canUseListCondition from './canUseListCondition'
+import {canUseListCondition, conditionStartInFirstInlines, conditionEndInSameLastInlines, conditionStartEndInSameInlines} from './canUseListCondition'
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
+import Stack from '../stack'
 
 // export const makeToggleOff = (inlines: any[], name: String) => {
 //   const newInlines: any[] = []; // Should act as queue for getting new list of inlines
@@ -141,6 +142,8 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		process(sfdt, processInlines, processListBlock);
 	} else {
+		const stack = new Stack()
+
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines: any[] = [];
@@ -195,9 +198,26 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		// }
 
 		const processListBlock = (block) => {
-			if (canUseListCondition(block, name)) {
+			if (canUseListCondition(block, name) || !stack.isEmpty()) {
+				if (conditionStartEndInSameInlines(block, name)) {
+					return false
+				}
+
+				if (conditionStartInFirstInlines(block, name)) {
+					stack.push(block)
+
+					return false
+				}
+
+				if (conditionEndInSameLastInlines(block, name)) {
+					stack.pop()
+
+					return false
+				}
+
 				return false
 			}
+
 			return true
 		}
 

@@ -8,6 +8,8 @@ import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditi
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt'
+import draftConsentOrderSFDT from './fixtures/draftConsentOrderSFDT'
+import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2'
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -165,13 +167,14 @@ describe('toggleBookmark', function() {
 
 			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
-			// console.log('Toggle off', JSON.stringify(toggleOff, null, 2))
+			// console.log('Toggle on------------', JSON.stringify(toggleOn, null, 2))
 
 			const toggleOff = toggleBookmark(
 				bookmarkStartEndingInDifferentInline,
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				false
 			);
+			// console.log('Toggle off------------', JSON.stringify(toggleOff, null, 2))
 			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
 			const lastInlineAfterToggleOn = getInline(toggleOff, 0, 2);
 			expect(firstInlineAfterToggleOn[2].hasFieldEnd).toBeTruthy();
@@ -187,9 +190,34 @@ describe('toggleBookmark', function() {
 				false
 			)
 
-			// console.log('Sfdt after toggle off-----', JSON.stringify(toggleOff, null, 2))
+			// console.log('Sfdt after toggle off-----', JSON.stringify(toggledOff, null, 2))
 			const inlineAfterToggleOff = get(toggledOff, 'sections[0].blocks[5].inlines[0]')
 			expect(get(inlineAfterToggleOff, 'text')).toEqual('Three')
 		})
 	})
 });
+
+
+// describe('toggleBookmark => Draft Consent Order', () => {
+// 	it('toggle off', () => {
+// 		const toggedOff = toggleBookmark(
+// 			draftConsentOrderSFDT,
+// 			'COND::0804192b-a470-4e7b-87f9-f3347a71bb45',
+// 			false
+// 		)
+
+// 		console.log('Sfdt after toggle off-----------', JSON.stringify(toggedOff, null, 2))
+// 	})
+// })
+
+// describe('toggleBookmark', () => {
+// 	it('toggle off', () => {
+// 		const toggledOff = toggleBookmark(
+// 			listWithConditionSfdt2,
+// 			'COND::firstofOne',
+// 			false
+// 		)
+
+// 		console.log('Sfdt after toggle off-----------', JSON.stringify(toggledOff, null, 2))
+// 	})
+// })
