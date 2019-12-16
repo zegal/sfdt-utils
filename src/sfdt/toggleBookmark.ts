@@ -1,8 +1,15 @@
+import {isConditionalBookmark} from './../queryBookmark';
 // DEPRECATED, use sfdt/blocksProcess
+import filter from 'lodash/filter';
 import process from './processInlines';
-import {canUseListCondition, conditionStartInFirstInlines, conditionEndInSameLastInlines, conditionStartEndInSameInlines} from './canUseListCondition'
+import {
+	canUseListCondition,
+	conditionStartInFirstInlines,
+	conditionEndInSameLastInlines,
+	conditionStartEndInSameInlines
+} from './canUseListCondition';
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
-import Stack from '../stack'
+import Stack from '../stack';
 
 // export const makeToggleOff = (inlines: any[], name: String) => {
 //   const newInlines: any[] = []; // Should act as queue for getting new list of inlines
@@ -138,88 +145,59 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 			return newInlines;
 		};
 
-		const processListBlock = () => true
-
-		process(sfdt, processInlines, processListBlock);
+		process(sfdt, processInlines);
 	} else {
-		const stack = new Stack()
+		const stack = new Stack();
+		const stackForInline = new Stack();
 
 		// toggle field off
 		const processInlines = (inlines) => {
-			const newInlines: any[] = [];
+			const newInlines = filter(inlines, (inline) => {
+				if (isMatchingBookmark(inline, name) && isConditionalBookmark(inline)) {
+					if (isBookmarkStart(inline)) {
+						stackForInline.push(inline);
 
-			let inMatchingBookmark = false;
-
-			inlines.forEach((inline, index) => {
-				const nextInline = inlines[index + 1];
-				const prevInline = inlines[index - 1];
-
-				if (isMatchingBookmark(inline, name)) {
-					// console.log('Matched:', name)
-					inMatchingBookmark = true;
-				}
-
-				if (isBookmarkEnd(inline) && inMatchingBookmark) {
-					if (prevInline && prevInline.fieldType === undefined) {
-						// console.log('ADDING end')
-						newInlines.push({
-							fieldType: 1
-						});
+						return false;
 					}
 
-					// make sure to only add once
-					// so we toggle this flag after anytime we match the end of the bookmark
-					inMatchingBookmark = false;
-				}
-
-				newInlines.push(inline);
-
-				if (isBookmarkStart(inline) && inMatchingBookmark) {
-					// check to see if bookmark is already off
-					// and if so we dont need to add another 'off' flag
-					if (nextInline && nextInline.fieldType === undefined) {
-						// console.log('ADDING start')
-						newInlines.push({
-							hasFieldEnd: true,
-
-							// these are added automatically by SF if they are not here
-							// so we add them in here manually now too so that tests can check for em
-							characterFormat: {},
-							fieldType: 0
-						});
+					if (isBookmarkEnd(inline)) {
+						stackForInline.pop();
+						return false;
 					}
 				}
+
+				if (!stackForInline.isEmpty()) {
+					return false;
+				}
+				return true;
 			});
 
 			return newInlines;
 		};
-		// const processInlines = inlines => {
-		// 	return makeToggleOff(inlines, name)
-		// }
 
 		const processListBlock = (block) => {
 			if (canUseListCondition(block, name) || !stack.isEmpty()) {
 				if (conditionStartEndInSameInlines(block, name)) {
-					return false
+					return false;
 				}
 
 				if (conditionStartInFirstInlines(block, name)) {
-					stack.push(block)
+					stack.push(block);
 
-					return false
+					return false;
 				}
 
 				if (conditionEndInSameLastInlines(block, name)) {
-					stack.pop()
+					stack.pop();
 
-					return false
+					return false;
 				}
 
-				return false
+				return false;
 			}
 
-			return true
-		}
+			return true;
+		};
 
 		process(sfdt, processInlines, processListBlock);
 	}
