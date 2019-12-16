@@ -8,7 +8,6 @@ import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditi
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt'
-import draftConsentOrderSFDT from './fixtures/draftConsentOrderSFDT'
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2'
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
