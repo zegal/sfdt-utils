@@ -1,3 +1,4 @@
+import {inline} from './../../types/sfdt.d';
 import filter from 'lodash/filter';
 import {isConditionalBookmark, isMatchingBookmark, isBookmarkStart, isBookmarkEnd} from './../queryBookmark';
 import get from 'lodash/get';
@@ -5,45 +6,35 @@ import first from 'lodash/first';
 import last from 'lodash/last';
 import isEmpty from 'lodash/isEmpty';
 
-export const blockIncludeEndingConditon = (block, name) => {
+const doBlockInlcude = (isIncluded) => (block, name) => {
 	const inlines = get(block, 'inlines');
 	const conditionalEndingBookmarks = filter(inlines, (inline) => {
-		if (
-			isConditionalBookmark(inline) &&
-			isMatchingBookmark(inline, name) &&
-			isBookmarkEnd(inline) &&
-			!conditionEndInSameLastInlines(inline, name)
-		) {
+		if (isIncluded(inline, name)) {
 			return true;
 		}
 		return false;
 	});
 
-	if (conditionalEndingBookmarks.length) {
-		return true;
-	}
-	return false;
+	return conditionalEndingBookmarks.length;
 };
 
-export const blockInlcudeStartCondition = (block, name) => {
-	const inlines = get(block, 'inlines');
-	const conditionStartBookmarks = filter(inlines, (inline) => {
-		if (
-			isConditionalBookmark(inline) &&
-			isMatchingBookmark(inline, name) &&
-			isBookmarkStart(inline) &&
-			!conditionStartInFirstInlines(inline, name)
-		) {
-			return true;
-		}
-		return false;
-	});
+export const blockIncludeEndingConditon = doBlockInlcude((inline, name) => {
+	return (
+		isConditionalBookmark(inline) &&
+		isMatchingBookmark(inline, name) &&
+		isBookmarkEnd(inline) &&
+		!conditionEndInSameLastInlines(inline, name)
+	);
+});
 
-	if (conditionStartBookmarks.length) {
-		return true;
-	}
-	return false;
-};
+export const blockInlcudeStartCondition = doBlockInlcude((inline, name) => {
+	return (
+		isConditionalBookmark(inline) &&
+		isMatchingBookmark(inline, name) &&
+		isBookmarkStart(inline) &&
+		!conditionStartInFirstInlines(inline, name)
+	);
+});
 
 export const conditionStartEndInSameInlines = (block, name) => {
 	const inlines = get(block, 'inlines');
@@ -89,23 +80,16 @@ export function canUseListCondition(block, name) {
 
 	// 3. if block has conditional bookmark at start but
 	// last inline in same block is not ending matching conditional bookmark
-	if (
-		conditionStartInFirstInlines(block, name) &&
-		!conditionEndInSameLastInlines(block, name) &&
-		!blockIncludeEndingConditon(block, name)
-	) {
-		return true;
-	}
-
 	// 4. if block has conditional bookmark as end but
 	// don't have same bookmark in same inlines
-	if (
-		conditionEndInSameLastInlines(block, name) &&
-		!conditionEndInSameLastInlines(block, name) &&
-		!blockInlcudeStartCondition(block, name)
-	) {
-		return true;
-	}
+	return (
+		(conditionStartInFirstInlines(block, name) &&
+			!conditionEndInSameLastInlines(block, name) &&
+			!blockIncludeEndingConditon(block, name)) ||
+		(conditionEndInSameLastInlines(block, name) &&
+			!conditionEndInSameLastInlines(block, name) &&
+			!blockInlcudeStartCondition(block, name))
+	);
 
 	return false;
 }
