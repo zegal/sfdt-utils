@@ -1,89 +1,89 @@
 {
-  "private": false,
-  "version": "0.3.4",
-  "name": "@zegal/sfdt-utils",
-  "description": "SFDT Utils",
-  "author": "Adam Tombleson <rekarnar@gmail.com>",
-  "main": "index.js",
-  "files": [
-    "*.js",
-    "types/*.d.ts",
-    "!rollup.config.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zegal/sfdt-utils.git"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "lodash": "^4.17.15"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/plugin-transform-react-jsx": "^7.7.0",
-    "@babel/preset-env": "^7.6.0",
-    "@babel/preset-typescript": "^7.6.0",
-    "@types/jest": "^24.0.18",
-    "@types/lodash": "^4.14.146",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
-    "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.15.1",
-    "jest": "^24.9.0",
-    "react": "^16.12.0",
-    "react-docgen-typescript-loader": "^3.2.0",
-    "react-dom": "^16.12.0",
-    "rollup": "^1.21.2",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-terser": "^5.1.2",
-    "rollup-plugin-typescript": "^1.0.1",
-    "ts-jest": "^24.1.0",
-    "tslib": "^1.10.0",
-    "typescript": "^3.6.3"
-  },
-  "scripts": {
-    "build": "rollup -c",
-    "start": "rollup -cw",
-    "test": "yarn jest --coverage",
-    "prepublish": "yarn build"
-  },
-  "jest": {
-    "testMatch": [
-      "**/__tests__/*.test.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/jest.setup.js"
-    ],
-    "collectCoverageFrom": [
-      "**/src/*.{ts,js}",
-      "!**/node_modules/**"
-    ],
-    "coverageReporters": [
-      "json-summary",
-      "json",
-      "lcov",
-      "text",
-      "clover"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "lines": 10,
-        "statements": 10,
-        "functions": 10,
-        "branches": 10
-      }
-    }
-  },
-  "bugs": {
-    "url": "https://github.com/zegal/sfdt-utils/issues"
-  },
-  "homepage": "https://github.com/zegal/sfdt-utils#readme",
-  "keywords": [
-    "syncfusion",
-    "sfdt",
-    "zegal"
-  ]
+	"private": false,
+	"version": "0.3.5",
+	"name": "@zegal/sfdt-utils",
+	"description": "SFDT Utils",
+	"author": "Adam Tombleson <rekarnar@gmail.com>",
+	"main": "index.js",
+	"files": [
+		"*.js",
+		"types/*.d.ts",
+		"!rollup.config.js"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/zegal/sfdt-utils.git"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"lodash": "^4.17.15"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.6.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+		"@babel/plugin-transform-react-jsx": "^7.7.0",
+		"@babel/preset-env": "^7.6.0",
+		"@babel/preset-typescript": "^7.6.0",
+		"@types/jest": "^24.0.18",
+		"@types/lodash": "^4.14.146",
+		"awesome-typescript-loader": "^5.2.1",
+		"babel-jest": "^24.9.0",
+		"babel-loader": "^8.0.6",
+		"enzyme": "^3.10.0",
+		"enzyme-adapter-react-16": "^1.15.1",
+		"jest": "^24.9.0",
+		"react": "^16.12.0",
+		"react-docgen-typescript-loader": "^3.2.0",
+		"react-dom": "^16.12.0",
+		"rollup": "^1.21.2",
+		"rollup-plugin-node-resolve": "^5.2.0",
+		"rollup-plugin-terser": "^5.1.2",
+		"rollup-plugin-typescript": "^1.0.1",
+		"ts-jest": "^24.1.0",
+		"tslib": "^1.10.0",
+		"typescript": "^3.6.3"
+	},
+	"scripts": {
+		"build": "rollup -c",
+		"start": "rollup -cw",
+		"test": "yarn jest --coverage",
+		"prepublish": "yarn build"
+	},
+	"jest": {
+		"testMatch": [
+			"**/__tests__/*.test.{js,jsx,ts,tsx}"
+		],
+		"testEnvironment": "jsdom",
+		"setupFilesAfterEnv": [
+			"<rootDir>/jest.setup.js"
+		],
+		"collectCoverageFrom": [
+			"**/src/*.{ts,js}",
+			"!**/node_modules/**"
+		],
+		"coverageReporters": [
+			"json-summary",
+			"json",
+			"lcov",
+			"text",
+			"clover"
+		],
+		"coverageThreshold": {
+			"global": {
+				"lines": 10,
+				"statements": 10,
+				"functions": 10,
+				"branches": 10
+			}
+		}
+	},
+	"bugs": {
+		"url": "https://github.com/zegal/sfdt-utils/issues"
+	},
+	"homepage": "https://github.com/zegal/sfdt-utils#readme",
+	"keywords": [
+		"syncfusion",
+		"sfdt",
+		"zegal"
+	]
 }
