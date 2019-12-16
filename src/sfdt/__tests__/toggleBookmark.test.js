@@ -51,8 +51,8 @@ describe('toggleBookmark', function() {
 		test('Toggle parent off', function() {
 			const nestedBookmarkSfdt = getSFDT(false, nestedConditionListWithParentOnOneChildOff);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
-
-			expect(initialInlines.length).toEqual(10);
+			const INITIAL_INLINE_LENGTH = 10;
+			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
@@ -61,8 +61,8 @@ describe('toggleBookmark', function() {
 		test('Toggle parent on', function() {
 			const nestedBookmarkSfdt = getSFDT(false, nestedConditionWithParentOffOneChildOff);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
-
-			expect(initialInlines.length).toEqual(10);
+			const INITIAL_INLINE_LENGTH = 10;
+			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
 			expect(initialInlines[1].hasFieldEnd).toBeTruthy();
 			expect(initialInlines[8].fieldType).toBe(1);
 
