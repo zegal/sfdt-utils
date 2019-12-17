@@ -1,4 +1,3 @@
-import {inline} from './../../types/sfdt.d';
 import filter from 'lodash/filter';
 import {isConditionalBookmark, isMatchingBookmark, isBookmarkStart, isBookmarkEnd} from './../queryBookmark';
 import get from 'lodash/get';
@@ -60,21 +59,64 @@ export const conditionEndInSameLastInlines = (block, name) => {
 	return isMatchingBookmark(lastElementOfInlines, name) && isConditionalBookmark(lastElementOfInlines);
 };
 
+/**
+ * filter all the bookmarks from inlines that are not added by us or added by docx
+ * eg. {
+ * 	"characterFormat": {},
+ *	"bookmarkType": 0,
+ *	"name": "(c)"
+ * }
+ */
+export const normalizeBlockInlines = (block) => {
+	const inlines = get(block, 'inlines');
+
+	const newInlines = filter(inlines, (inline) => {
+		if (isConditionalBookmark(inline)) {
+			return true;
+		}
+
+		// TODO:: rename isConditionalBookmark and refactor
+		// this is checking data bookmark
+		if (isConditionalBookmark(inline, 'DATA')) {
+			return true;
+		}
+
+		const text = get(inline, 'text');
+		if (text && text !== '') {
+			return true;
+		}
+
+		return false;
+	});
+
+	const newBlock = {
+		...block,
+		inlines: newInlines
+	};
+
+	return newBlock;
+};
+
 export function canUseListCondition(block, name) {
 	// condition for numbering condition
+	const normalizedBlock = normalizeBlockInlines(block);
 
 	// 1. if block don't have paragraphFormat.listFormat
 	// represent block is not list
-	const blockParagraphFormat = get(block, 'paragraphFormat');
+	const blockParagraphFormat = get(normalizedBlock, 'paragraphFormat');
 	const listFormat = get(blockParagraphFormat, 'listFormat');
-	if (!listFormat && !isEmpty(listFormat)) {
+	if (!listFormat) {
 		return false;
+	}
+
+	if (listFormat && !isEmpty(listFormat)) {
+		return true;
 	}
 
 	// 2. if block.inlines first element is conditional bookmark
 	// represent block may have partials condition
 	// condition don't start from the beginning of the line
-	if (conditionStartEndInSameInlines(block, name)) {
+	if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 		return true;
 	}
 
@@ -83,13 +125,11 @@ export function canUseListCondition(block, name) {
 	// 4. if block has conditional bookmark as end but
 	// don't have same bookmark in same inlines
 	return (
-		(conditionStartInFirstInlines(block, name) &&
-			!conditionEndInSameLastInlines(block, name) &&
-			!blockIncludeEndingConditon(block, name)) ||
-		(conditionEndInSameLastInlines(block, name) &&
-			!conditionEndInSameLastInlines(block, name) &&
-			!blockInlcudeStartCondition(block, name))
+		(conditionStartInFirstInlines(normalizedBlock, name) &&
+			!conditionEndInSameLastInlines(normalizedBlock, name) &&
+			!blockIncludeEndingConditon(normalizedBlock, name)) ||
+		(conditionEndInSameLastInlines(normalizedBlock, name) &&
+			!conditionEndInSameLastInlines(normalizedBlock, name) &&
+			!blockInlcudeStartCondition(normalizedBlock, name))
 	);
-
-	return false;
 }
