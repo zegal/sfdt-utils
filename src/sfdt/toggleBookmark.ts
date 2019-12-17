@@ -56,7 +56,7 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		process(sfdt, processInlines);
 	} else {
-		const stack = new Stack();
+		const stackForBlock = new Stack();
 		const stackForInline = new Stack();
 
 		// toggle field off
@@ -85,23 +85,27 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		};
 
 		const processListBlock = (block) => {
-			if (canUseListCondition(block, name) || !stack.isEmpty()) {
+			if (canUseListCondition(block, name)) {
 				if (conditionStartEndInSameInlines(block, name)) {
 					return false;
 				}
 
 				if (conditionStartInFirstInlines(block, name)) {
-					stack.push(block);
+					stackForBlock.push(block);
 
 					return false;
 				}
 
 				if (conditionEndInSameLastInlines(block, name)) {
-					stack.pop();
+					stackForBlock.pop();
 
 					return false;
 				}
 
+				return true;
+			}
+
+			if (!stackForBlock.isEmpty()) {
 				return false;
 			}
 
