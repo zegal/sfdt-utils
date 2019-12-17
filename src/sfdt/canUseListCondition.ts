@@ -105,12 +105,13 @@ export function canUseListCondition(block, name) {
 	// represent block is not list
 	const blockParagraphFormat = get(normalizedBlock, 'paragraphFormat');
 	const listFormat = get(blockParagraphFormat, 'listFormat');
+
 	if (!listFormat) {
-		return false;
+		return false
 	}
 
-	if (listFormat && !isEmpty(listFormat)) {
-		return true;
+	if (listFormat && isEmpty(listFormat)) {
+		return false;
 	}
 
 	// 2. if block.inlines first element is conditional bookmark
@@ -129,7 +130,7 @@ export function canUseListCondition(block, name) {
 			!conditionEndInSameLastInlines(normalizedBlock, name) &&
 			!blockIncludeEndingConditon(normalizedBlock, name)) ||
 		(conditionEndInSameLastInlines(normalizedBlock, name) &&
-			!conditionEndInSameLastInlines(normalizedBlock, name) &&
+			!conditionStartInFirstInlines(normalizedBlock, name) &&
 			!blockInlcudeStartCondition(normalizedBlock, name))
 	);
 }

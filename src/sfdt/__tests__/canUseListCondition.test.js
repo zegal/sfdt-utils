@@ -33,7 +33,7 @@ const block1 = {
 };
 
 describe('normalizeBlockInlines', () => {
-	it('should filter out all non-condition bookmar from inline', () => {
+	it('should filter out all non-condition bookmark from inlines', () => {
 		const newBlock = normalizeBlockInlines(block1);
 
 		expect(get(newBlock, 'inlines').length).toBe(2);
