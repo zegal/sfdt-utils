@@ -28,6 +28,15 @@ const block1 = {
 			characterFormat: {},
 			bookmarkType: 1,
 			name: '(f)'
+		},
+		{
+			characterFormat: {
+				fontSize: 11,
+				fontFamily: 'Arial',
+				fontSizeBidi: 11,
+				fontFamilyBidi: 'Arial'
+			},
+			text: ' '
 		}
 	]
 };
