@@ -1,109 +1,109 @@
-import get from 'lodash/get'
-import { block as BlockType } from './../../types/sfdt.d';
-import { processSFDT, processBlock } from './blocksProcess';
+import get from 'lodash/get';
+import {block as BlockType} from './../../types/sfdt.d';
+import {processSFDT, processBlock} from './blocksProcess';
 // import process from './processInlines'
 
-const debug = false
+const debug = false;
 
 export default (data, sfdt, prefix = 'DATA::') => {
-	debug && console.log('data, sfdt', {data, sfdt})
+	debug && console.log('data, sfdt', {data, sfdt});
 
 	if (!sfdt) {
-		return
+		return;
 	}
 
 	return processSFDT(sfdt, (block: BlockType) => {
 		const callbackBlock = (block: BlockType) => {
 			if (get(block, 'inlines.rows')) {
-				return get(block, 'inlines')
+				return get(block, 'inlines');
 			}
-			return block
-		}
+			return block;
+		};
 
 		const callbackInline = (inlines: any[]) => {
-			let dataMode = false
+			let dataMode = false;
 
 			// using objects here allows for nested bookmarks
-			let processing = {}
-			let doneProcessing = {}
+			let processing = {};
+			let doneProcessing = {};
 			// keep track of the current one
-			let currentlyProcessing
+			let currentlyProcessing;
 
-			const newInlines: any[] = []
+			const newInlines: any[] = [];
 
 			inlines.forEach((inline) => {
-				const newInline = {...inline}
+				const newInline = {...inline};
 
 				// bookmark end
 				if (inline.bookmarkType === 1) {
-					processing[inline.name] = false
-					debug && console.log('Stopping processing', inline.name, inline)
+					processing[inline.name] = false;
+					debug && console.log('Stopping processing', inline.name, inline);
 					if (inline.name.includes(prefix)) {
-						dataMode = false
+						dataMode = false;
 					}
 
-					currentlyProcessing = ''
+					currentlyProcessing = '';
 					// keep end tag
-					newInlines.push(newInline)
-					return
+					newInlines.push(newInline);
+					return;
 				}
 
 				// middle of a bookmark
 				// NOTE: needs to be above the start processing but below end
 				// (so it does not also process the opening tag etc)
 				if (dataMode) {
-				// if (processing[inline.name]) {
+					// if (processing[inline.name]) {
 					if (!doneProcessing[currentlyProcessing]) {
-						debug && console.log('Replacing:', newInline, data[currentlyProcessing])
+						debug && console.log('Replacing:', newInline, data[currentlyProcessing]);
 						if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
 							// console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
-							newInline.text = data[currentlyProcessing] + ' '
+							newInline.text = data[currentlyProcessing];
 
 							if (newInline.characterFormat) {
-								newInline.characterFormat.highlightColor = ''
+								newInline.characterFormat.highlightColor = '';
 							}
 						}
 
-						newInlines.push(newInline)
+						newInlines.push(newInline);
 
-						doneProcessing[currentlyProcessing] = true
+						doneProcessing[currentlyProcessing] = true;
 					} else {
 						// no else, but just a comment to make it clear
 						// we are dropping this line
 						// because we only use one child inside a bookmark
 					}
 
-					return
+					return;
 				}
 
 				// bookmark start
 				if (inline.bookmarkType === 0) {
 					if (inline.name.includes(prefix)) {
-						dataMode = true
+						dataMode = true;
 					}
 
-					currentlyProcessing = inline.name
-					debug && console.log('Currently Processing', currentlyProcessing)
+					currentlyProcessing = inline.name;
+					debug && console.log('Currently Processing', currentlyProcessing);
 
-					processing[inline.name] = true
+					processing[inline.name] = true;
 					// keep bookmark start tag
-					newInlines.push(newInline)
-					debug && console.log('Starting processing', inline.name, inline)
-					return
+					newInlines.push(newInline);
+					debug && console.log('Starting processing', inline.name, inline);
+					return;
 				}
 
 				// keep the normal non-inside bookmark and not bookmark start test
-				newInlines.push(newInline)
-			})
+				newInlines.push(newInline);
+			});
 
 			// console.log('Processing results:', {processing, doneProcessing})
 
-			return newInlines
-		}
+			return newInlines;
+		};
 
-		return processBlock(block, callbackInline, callbackBlock)
-	})
-}
+		return processBlock(block, callbackInline, callbackBlock);
+	});
+};
 
 // export default (data, sfdt, prefix = 'DATA::') => {
 // 	debug && console.log('data, sfdt', {data, sfdt})
