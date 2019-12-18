@@ -156,12 +156,41 @@ const listWithConditionSfdt = {
                 },
                 "characterFormat": {},
                 "inlines": [
-                    {
-                        "characterFormat": {
-                            "bidi": false
-                        },
-                        "text": "Long Four Text"
-                    }
+                  {
+                      "characterFormat": {
+                          "highlightColor": ""
+                      },
+                      "bookmarkType": 0,
+                      "name": "COND::fcd74c0d-d1e4-4337-baa5-2b2c5abb120b"
+                  },
+                  {
+                      "characterFormat": {
+                          "highlightColor": "",
+                          "bidi": false
+                      },
+                      "text": "Long "
+                  },
+                  {
+                      "characterFormat": {
+                          "highlightColor": "",
+                          "bidi": false
+                      },
+                      "text": "Four"
+                  },
+                  {
+                      "characterFormat": {
+                          "highlightColor": ""
+                      },
+                      "bookmarkType": 1,
+                      "name": "COND::fcd74c0d-d1e4-4337-baa5-2b2c5abb120b"
+                  },
+                  {
+                      "characterFormat": {
+                          "highlightColor": "NoColor",
+                          "bidi": false
+                      },
+                      "text": " Text"
+                  }
                 ]
             },
             {

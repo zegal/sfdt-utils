@@ -102,6 +102,10 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 					return false;
 				}
 
+				if (!stackForBlock.isEmpty()) {
+					return false;
+				}
+
 				return true;
 			}
 

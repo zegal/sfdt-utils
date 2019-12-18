@@ -164,5 +164,14 @@ describe('toggleBookmark', () => {
 		const inlineAfterToggleOff = getInline(toggledOff, 0);
 
 		expect(get(inlineAfterToggleOff, '[0]').name).not.toEqual('COND:firstofOne');
+		expect(get(inlineAfterToggleOff, '[1].text')).not.toEqual('One');
+	});
+
+	it('toggle off inside list inline', () => {
+		const toggledOff = toggleBookmark(listWithConditionSfdt2, 'COND::fcd74c0d-d1e4-4337-baa5-2b2c5abb120b', false);
+
+		const inlineAfterToggleOff = getInline(toggledOff, 0, 2);
+
+		expect(get(inlineAfterToggleOff, '[0].text')).toEqual(' Text');
 	});
 });
