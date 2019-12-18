@@ -82,7 +82,8 @@ export const normalizeBlockInlines = (block) => {
 		}
 
 		const text = get(inline, 'text');
-		if (text && text !== '') {
+		const trimmedText = text && text.trim();
+		if (!isEmpty(trimmedText)) {
 			return true;
 		}
 
@@ -107,7 +108,7 @@ export function canUseListCondition(block, name) {
 	const listFormat = get(blockParagraphFormat, 'listFormat');
 
 	if (!listFormat) {
-		return false
+		return false;
 	}
 
 	if (listFormat && isEmpty(listFormat)) {

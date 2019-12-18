@@ -9,6 +9,7 @@ import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWi
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
+import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -173,5 +174,12 @@ describe('toggleBookmark', () => {
 		const inlineAfterToggleOff = getInline(toggledOff, 0, 2);
 
 		expect(get(inlineAfterToggleOff, '[0].text')).toEqual(' Text');
+	});
+
+	it('toggle off in deed separation list', () => {
+		let toggledOff = toggleBookmark(deedSeparationSfdt, 'COND::7cb6036d-44bd-4d3f-ae6d-7e77f165c77c', false);
+		toggledOff = toggleBookmark(toggledOff, 'COND::5079cf1c-41b5-4f27-8f88-bcb91327aaf6', false);
+
+		expect(get(toggledOff, 'sections[0].blocks').length).toBe(0);
 	});
 });
