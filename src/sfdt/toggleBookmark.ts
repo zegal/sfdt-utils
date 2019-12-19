@@ -9,6 +9,7 @@ import {
 	conditionStartEndInSameInlines
 } from './canUseListCondition';
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
+import {normalizeBlockInlines} from './canUseListCondition';
 import Stack from '../stack';
 
 /**
@@ -85,18 +86,19 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		};
 
 		const processListBlock = (block) => {
-			if (canUseListCondition(block, name)) {
-				if (conditionStartEndInSameInlines(block, name)) {
+			const normalizedBlock = normalizeBlockInlines(block);
+			if (canUseListCondition(normalizedBlock, name)) {
+				if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 					return false;
 				}
 
-				if (conditionStartInFirstInlines(block, name)) {
+				if (conditionStartInFirstInlines(normalizedBlock, name)) {
 					stackForBlock.push(block);
 
 					return false;
 				}
 
-				if (conditionEndInSameLastInlines(block, name)) {
+				if (conditionEndInSameLastInlines(normalizedBlock, name)) {
 					stackForBlock.pop();
 
 					return false;
