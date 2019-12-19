@@ -60,6 +60,9 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		const stackForBlock = new Stack();
 		const stackForInline = new Stack();
 
+		// Boolean field for stackForInline.isEmpty() to get the inlines within the bookmark condtion
+		let isInlineWithinBookmark: boolean = false;
+
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines = filter(inlines, (inline) => {
@@ -75,13 +78,20 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 						return false;
 					}
 				}
+				// If stack is not empty; there are inlines within the condition
+				isInlineWithinBookmark = !stackForInline.isEmpty();
 
 				if (!stackForInline.isEmpty()) {
 					return false;
 				}
+
 				return true;
 			});
 
+			// Empty inlines [] are not checked by filter, so use the boolean isInlineWithinBookmark to check if those inlines are to be removed or not
+			if (isInlineWithinBookmark && inlines.length === 0) {
+				return false;
+			}
 			return newInlines;
 		};
 
