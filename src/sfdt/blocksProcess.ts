@@ -51,6 +51,24 @@ export const processBlock = (block: any, callbackInline: TCallback, callbackBloc
 	return block
 }
 
+export const processBlockForCrossRef = (block: any, callbackInline: TCallback, callbackBlock): boolean => {
+	// 1. process block top level content first
+	block = callbackBlock(block)
+
+	// 2. then delve into inlines and tables:
+	const processedBlock = processTable(block, callbackInline, callbackBlock)
+
+	if (processedBlock) {
+		block = processedBlock
+	}
+
+	if (block.inlines) {
+		block.inlines = callbackInline(block)
+	}
+
+	return block
+}
+
 // callback is run on each block
 // things in blocks we care about:
 //  - rows            // for tables
