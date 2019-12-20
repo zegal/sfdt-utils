@@ -1,3 +1,4 @@
+import {block, inline} from './../../types/sfdt.d';
 import filter from 'lodash/filter';
 import {isConditionalBookmark, isMatchingBookmark, isBookmarkStart, isBookmarkEnd} from './../queryBookmark';
 import get from 'lodash/get';

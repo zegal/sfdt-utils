@@ -57,26 +57,29 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		process(sfdt, processInlines);
 	} else {
-		const stackForBlock = new Stack();
-		const stackForInline = new Stack();
+		const stack = new Stack();
+		let isStackContainInline = false;
 
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines = filter(inlines, (inline) => {
+				// console.log('Inline------------', inline);
 				if (isMatchingBookmark(inline, name) && isConditionalBookmark(inline)) {
 					if (isBookmarkStart(inline)) {
-						stackForInline.push(inline);
+						stack.push(inline);
+						isStackContainInline = true;
 
 						return false;
 					}
 
 					if (isBookmarkEnd(inline)) {
-						stackForInline.pop();
+						stack.pop();
+						isStackContainInline = false;
 						return false;
 					}
 				}
 
-				if (!stackForInline.isEmpty()) {
+				if (!stack.isEmpty()) {
 					return false;
 				}
 				return true;
@@ -93,25 +96,28 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 				}
 
 				if (conditionStartInFirstInlines(normalizedBlock, name)) {
-					stackForBlock.push(block);
+					stack.push(block);
 
 					return false;
 				}
 
 				if (conditionEndInSameLastInlines(normalizedBlock, name)) {
-					stackForBlock.pop();
+					stack.pop();
 
 					return false;
 				}
 
-				if (!stackForBlock.isEmpty()) {
+				if (!stack.isEmpty()) {
 					return false;
 				}
 
 				return true;
 			}
 
-			if (!stackForBlock.isEmpty()) {
+			if (!stack.isEmpty()) {
+				if (isStackContainInline) {
+					processInlines(block.inlines);
+				}
 				return false;
 			}
 

@@ -138,9 +138,7 @@ describe('toggleBookmark', function() {
 				false
 			);
 			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
-			const lastInlineAfterToggleOn = getInline(toggleOff, 0, 2);
 			expect(firstInlineAfterToggleOn.length).toBe(1);
-			expect(lastInlineAfterToggleOn.length).toBe(0);
 		});
 	});
 
