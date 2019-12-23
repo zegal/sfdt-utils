@@ -22,13 +22,7 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 			if (!canAddBlock) {
 				return false;
 			} else {
-				let newInlines = callback(block.inlines);
-				// Remove the blocks if the inline is removed i.e [] from the condition in callback function
-				if (!newInlines || (newInlines.length === 0 && block.inlines.length > 0)) {
-					return false;
-				}
-
-				block.inlines = newInlines;
+				block.inlines = callback(block.inlines);
 				return true;
 			}
 		});
