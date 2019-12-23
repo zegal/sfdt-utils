@@ -9,6 +9,7 @@ import {
 	conditionStartEndInSameInlines
 } from './canUseListCondition';
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
+import {normalizeBlockInlines} from './canUseListCondition';
 import Stack from '../stack';
 
 /**
@@ -56,60 +57,75 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		process(sfdt, processInlines);
 	} else {
-		const stackForBlock = new Stack();
-		const stackForInline = new Stack();
+		const stack = new Stack();
+		let isStackContainInline = false;
+
+		// boolean field for stackForInline.isEmpty() to get the inlines within the bookmark condtion
+		let isInlineWithinBookmark: boolean = false;
 
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines = filter(inlines, (inline) => {
+				// console.log('Inline------------', inline);
 				if (isMatchingBookmark(inline, name) && isConditionalBookmark(inline)) {
 					if (isBookmarkStart(inline)) {
-						stackForInline.push(inline);
+						stack.push(inline);
+						isStackContainInline = true;
 
 						return false;
 					}
 
 					if (isBookmarkEnd(inline)) {
-						stackForInline.pop();
+						stack.pop();
+						isStackContainInline = false;
 						return false;
 					}
 				}
 
-				if (!stackForInline.isEmpty()) {
+				if (!stack.isEmpty()) {
 					return false;
 				}
+
 				return true;
 			});
 
+			// empty inlines [] are not checked by filter, so use the boolean isInlineWithinBookmark to check if those inlines are to be removed or not
+			if (isInlineWithinBookmark && inlines.length === 0) {
+				return null;
+			}
 			return newInlines;
 		};
 
 		const processListBlock = (block) => {
-			if (canUseListCondition(block, name)) {
-				if (conditionStartEndInSameInlines(block, name)) {
+			const normalizedBlock = normalizeBlockInlines(block);
+			if (canUseListCondition(normalizedBlock, name)) {
+				if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 					return false;
 				}
 
-				if (conditionStartInFirstInlines(block, name)) {
-					stackForBlock.push(block);
-
-					return false;
-				}
-
-				if (conditionEndInSameLastInlines(block, name)) {
-					stackForBlock.pop();
+				if (conditionStartInFirstInlines(normalizedBlock, name)) {
+					stack.push(block);
 
 					return false;
 				}
 
-				if (!stackForBlock.isEmpty()) {
+				if (conditionEndInSameLastInlines(normalizedBlock, name)) {
+					stack.pop();
+
+					return false;
+				}
+
+				if (!stack.isEmpty()) {
 					return false;
 				}
 
 				return true;
 			}
 
-			if (!stackForBlock.isEmpty()) {
+			if (!stack.isEmpty()) {
+				if (isStackContainInline) {
+					processInlines(block.inlines);
+				}
 				return false;
 			}
 
