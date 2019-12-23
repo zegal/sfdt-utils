@@ -53,12 +53,6 @@ const firstInline = [
 ];
 
 /**
- * Conditional bookmark which start in firstInline, has empty inline and ends here
- * name: COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4
- */
-const emptyInline = [];
-
-/**
  * Conditional bookmark which start in firstInline end here
  * name: COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4
  */
@@ -114,15 +108,6 @@ const sfdt = {
 					characterFormat: {
 						highlightColor: ''
 					},
-					inlines: emptyInline
-				},
-				{
-					paragraphFormat: {
-						styleName: 'Normal'
-					},
-					characterFormat: {
-						highlightColor: ''
-					},
 					inlines: lastInline
 				},
 				{
@@ -137,12 +122,6 @@ const sfdt = {
 							text: 'Keep Distance with me.'
 						}
 					]
-				},
-				{
-					paragraphFormat: {
-						styleName: 'Normal'
-					},
-					inlines: []
 				}
 			]
 		}
