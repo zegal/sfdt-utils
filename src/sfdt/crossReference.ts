@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import {block as BlockType} from '../../types/sfdt';
 import {processSFDT, processBlockForCrossRef} from './blocksProcess';
+import createSfdt from './numberFromList';
 
 export const doInlinesContain = (inlines, callback) => {
 	const newInlines = filter(inlines, (inline) => {
@@ -34,10 +35,9 @@ const doInlinesContainRef = (inlines) =>
 		}
 	});
 
-export const getNumberFromList = (block: BlockType) => {};
-
-export const manipulateSfdtForCrossRef = (block: BlockType) => {
-	const number = getNumberFromList(block);
+export const manipulateSfdtForCrossRef = (oldSfdt, block: BlockType) => {
+	const sfdt = createSfdt(oldSfdt);
+	const number = sfdt.getNumberFromList(block);
 
 	// find XREF with the same name as XREFANCHOR
 };
@@ -61,8 +61,7 @@ export const findAnchor = (sfdt, callback) => {
 			// if inlines contains anchor
 			const inlineContainingAnchor = doInlinesContainAnchor(inlines);
 			if (inlineContainingAnchor.length) {
-				console.log('Block contains Anchor----------', block);
-				callback(block);
+				callback(sfdt, block);
 			}
 		};
 
