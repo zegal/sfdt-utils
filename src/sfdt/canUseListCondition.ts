@@ -1,3 +1,4 @@
+import {block, inline} from './../../types/sfdt.d';
 import filter from 'lodash/filter';
 import {isConditionalBookmark, isMatchingBookmark, isBookmarkStart, isBookmarkEnd} from './../queryBookmark';
 import get from 'lodash/get';
@@ -59,6 +60,10 @@ export const conditionEndInSameLastInlines = (block, name) => {
 	return isMatchingBookmark(lastElementOfInlines, name) && isConditionalBookmark(lastElementOfInlines);
 };
 
+function isBlank(str) {
+	return !str || /^\s*$/.test(str);
+}
+
 /**
  * filter all the bookmarks from inlines that are not added by us or added by docx
  * eg. {
@@ -82,7 +87,7 @@ export const normalizeBlockInlines = (block) => {
 		}
 
 		const text = get(inline, 'text');
-		if (text && text !== '') {
+		if (text && !isBlank(text)) {
 			return true;
 		}
 
@@ -99,15 +104,14 @@ export const normalizeBlockInlines = (block) => {
 
 export function canUseListCondition(block, name) {
 	// condition for numbering condition
-	const normalizedBlock = normalizeBlockInlines(block);
 
 	// 1. if block don't have paragraphFormat.listFormat
 	// represent block is not list
-	const blockParagraphFormat = get(normalizedBlock, 'paragraphFormat');
+	const blockParagraphFormat = get(block, 'paragraphFormat');
 	const listFormat = get(blockParagraphFormat, 'listFormat');
 
 	if (!listFormat) {
-		return false
+		return false;
 	}
 
 	if (listFormat && isEmpty(listFormat)) {
@@ -117,7 +121,7 @@ export function canUseListCondition(block, name) {
 	// 2. if block.inlines first element is conditional bookmark
 	// represent block may have partials condition
 	// condition don't start from the beginning of the line
-	if (conditionStartEndInSameInlines(normalizedBlock, name)) {
+	if (conditionStartEndInSameInlines(block, name)) {
 		return true;
 	}
 
@@ -126,11 +130,11 @@ export function canUseListCondition(block, name) {
 	// 4. if block has conditional bookmark as end but
 	// don't have same bookmark in same inlines
 	return (
-		(conditionStartInFirstInlines(normalizedBlock, name) &&
-			!conditionEndInSameLastInlines(normalizedBlock, name) &&
-			!blockIncludeEndingConditon(normalizedBlock, name)) ||
-		(conditionEndInSameLastInlines(normalizedBlock, name) &&
-			!conditionStartInFirstInlines(normalizedBlock, name) &&
-			!blockInlcudeStartCondition(normalizedBlock, name))
+		(conditionStartInFirstInlines(block, name) &&
+			!conditionEndInSameLastInlines(block, name) &&
+			!blockIncludeEndingConditon(block, name)) ||
+		(conditionEndInSameLastInlines(block, name) &&
+			!conditionStartInFirstInlines(block, name) &&
+			!blockInlcudeStartCondition(block, name))
 	);
 }
