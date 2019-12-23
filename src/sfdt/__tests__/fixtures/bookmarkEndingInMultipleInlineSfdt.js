@@ -84,19 +84,6 @@ const lastInline = [
 const sfdt = {
 	sections: [
 		{
-			sectionFormat: {
-				pageWidth: 612,
-				pageHeight: 792,
-				leftMargin: 72,
-				rightMargin: 72,
-				topMargin: 72,
-				bottomMargin: 72,
-				differentFirstPage: false,
-				differentOddAndEvenPages: false,
-				headerDistance: 36,
-				footerDistance: 36,
-				bidi: false
-			},
 			blocks: [
 				{
 					paragraphFormat: {
