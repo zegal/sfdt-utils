@@ -15,6 +15,23 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 
     const newBlocks = filter(section.blocks, (block) => {
       if (!block.inlines) {
+				if (block.rows) {
+					var rows = block.rows;
+					rows.forEach(function(row: any) {
+						if (row.hasOwnProperty('cells')) {
+							var cells = row.cells;
+							cells.forEach(function(cell: any) {
+								if (cell.hasOwnProperty('blocks')) {
+									var cellBlocks = cell.blocks;
+									cellBlocks.forEach(function(cellBlock: any) {
+										cellBlock.inlines = callback(cellBlock.inlines);
+										return true;
+									});
+								}
+							});
+						}
+					});
+				}
         return true
       }
 
