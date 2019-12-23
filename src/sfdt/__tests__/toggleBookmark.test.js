@@ -103,18 +103,19 @@ describe('toggleBookmark', function() {
 	describe('Bookmark start and ending in different inlines', function() {
 		test('Toggle on', function() {
 			const firstInline = getInline(bookmarkStartEndingInDifferentInline, 0);
-			const lastInline = getInline(bookmarkStartEndingInDifferentInline, 0, 2);
+			const lastInline = getInline(bookmarkStartEndingInDifferentInline, 0, 3);
 
 			expect(firstInline[2].hasFieldEnd).toBe(true);
 			expect(lastInline[1].fieldType).toBe(1);
 
-			const toggleOff = toggleBookmark(
+			const toggleOn = toggleBookmark(
 				bookmarkStartEndingInDifferentInline,
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				true
 			);
-			const firstInlineAfterToggle = getInline(toggleOff, 0);
-			const lastInlineAfterToggle = getInline(toggleOff, 0, 2);
+
+			const firstInlineAfterToggle = getInline(toggleOn, 0);
+			const lastInlineAfterToggle = getInline(toggleOn, 0, 3);
 
 			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
@@ -126,8 +127,10 @@ describe('toggleBookmark', function() {
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				true
 			);
+			const blocksWhenToggleOn = get(toggleOn, 'sections[0].blocks');
+
 			const firstInlineAfterToggle = getInline(toggleOn, 0);
-			const lastInlineAfterToggle = getInline(toggleOn, 0, 2);
+			const lastInlineAfterToggle = getInline(toggleOn, 0, 3);
 
 			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
@@ -137,8 +140,22 @@ describe('toggleBookmark', function() {
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				false
 			);
-			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
-			expect(firstInlineAfterToggleOn.length).toBe(1);
+			const firstInlineAfterToggleOff = getInline(toggleOff, 0);
+			const lastInlineAfterToggleOff = getInline(toggleOff, 0, toggleOff.sections[0].blocks.length - 1);
+			const blocksWhenToggleOff = get(toggleOff, 'sections[0].blocks');
+
+			expect(firstInlineAfterToggleOff.length).toBe(1);
+			expect(lastInlineAfterToggleOff.length).toBe(0);
+
+			let filterEmptyInlineBlock = blocksWhenToggleOff.pop();
+			// Check multiple inline blocks
+			expect(filterEmptyInlineBlock).not.toEqual(
+				expect.arrayContaining([
+					expect.objectContaining({
+						inlines: []
+					})
+				])
+			);
 		});
 	});
 
