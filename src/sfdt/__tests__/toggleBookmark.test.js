@@ -10,6 +10,7 @@ import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMul
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
+import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -179,5 +180,13 @@ describe('toggleBookmark', () => {
 		toggledOff = toggleBookmark(toggledOff, 'COND::5079cf1c-41b5-4f27-8f88-bcb91327aaf6', false);
 
 		expect(get(toggledOff, 'sections[0].blocks').length).toBe(0);
+	});
+
+	it('toggle off deed separation-2', () => {
+		let toggledOff = toggleBookmark(deedSeparationSfdt2, 'COND::cad2523d-7c56-498d-8ad7-4cc89c82bd5f', false);
+
+		const firstElementOfBlocks = get(toggledOff, 'sections[0].blocks');
+		expect(firstElementOfBlocks.length).toBe(1);
+		expect(get(firstElementOfBlocks, '[0].inlines[0].text')).toEqual('Outside of Condition');
 	});
 });

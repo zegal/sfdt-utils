@@ -63,7 +63,6 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines = filter(inlines, (inline) => {
-				// console.log('Inline------------', inline);
 				if (isMatchingBookmark(inline, name) && isConditionalBookmark(inline)) {
 					if (isBookmarkStart(inline)) {
 						stack.push(inline);
@@ -90,7 +89,8 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		const processListBlock = (block) => {
 			const normalizedBlock = normalizeBlockInlines(block);
-			if (canUseListCondition(normalizedBlock, name)) {
+			const doWeNeedListCondition = canUseListCondition(normalizedBlock, name);
+			if (doWeNeedListCondition) {
 				if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 					return false;
 				}
@@ -115,7 +115,7 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 			}
 
 			if (!stack.isEmpty()) {
-				if (isStackContainInline) {
+				if (isStackContainInline || !doWeNeedListCondition) {
 					processInlines(block.inlines);
 				}
 				return false;
