@@ -97,5 +97,9 @@ export const getInline = (
       inlines,
       `rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}]`
     );
-  }
+	}
+	if(!inlines) {
+	 	return	get(sfdt,
+					`sections[${position}].blocks[${blockPosition}].rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}].inlines`)
+	}
 };

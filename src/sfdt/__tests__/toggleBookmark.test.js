@@ -9,6 +9,7 @@ import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWi
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
+import tableConditionSfdt from './fixtures/tableConditionSfdt';
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
 import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
 
@@ -173,6 +174,29 @@ describe('toggleBookmark', () => {
 		const inlineAfterToggleOff = getInline(toggledOff, 0, 2);
 
 		expect(get(inlineAfterToggleOff, '[0].text')).toEqual(' Text');
+	});
+
+	it('toggle on inside table', () => {
+		const toggleOnTable = toggleBookmark(tableConditionSfdt, 'COND::32ef2517-b7e0-4066-baec-785c02e09aaf', true);
+
+		const inlineAfterToggleOn = getInline(toggleOnTable, 0,5, {
+			rowPosition: 1,
+			cellPosition: 1,
+			blockPositionInCell: 0
+		});
+		expect(get(inlineAfterToggleOn, '[0]').name).toEqual('COND::32ef2517-b7e0-4066-baec-785c02e09aaf')
+		expect(get(inlineAfterToggleOn, '[1]').text).toEqual('test2');
+	});
+
+	it('toggle off inside table', () => {
+		const toggleOffInsideTable = toggleBookmark(tableConditionSfdt, 'COND::32ef2517-b7e0-4066-baec-785c02e09aaf', false);
+
+		const inlineAfterToggleOn = getInline(toggleOffInsideTable, 0,5, {
+			rowPosition: 1,
+			cellPosition: 1,
+			blockPositionInCell: 0
+		});
+		expect(inlineAfterToggleOn).toEqual(expect.arrayContaining([]))
 	});
 
 	it('toggle off in deed separation list', () => {
