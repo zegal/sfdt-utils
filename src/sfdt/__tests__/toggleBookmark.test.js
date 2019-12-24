@@ -11,6 +11,7 @@ import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
 import tableConditionSfdt from './fixtures/tableConditionSfdt';
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
+import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -104,19 +105,18 @@ describe('toggleBookmark', function() {
 	describe('Bookmark start and ending in different inlines', function() {
 		test('Toggle on', function() {
 			const firstInline = getInline(bookmarkStartEndingInDifferentInline, 0);
-			const lastInline = getInline(bookmarkStartEndingInDifferentInline, 0, 3);
+			const lastInline = getInline(bookmarkStartEndingInDifferentInline, 0, 2);
 
 			expect(firstInline[2].hasFieldEnd).toBe(true);
 			expect(lastInline[1].fieldType).toBe(1);
 
-			const toggleOn = toggleBookmark(
+			const toggleOff = toggleBookmark(
 				bookmarkStartEndingInDifferentInline,
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				true
 			);
-
-			const firstInlineAfterToggle = getInline(toggleOn, 0);
-			const lastInlineAfterToggle = getInline(toggleOn, 0, 3);
+			const firstInlineAfterToggle = getInline(toggleOff, 0);
+			const lastInlineAfterToggle = getInline(toggleOff, 0, 2);
 
 			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
@@ -128,10 +128,8 @@ describe('toggleBookmark', function() {
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				true
 			);
-			const blocksWhenToggleOn = get(toggleOn, 'sections[0].blocks');
-
 			const firstInlineAfterToggle = getInline(toggleOn, 0);
-			const lastInlineAfterToggle = getInline(toggleOn, 0, 3);
+			const lastInlineAfterToggle = getInline(toggleOn, 0, 2);
 
 			expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
@@ -141,22 +139,8 @@ describe('toggleBookmark', function() {
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				false
 			);
-			const firstInlineAfterToggleOff = getInline(toggleOff, 0);
-			const lastInlineAfterToggleOff = getInline(toggleOff, 0, toggleOff.sections[0].blocks.length - 1);
-			const blocksWhenToggleOff = get(toggleOff, 'sections[0].blocks');
-
-			expect(firstInlineAfterToggleOff.length).toBe(1);
-			expect(lastInlineAfterToggleOff.length).toBe(0);
-
-			let filterEmptyInlineBlock = blocksWhenToggleOff.pop();
-			// Check multiple inline blocks
-			expect(filterEmptyInlineBlock).not.toEqual(
-				expect.arrayContaining([
-					expect.objectContaining({
-						inlines: []
-					})
-				])
-			);
+			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
+			expect(firstInlineAfterToggleOn.length).toBe(1);
 		});
 	});
 
@@ -220,5 +204,13 @@ describe('toggleBookmark', () => {
 		toggledOff = toggleBookmark(toggledOff, 'COND::5079cf1c-41b5-4f27-8f88-bcb91327aaf6', false);
 
 		expect(get(toggledOff, 'sections[0].blocks').length).toBe(0);
+	});
+
+	it('toggle off deed separation-2', () => {
+		let toggledOff = toggleBookmark(deedSeparationSfdt2, 'COND::cad2523d-7c56-498d-8ad7-4cc89c82bd5f', false);
+
+		const firstElementOfBlocks = get(toggledOff, 'sections[0].blocks');
+		expect(firstElementOfBlocks.length).toBe(1);
+		expect(get(firstElementOfBlocks, '[0].inlines[0].text')).toEqual('Outside of Condition');
 	});
 });

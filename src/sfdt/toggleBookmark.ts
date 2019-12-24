@@ -60,13 +60,9 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		const stack = new Stack();
 		let isStackContainInline = false;
 
-		// boolean field for stackForInline.isEmpty() to get the inlines within the bookmark condtion
-		let isInlineWithinBookmark: boolean = false;
-
 		// toggle field off
 		const processInlines = (inlines) => {
 			const newInlines = filter(inlines, (inline) => {
-				// console.log('Inline------------', inline);
 				if (isMatchingBookmark(inline, name) && isConditionalBookmark(inline)) {
 					if (isBookmarkStart(inline)) {
 						stack.push(inline);
@@ -85,20 +81,16 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 				if (!stack.isEmpty()) {
 					return false;
 				}
-
 				return true;
 			});
 
-			// empty inlines [] are not checked by filter, so use the boolean isInlineWithinBookmark to check if those inlines are to be removed or not
-			if (isInlineWithinBookmark && inlines.length === 0) {
-				return null;
-			}
 			return newInlines;
 		};
 
 		const processListBlock = (block) => {
 			const normalizedBlock = normalizeBlockInlines(block);
-			if (canUseListCondition(normalizedBlock, name)) {
+			const doWeNeedListCondition = canUseListCondition(normalizedBlock, name);
+			if (doWeNeedListCondition) {
 				if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 					return false;
 				}
@@ -123,7 +115,7 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 			}
 
 			if (!stack.isEmpty()) {
-				if (isStackContainInline) {
+				if (isStackContainInline || !doWeNeedListCondition) {
 					processInlines(block.inlines);
 				}
 				return false;
