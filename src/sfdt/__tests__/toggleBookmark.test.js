@@ -7,6 +7,7 @@ import list2Inlines from './fixtures/list-2';
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+import newlineSpaceInsideCondition from './fixtures/newlineSpaceInsideCondition';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
 import tableConditionSfdt from './fixtures/tableConditionSfdt';
@@ -144,6 +145,22 @@ describe('toggleBookmark', function() {
 		});
 	});
 
+	describe('Newline space inside hidden condition', function() {
+		test('toggle off should delete block (empty included) inside the condition', () => {
+			const toggledOffSFDT = toggleBookmark(
+				newlineSpaceInsideCondition,
+				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
+				false
+			);
+			const blocksLengthAfterToggleOff = toggledOffSFDT.sections[0].blocks.length;
+			const lastInlineAfterToggleOff = getInline(toggledOffSFDT, 0, blocksLengthAfterToggleOff - 1);
+
+			const secondInlineAfterToggleOff = getInline(toggledOffSFDT, 0, 1);
+			// Empty inline outside condition should be as it is
+			expect(lastInlineAfterToggleOff).toEqual([]);
+			expect(get(secondInlineAfterToggleOff[0], 'text')).toEqual('End of Paragraph');
+		});
+	});
 	describe('Number in List', () => {
 		test('toggle off => should delete block', () => {
 			const toggledOff = toggleBookmark(
@@ -179,24 +196,28 @@ describe('toggleBookmark', () => {
 	it('toggle on inside table', () => {
 		const toggleOnTable = toggleBookmark(tableConditionSfdt, 'COND::32ef2517-b7e0-4066-baec-785c02e09aaf', true);
 
-		const inlineAfterToggleOn = getInline(toggleOnTable, 0,5, {
+		const inlineAfterToggleOn = getInline(toggleOnTable, 0, 5, {
 			rowPosition: 1,
 			cellPosition: 1,
 			blockPositionInCell: 0
 		});
-		expect(get(inlineAfterToggleOn, '[0]').name).toEqual('COND::32ef2517-b7e0-4066-baec-785c02e09aaf')
+		expect(get(inlineAfterToggleOn, '[0]').name).toEqual('COND::32ef2517-b7e0-4066-baec-785c02e09aaf');
 		expect(get(inlineAfterToggleOn, '[1]').text).toEqual('test2');
 	});
 
 	it('toggle off inside table', () => {
-		const toggleOffInsideTable = toggleBookmark(tableConditionSfdt, 'COND::32ef2517-b7e0-4066-baec-785c02e09aaf', false);
+		const toggleOffInsideTable = toggleBookmark(
+			tableConditionSfdt,
+			'COND::32ef2517-b7e0-4066-baec-785c02e09aaf',
+			false
+		);
 
-		const inlineAfterToggleOn = getInline(toggleOffInsideTable, 0,5, {
+		const inlineAfterToggleOn = getInline(toggleOffInsideTable, 0, 5, {
 			rowPosition: 1,
 			cellPosition: 1,
 			blockPositionInCell: 0
 		});
-		expect(inlineAfterToggleOn).toEqual(expect.arrayContaining([]))
+		expect(inlineAfterToggleOn).toEqual(expect.arrayContaining([]));
 	});
 
 	it('toggle off in deed separation list', () => {
