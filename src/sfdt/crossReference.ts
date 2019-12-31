@@ -1,3 +1,4 @@
+import {isBlockList} from './canUseListCondition';
 import {isBookmark} from './../queryBookmark';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
@@ -37,7 +38,10 @@ const doInlinesContainRef = (inlines) =>
 
 export const manipulateSfdtForCrossRef = (oldSfdt, block: BlockType) => {
 	const sfdt = createSfdt(oldSfdt);
+
+	// console.log('Block-------------', block);
 	const number = sfdt.getNumberFromList(block);
+	console.log('Number----------', number);
 
 	// find XREF with the same name as XREFANCHOR
 };
@@ -59,10 +63,11 @@ export const findAnchor = (sfdt, callback) => {
 			const inlines = get(block, 'inlines');
 
 			// if inlines contains anchor
-			const inlineContainingAnchor = doInlinesContainAnchor(inlines);
-			if (inlineContainingAnchor.length) {
+			// const inlineContainingAnchor = doInlinesContainAnchor(inlines);
+			if (isBlockList(block)) {
 				callback(sfdt, block);
 			}
+			// callback(sfdt, block);
 		};
 
 		return processBlockForCrossRef(block, callbackInline, callbackBlock);
