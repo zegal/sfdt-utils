@@ -1,4 +1,4 @@
-import {block, inline} from './../../types/sfdt.d';
+import {block as BlockType} from './../../types/sfdt.d';
 import filter from 'lodash/filter';
 import {isConditionalBookmark, isMatchingBookmark, isBookmarkStart, isBookmarkEnd} from './../queryBookmark';
 import get from 'lodash/get';
@@ -100,6 +100,21 @@ export const normalizeBlockInlines = (block) => {
 	};
 
 	return newBlock;
+};
+
+export const isBlockList = (block: BlockType) => {
+	const blockParagraphFormat = get(block, 'paragraphFormat');
+	const listFormat = get(blockParagraphFormat, 'listFormat');
+
+	if (!listFormat) {
+		return false;
+	}
+
+	if (listFormat && isEmpty(listFormat)) {
+		return false;
+	}
+
+	return true;
 };
 
 export function canUseListCondition(block, name) {
