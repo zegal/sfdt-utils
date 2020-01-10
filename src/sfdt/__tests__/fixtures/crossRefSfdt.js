@@ -35,6 +35,45 @@ const crossRefSfdt = {
           },
           "inlines": [
             {
+              "characterFormat": {},
+              "bookmarkType": 0,
+              "name": "XREF:CheckTermsConditions"
+            },
+            {
+              "characterFormat": {
+                "bold": false,
+                "italic": false,
+                "fontSize": 11,
+                "fontFamily": "source sans pro",
+                "strikethrough": "None",
+                "highlightColor": "Yellow",
+                "fontColor": "#000000FF",
+                "boldBidi": false,
+                "italicBidi": false,
+                "fontFamilyBidi": "source sans pro"
+              },
+              "text": "4.4"
+            },
+            {
+              "characterFormat": {
+                "bold": false,
+                "italic": false,
+                "fontSize": 11,
+                "fontFamily": "source sans pro",
+                "strikethrough": "None",
+                "fontColor": "#000000FF",
+                "boldBidi": false,
+                "italicBidi": false,
+                "fontFamilyBidi": "source sans pro"
+              },
+              "text": " "
+            },
+            {
+              "characterFormat": {},
+              "bookmarkType": 1,
+              "name": "XREF:CheckTermsConditions"
+            },
+            {
               "characterFormat": {
                 "bold": false,
                 "italic": false,
@@ -94,7 +133,7 @@ const crossRefSfdt = {
                 "italicBidi": false,
                 "fontFamilyBidi": "source sans pro"
               },
-              "text": "4.2"
+              "text": "4.6"
             },
             {
               "characterFormat": {
@@ -154,6 +193,7 @@ const crossRefSfdt = {
             "bold": false
           },
           "inlines": [
+            
             {
               "characterFormat": {
                 "bold": false,
@@ -200,6 +240,7 @@ const crossRefSfdt = {
             "bold": false
           },
           "inlines": [
+            
             {
               "characterFormat": {
                 "bold": false,
