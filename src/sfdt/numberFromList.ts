@@ -1002,10 +1002,12 @@ class WListLevel {
 // WListLevel.circleBullet = '\uf06f' + '\u0020';
 // WListLevel.uniqueListLevels = new WUniqueFormats();
 // WListLevel.uniqueFormatType = 9;
+const renderedLists = new Dictionary();
 
 function createSfdt(sfdt) {
 	const newSfdt = {...sfdt};
-	const renderedLists = new Dictionary();
+	// const renderedLists = new Dictionary();
+	const clearList = () => renderedLists.clear();
 
 	function getListById(listId) {
 		// extract list from newSfdt
@@ -1063,7 +1065,7 @@ function createSfdt(sfdt) {
 
 	function addListLevels(abstractList) {
 		for (let i = abstractList.levels.length; i < 9; i++) {
-			let listLevel = {};
+			let listLevel = {} as any;
 			let val = i % 3;
 			if (abstractList.levels[0].listLevelPattern === 'Bullet') {
 				listLevel.listLevelPattern = 'Bullet';
@@ -1131,6 +1133,7 @@ function createSfdt(sfdt) {
 		const abstractListId = get(list, 'abstractListId');
 		if (!renderedLists.containsKey(getAbstractListById(abstractListId))) {
 			let startVal = new Dictionary();
+
 			renderedLists.add(getAbstractListById(abstractListId), startVal);
 			let listLevel = getListLevel(list, listLevelNumber);
 			for (let i = 0; i <= listLevelNumber; i++) {
@@ -1168,8 +1171,39 @@ function createSfdt(sfdt) {
 					levelNumber--;
 				}
 				let startAt = getListStartValue(listLevelNumber, list);
+
 				levels.add(listLevelNumber, startAt);
 			}
+		}
+	}
+
+	// TO-DO
+	function getListTextListLevel(listLevel: WListLevel, listValue: number): string {
+		switch (listLevel.listLevelPattern) {
+			// case 'UpRoman':
+			// 	return this.getAsRoman(listValue).toUpperCase();
+			// case 'LowRoman':
+			// 	return this.getAsRoman(listValue).toLowerCase();
+			// case 'UpLetter':
+			// 	return this.getAsLetter(listValue).toUpperCase();
+			// case 'LowLetter':
+			// 	return this.getAsLetter(listValue).toLowerCase();
+			case 'Arabic':
+				return listValue.toString();
+			// case 'LeadingZero':
+			// 	return this.getAsLeadingZero(listValue);
+			case 'Number':
+				return listValue.toString();
+			case 'OrdinalText':
+				return listValue.toString();
+			case 'Ordinal':
+				return listValue.toString();
+			case 'FarEast':
+				return listValue.toString();
+			case 'Special':
+				return listValue.toString();
+			default:
+				return '';
 		}
 	}
 
@@ -1185,19 +1219,16 @@ function createSfdt(sfdt) {
 		// tslint:disable-next-line:max-line-length
 		if (renderedLists.containsKey(getAbstractListById(listAdv.abstractListId))) {
 			let levels = renderedLists.get(getAbstractListById(listAdv.abstractListId));
-			let keys = levels.keys;
+			let keys = levels.keys();
 			for (let i = 0; i < keys.length; i++) {
 				let levelNumber = keys[i];
 				let levelKey = '%' + (levelNumber + 1).toString();
-				let listLevel = this.getListLevel(listAdv, levelNumber);
+				let listLevel = getListLevel(listAdv, levelNumber);
 				if (listText.match(levelKey)) {
 					if (levelNumber > listLevelNumber) {
 						return '';
 					} else if (levels.containsKey(levelNumber) && !isNullOrUndefined(listLevel)) {
-						listText = listText.replace(
-							levelKey,
-							this.getListTextListLevel(listLevel, levels.get(levelNumber))
-						);
+						listText = listText.replace(levelKey, getListTextListLevel(listLevel, levels.get(levelNumber)));
 					} else {
 						listText = listText.replace(levelKey, '0');
 					}
@@ -1207,7 +1238,7 @@ function createSfdt(sfdt) {
 		return listText;
 	}
 
-	function getNumberFromList(block: BlockType) {
+	function getNumberFromList(block: BlockType, isAnchor) {
 		const listFormat = getListFormatFromBlock(block);
 		const list = getListById(listFormat.listId);
 		const levelNumber = listFormat.listLevelNumber;
@@ -1228,11 +1259,14 @@ function createSfdt(sfdt) {
 		//     }
 		// }
 		updateListValues(list, levelNumber);
-		return getListText(list, levelNumber, listLevel);
+		if (isAnchor(block)) return getListText(list, levelNumber, listLevel);
+		return null;
 	}
 
 	return {
-		getNumberFromList
+		getNumberFromList,
+		clearList,
+		sfdt
 	};
 }
 
