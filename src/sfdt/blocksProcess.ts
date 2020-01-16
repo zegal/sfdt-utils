@@ -54,10 +54,10 @@ export const processBlock = (block: any, callbackInline: TCallback, callbackBloc
 	return block;
 };
 
-// Should be similar to processBlockForCrossRef <<<<< refactor TODO
-export const processBlockToUpdateRef = (block, callbackInline, callbackBlock) => {
+export const processBlockForCrossRef = (block: any, callbackInline: TCallback, callbackBlock): boolean => {
+	// 1. process block top level content first
 	let newBlock = callbackBlock(block);
-
+	// 2. then delve into inlines and tables:
 	if (newBlock) {
 		const processedBlock = processTable(newBlock, callbackInline, callbackBlock);
 
@@ -69,25 +69,6 @@ export const processBlockToUpdateRef = (block, callbackInline, callbackBlock) =>
 			newBlock.inlines = callbackInline(newBlock);
 		}
 		return newBlock;
-	}
-	// 2. then delve into inlines and tables:
-
-	return block;
-};
-
-export const processBlockForCrossRef = (block: any, callbackInline: TCallback, callbackBlock): boolean => {
-	// 1. process block top level content first
-	block = callbackBlock(block);
-
-	// 2. then delve into inlines and tables:
-	const processedBlock = processTable(block, callbackInline, callbackBlock);
-
-	if (processedBlock) {
-		block = processedBlock;
-	}
-
-	if (block.inlines) {
-		block.inlines = callbackInline(block);
 	}
 
 	return block;
