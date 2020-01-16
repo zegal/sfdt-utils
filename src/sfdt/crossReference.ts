@@ -129,7 +129,7 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 			// console.log('^^^^^^^^^^^^^%%%%%%%%%%%%');
 			// Check the inline for the bookmark as anchorbookmark
 			if (anchorListNumber && isRefBlock(block)) {
-				// console.log('indsfjnskjdfnskjnfkjnsjkdf');
+				console.log('indsfjnskjdfnskjnfkjnsjkdf');
 				let dataMode = false;
 
 				// // using objects here allows for nested bookmarks
@@ -148,7 +148,7 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 						// processing[inline.name] = false;
 						// console.log('Stopping processing', inline.name, inline);
 						if (inline.name.includes(`${REF}:`) && inline.name === anchorNameToCompare) {
-							// console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%', inline.name);
+							console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%', inline.name);
 							dataMode = false;
 						}
 
@@ -234,7 +234,7 @@ export const manipulateSfdtForCrossRef = (sfdt, block: BlockType) => {
 		// Number is in the format 1.2. <= remove the point
 		if (number) {
 			number = number.substring(number.length - 1) === '.' ? number.substring(0, number.length - 1) : number;
-			// console.log('999999999', sfdt);
+			console.log('999999999', number);
 			updateRefBlockOfAnchor(sfdt.sfdt, number, block);
 		}
 	}

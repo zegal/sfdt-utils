@@ -74,7 +74,7 @@ const getListLevelPattern = function(value) {
  */
 function addListLevels(abstractList) {
 	for (let i = abstractList.levels.length; i < 9; i++) {
-		const listLevel = [];
+		let listLevel = {} as any;
 		let val = i % 3;
 		if (abstractList.levels[0].listLevelPattern === 'Bullet') {
 			listLevel.listLevelPattern = 'Bullet';

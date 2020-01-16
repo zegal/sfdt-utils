@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import {block as BlockType} from '../../types/sfdt';
 import {isNullOrUndefined} from './listHelpers';
 import Dictionary from '../dictionary';
+import {getAsRoman, getAsLetter, getAsLeadingZero} from './generateListLetters';
 
 export const updateListValues = () => {};
 export const getListText = () => {};
@@ -1180,18 +1181,18 @@ function createSfdt(sfdt) {
 	// TO-DO
 	function getListTextListLevel(listLevel: WListLevel, listValue: number): string {
 		switch (listLevel.listLevelPattern) {
-			// case 'UpRoman':
-			// 	return this.getAsRoman(listValue).toUpperCase();
-			// case 'LowRoman':
-			// 	return this.getAsRoman(listValue).toLowerCase();
-			// case 'UpLetter':
-			// 	return this.getAsLetter(listValue).toUpperCase();
-			// case 'LowLetter':
-			// 	return this.getAsLetter(listValue).toLowerCase();
+			case 'UpRoman':
+				return getAsRoman(listValue).toUpperCase();
+			case 'LowRoman':
+				return getAsRoman(listValue).toLowerCase();
+			case 'UpLetter':
+				return getAsLetter(listValue).toUpperCase();
+			case 'LowLetter':
+				return getAsLetter(listValue).toLowerCase();
 			case 'Arabic':
 				return listValue.toString();
-			// case 'LeadingZero':
-			// 	return this.getAsLeadingZero(listValue);
+			case 'LeadingZero':
+				return getAsLeadingZero(listValue);
 			case 'Number':
 				return listValue.toString();
 			case 'OrdinalText':
