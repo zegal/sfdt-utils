@@ -58,7 +58,10 @@ const getAnchorListFormat = (block) => {
 const getAnchorBookmark = (block) => {
 	if (isAnchorBlock(block)) {
 		// Get Start inline
-		let inlines = doInlinesContain(block.inlines, (inline) => get(inline, 'bookmarkType') === 0);
+		let inlines = doInlinesContain(
+			block.inlines,
+			(inline) => get(inline, 'bookmarkType') === 0 && get(inline, 'name').includes(ANCHOR)
+		);
 		// Assumption one List block has one Anchor only (find the start bookmark only)
 		return get(inlines[0], 'name');
 	}
