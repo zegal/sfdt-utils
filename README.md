@@ -83,9 +83,13 @@ hasBookmark('my-bookmark-name', documentEditor)
 ```
 
 ### insertBookmark
+
 ### populate
+
 ### processInlines
+
 ### queryBookmark
+
 ### showCaret
 
 ### Toggle Bookmark - Hide or show the content of a bookmark
@@ -102,7 +106,9 @@ hasBookmark('my-bookmark-name', documentEditor)
 const updatedSFDT = toggleBookmark(SFDT, 'my-bookmark-name', true)
 
 ```
+
 ### unselect
+
 ### updateBookmarkContent - Change the content of a bookmark
 
 ```
@@ -120,4 +126,10 @@ updateBookmarkContent('my-bookmark-name', 'new content!', documentEditor)
 
 ```
  $ yarn test
+```
+
+## Format the project (with prettier):
+
+```
+ $ yarn fmt
 ```
