@@ -23,9 +23,7 @@ const getRefName = (refBookMark) => refBookMark.split(REF)[1];
 const inlinesWithAnchor = (inlines) =>
 	doInlinesContain(inlines, (inline) => {
 		const name = get(inline, 'name');
-
-		const processedName = name; //&& name.split(':');
-		if (isBookmark(inline) && processedName.includes(ANCHOR)) {
+		if (isBookmark(inline) && name.includes(ANCHOR)) {
 			return true;
 		}
 		return false;
@@ -34,9 +32,7 @@ const inlinesWithAnchor = (inlines) =>
 const inlinesWithRef = (inlines) =>
 	doInlinesContain(inlines, (inline) => {
 		const name = get(inline, 'name');
-
-		const processedName = name; //&& name.split(':');
-		if (isBookmark(inline) && processedName.includes(REF)) {
+		if (isBookmark(inline) && name.includes(REF)) {
 			return true;
 		}
 	});
