@@ -1,6 +1,6 @@
 {
 	"private": false,
-	"version": "0.4.6",
+	"version": "0.4.7",
 	"name": "@zegal/sfdt-utils",
 	"description": "SFDT Utils",
 	"author": "Adam Tombleson <rekarnar@gmail.com>",
@@ -32,6 +32,7 @@
 		"enzyme": "^3.10.0",
 		"enzyme-adapter-react-16": "^1.15.1",
 		"jest": "^24.9.0",
+		"prettier": "1.19.1",
 		"react": "^16.12.0",
 		"react-docgen-typescript-loader": "^3.2.0",
 		"react-dom": "^16.12.0",
@@ -47,7 +48,8 @@
 		"build": "rollup -c",
 		"start": "rollup -cw",
 		"test": "yarn jest --coverage",
-		"prepublish": "yarn build"
+		"prepublish": "yarn build",
+		"fmt": "prettier --write \"./**/*.{js,jsx,json,ts,tsx}\""
 	},
 	"jest": {
 		"testMatch": [

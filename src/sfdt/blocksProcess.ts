@@ -1,55 +1,78 @@
 type TCallback = (
-	inlines: any,
-	// block?: any
-) => any
+	inlines: any
+) => // block?: any
+any;
 
 const processTable = (parent, callbackInline: TCallback, callbackBlock) => {
+	if (!parent) {
+		return false;
+	}
 	if (!parent.rows) {
-		return false
+		return false;
 	}
 
 	parent.rows.forEach((row) => {
 		if (!row.cells) {
-			return false
+			return false;
 		}
 
 		row.cells.forEach((cell) => {
 			if (!cell.blocks) {
-				return false
+				return false;
 			}
 
 			cell.blocks.forEach((block) => {
-				block = callbackBlock(block)
+				block = callbackBlock(block);
 
 				if (!block.inlines) {
-					return false
+					return false;
 				}
 
-				block.inlines = callbackInline(block.inlines)
-			})
-		})
-	})
+				block.inlines = callbackInline(block.inlines);
+			});
+		});
+	});
 
-	return parent
-}
+	return parent;
+};
 
 export const processBlock = (block: any, callbackInline: TCallback, callbackBlock): boolean => {
 	// 1. process block top level content first
-	block = callbackBlock(block)
+	block = callbackBlock(block);
 
 	// 2. then delve into inlines and tables:
-	const processedBlock = processTable(block, callbackInline, callbackBlock)
+	const processedBlock = processTable(block, callbackInline, callbackBlock);
 
 	if (processedBlock) {
-		block = processedBlock
+		block = processedBlock;
 	}
 
 	if (block.inlines) {
-		block.inlines = callbackInline(block.inlines)
+		block.inlines = callbackInline(block.inlines);
 	}
 
-	return block
-}
+	return block;
+};
+
+export const processBlockForCrossRef = (block: any, callbackInline: TCallback, callbackBlock): boolean => {
+	// 1. process block top level content first
+	let newBlock = callbackBlock(block);
+	// 2. then delve into inlines and tables:
+	if (newBlock) {
+		const processedBlock = processTable(newBlock, callbackInline, callbackBlock);
+
+		if (processedBlock) {
+			newBlock = processedBlock;
+		}
+
+		if (newBlock.inlines) {
+			newBlock.inlines = callbackInline(newBlock);
+		}
+		return newBlock;
+	}
+
+	return block;
+};
 
 // callback is run on each block
 // things in blocks we care about:
@@ -58,27 +81,26 @@ export const processBlock = (block: any, callbackInline: TCallback, callbackBloc
 //  - characterFormat
 export const processBlocks = (parent: any, callback: TCallback) => {
 	if (!parent.sections) {
-		// console.warn('Missing: sections', parent)
-		return false
+		return false;
 	}
 
 	parent.sections.forEach((section) => {
 		if (!section.blocks) {
-			return false
+			return false;
 		}
 
 		section.blocks.forEach((block) => {
-			block = callback(block)
-		})
-	})
+			block = callback(block);
+		});
+	});
 
-	return true
-}
+	return true;
+};
 
 export const processSFDT = (sfdt: any, doProcess: TCallback) => {
-	processBlocks(sfdt, doProcess)
+	processBlocks(sfdt, doProcess);
 
-	return sfdt
-}
+	return sfdt;
+};
 
-export default processSFDT
+export default processSFDT;
