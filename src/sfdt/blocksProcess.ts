@@ -81,7 +81,6 @@ export const processBlockForCrossRef = (block: any, callbackInline: TCallback, c
 //  - characterFormat
 export const processBlocks = (parent: any, callback: TCallback) => {
 	if (!parent.sections) {
-		console.warn('Missing: sections', parent);
 		return false;
 	}
 
