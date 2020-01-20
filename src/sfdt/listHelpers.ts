@@ -1,5 +1,5 @@
 import {sfdt} from './../../types/sfdt.d';
-const {isNull, isUndefined, get, find} = require('lodash');
+import {isNull, isUndefined, get, find} from 'lodash';
 
 // import Dictionary from '../dictionary';
 
