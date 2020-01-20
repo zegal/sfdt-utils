@@ -1244,23 +1244,12 @@ function createSfdt(sfdt) {
 		const list = getListById(listFormat.listId);
 		const levelNumber = listFormat.listLevelNumber;
 		const listLevel = getListLevel(list, listFormat.listLevelNumber);
-		// tslint:disable-next-line:max-line-length
-		// let levelOverride = !isNullOrUndefined(list.levelOverrides) ? list.levelOverrides[levelNumber] : undefined;
-		// If LevelOverride exists and have either override list level or StartAtOverride, then only list numbering will be restarted.
-		// tslint:disable-next-line:max-line-length
-		// if (!isNullOrUndefined(levelOverride) && !(document.renderedLevelOverrides.indexOf(levelOverride) > -1) && isNullOrUndefined(levelOverride.overrideListLevel)) {
-		//     //Add List Override style
-		//     document.renderedLevelOverrides.push(list.levelOverrides.getItem(levelNumber) as WLevelOverride);
-		//     if (document.renderedLists.containsKey((list.wordDocument as WordDocument).getAbstractListById(list.abstractListId))) {
-		// tslint:disable-next-line:max-line-length
-		//         let levels: Dictionary<number, number> = document.renderedLists.get((list.wordDocument as WordDocument).getAbstractListById(list.abstractListId));
-		//         if (levels.containsKey(levelNumber)) {
-		//             levels.remove(levelNumber);
-		//         }
-		//     }
-		// }
-		updateListValues(list, levelNumber);
-		if (isAnchor(block)) return getListText(list, levelNumber, listLevel);
+
+		// listId is also -1 sometimes in sfdt, in such cases there is no list from id that we need although the block has listformat
+		if (list) {
+			updateListValues(list, levelNumber);
+			if (isAnchor(block)) return getListText(list, levelNumber, listLevel);
+		}
 		return null;
 	}
 
