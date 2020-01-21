@@ -75,12 +75,11 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 	// Process each block
 	const anchorNameToCompare = REF + getAnchorName(getAnchorBookmark(anchorBlock));
 	return processBlocks(sfdt, (block: BlockType) => {
-		const callbackBlock = (block: BlockType) => {
+		const callbackBlockForRef = (block: BlockType) => {
 			if (isRefBlock(block)) {
 				return block;
 			}
 		};
-
 		const callbackInline = (block) => {
 			let inlines = block.inlines;
 			// Check the inline for the bookmark as anchorbookmark
@@ -149,7 +148,7 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 			}
 			return inlines;
 		};
-		return processBlockForCrossRef(block, callbackInline, callbackBlock);
+		return processBlockForCrossRef(block, callbackInline, callbackBlockForRef);
 	});
 };
 
