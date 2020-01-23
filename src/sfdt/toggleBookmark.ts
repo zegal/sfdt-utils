@@ -1,6 +1,6 @@
 import {isConditionalBookmark} from './../queryBookmark';
 // DEPRECATED, use sfdt/blocksProcess
-import filter from 'lodash/filter';
+import {filter, forEach} from 'lodash';
 import process from './processInlines';
 import {
 	canUseListCondition,
@@ -30,7 +30,7 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 		const processInlines = (inlines) => {
 			const newInlines: any[] = [];
 
-			inlines.forEach((inline, index) => {
+			forEach(inlines, (inline, index: any) => {
 				let defaultAdd = true;
 				const nextInline = inlines[index + 1];
 				const prevInline = inlines[index - 1];
