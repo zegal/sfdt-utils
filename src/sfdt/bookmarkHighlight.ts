@@ -11,7 +11,7 @@ import SFDTType from '../../types/sfdt'
 *
 * eg: bookmarkHighlight(sfdt, ['bookmark_id'], '#ff0000') // red
 */
-export default (sfdt: SFDTType, bookmarks: string[], highlightColor = '') => {
+export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor') => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {

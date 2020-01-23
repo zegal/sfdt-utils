@@ -60,7 +60,7 @@ export default (data, sfdt, prefix = 'DATA::') => {
 							newInline.text = data[currentlyProcessing];
 
 							if (newInline.characterFormat) {
-								newInline.characterFormat.highlightColor = '';
+								newInline.characterFormat.highlightColor = 'NoColor';
 							}
 						}
 
