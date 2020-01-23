@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import filter from 'lodash/filter';
-
+import forEach from 'lodash/forEach';
 // DEPRECATED, use sfdt/blocksProcess
 export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 	if (!sfdt.sections) {
@@ -8,7 +8,7 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 		return false;
 	}
 
-	sfdt.sections.forEach((section) => {
+	forEach(sfdt.sections, (section) => {
 		if (!section.blocks && !section.headersFooters) {
 			return false;
 		}
@@ -17,13 +17,13 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 			if (!block.inlines) {
 				if (block.rows) {
 					var rows = block.rows;
-					rows.forEach(function(row: any) {
+					forEach(rows, function(row: any) {
 						if (row.hasOwnProperty('cells')) {
 							var cells = row.cells;
-							cells.forEach(function(cell: any) {
+							forEach(cells, function(cell: any) {
 								if (cell.hasOwnProperty('blocks')) {
 									var cellBlocks = cell.blocks;
-									cellBlocks.forEach(function(cellBlock: any) {
+									forEach(cellBlocks, function(cellBlock: any) {
 										cellBlock.inlines = callback(cellBlock.inlines);
 										return true;
 									});
