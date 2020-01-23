@@ -156,8 +156,10 @@ export const manipulateSfdtForCrossRef = (sfdt, block: BlockType) => {
 	if (isBlockList(block)) {
 		let number = sfdt.getNumberFromList(block, isAnchorBlock);
 		// Number is in the format 1.2. <= remove the point
+		console.log(number, 'number');
 		if (number) {
 			number = number.substring(number.length - 1) === '.' ? number.substring(0, number.length - 1) : number;
+
 			updateRefBlockOfAnchor(sfdt.sfdt, number, block);
 		}
 	}

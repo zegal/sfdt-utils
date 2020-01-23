@@ -16,36 +16,36 @@ export const getAsLeadingZero = function(listValue: number): string {
  * @param magnitude
  * @param letter
  */
-function generateRomanNumber(number: number, magnitude: number, letter: string): string {
-	let numberstring: string = '';
-	while (number >= magnitude) {
-		number -= magnitude;
-		numberstring += letter;
-		this.value = number;
+export const getAsRoman = () => {
+	let value;
+	function generateRomanNumber(number: number, magnitude: number, letter: string): string {
+		let numberstring: string = '';
+		while (number >= magnitude) {
+			number -= magnitude;
+			numberstring += letter;
+			value = number;
+		}
+		return numberstring.toString();
 	}
-	return numberstring.toString();
-}
-/**
- * Gets the roman letter.
- * @param number
- */
-export const getAsRoman = function(number: number): string {
-	let retval: string = '';
-	this.value = number;
-	retval += generateRomanNumber(this.value, 1000, 'M');
-	retval += generateRomanNumber(this.value, 900, 'CM');
-	retval += generateRomanNumber(this.value, 500, 'D');
-	retval += generateRomanNumber(this.value, 400, 'CD');
-	retval += generateRomanNumber(this.value, 100, 'C');
-	retval += generateRomanNumber(this.value, 90, 'XC');
-	retval += generateRomanNumber(this.value, 50, 'L');
-	retval += generateRomanNumber(this.value, 40, 'XL');
-	retval += generateRomanNumber(this.value, 10, 'X');
-	retval += generateRomanNumber(this.value, 9, 'IX');
-	retval += generateRomanNumber(this.value, 5, 'V');
-	retval += generateRomanNumber(this.value, 4, 'IV');
-	retval += generateRomanNumber(this.value, 1, 'I');
-	return retval.toString();
+	function convertToRoman(number: number): string {
+		let retval: string = '';
+		value = number;
+		retval += generateRomanNumber(value, 1000, 'M');
+		retval += generateRomanNumber(value, 900, 'CM');
+		retval += generateRomanNumber(value, 500, 'D');
+		retval += generateRomanNumber(value, 400, 'CD');
+		retval += generateRomanNumber(value, 100, 'C');
+		retval += generateRomanNumber(value, 90, 'XC');
+		retval += generateRomanNumber(value, 50, 'L');
+		retval += generateRomanNumber(value, 40, 'XL');
+		retval += generateRomanNumber(value, 10, 'X');
+		retval += generateRomanNumber(value, 9, 'IX');
+		retval += generateRomanNumber(value, 5, 'V');
+		retval += generateRomanNumber(value, 4, 'IV');
+		retval += generateRomanNumber(value, 1, 'I');
+		return retval.toString();
+	}
+	return {convertToRoman};
 };
 
 /**
