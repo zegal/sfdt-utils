@@ -1,5 +1,6 @@
-import {get, filter, forEach} from 'lodash';
-
+import get from 'lodash/get';
+import filter from 'lodash/filter';
+import forEach from 'lodash/forEach';
 // DEPRECATED, use sfdt/blocksProcess
 export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 	if (!sfdt.sections) {

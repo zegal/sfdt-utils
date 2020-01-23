@@ -1,6 +1,7 @@
 import {isConditionalBookmark} from './../queryBookmark';
 // DEPRECATED, use sfdt/blocksProcess
-import {filter, forEach} from 'lodash';
+import filter from 'lodash/filter';
+import forEach from 'lodash/forEach';
 import process from './processInlines';
 import {
 	canUseListCondition,
