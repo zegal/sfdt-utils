@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import forEach from 'lodash/forEach';
 import isEmpty from 'lodash/isEmpty';
 import {block as BlockType} from '../../types/sfdt';
 import {isNullOrUndefined} from './listHelpers';
@@ -194,12 +195,15 @@ function createSfdt(sfdt) {
 				levels.add(listLevelNumber, startAt);
 				formats[listLevelNumber] = listLevel;
 			}
-			nestedListVal = {levels: levels.valuesInternal, formats};
+
+			nestedListVal = {
+				levels: Array.isArray(levels.valuesInternal) ? levels.valuesInternal : [levels.valuesInternal],
+				formats
+			};
 		}
 		return nestedListVal;
 	}
 
-	// TO-DO
 	function getListTextListLevel(listLevel, listValue: number): string {
 		const getRoman: any = getAsRoman();
 		switch (listLevel.listLevelPattern) {
@@ -261,6 +265,29 @@ function createSfdt(sfdt) {
 		return listText;
 	}
 
+	function getListTextAsFormat(listFormat, listNumber, depth) {
+		const {numberFormat} = listFormat;
+
+		let number = getListTextListLevel(listFormat, listNumber);
+		let formatToReplace = numberFormat.split('%');
+		let listTextWithFormat = formatToReplace.filter((val) => val.includes(depth))[0];
+		// Remove the dot. We'll add later
+		// if (listTextWithFormat.includes('.')) listTextWithFormat = listTextWithFormat.replace('.', '');
+		return listTextWithFormat.replace(/\d/g, number);
+	}
+	/**
+   
+   * @param {Object} levelSteps format gives numberformat for each level number in the levels
+   */
+	function getAllListText(levelSteps) {
+		const {formats, levels} = levelSteps;
+		let listText = [];
+		forEach(Object.keys(formats), (index) => {
+			listText.push(getListTextAsFormat(formats[index], levels[index], parseInt(index) + 1));
+		});
+		return listText.join('');
+	}
+
 	function getNumberFromList(block: BlockType, isAnchor) {
 		const listFormat = getListFormatFromBlock(block);
 		const list = getListById(listFormat.listId);
@@ -269,10 +296,10 @@ function createSfdt(sfdt) {
 
 		// listId is also -1 sometimes in sfdt, in such cases there is no list from id that we need although the block has listformat
 		if (list) {
-			let step = updateListValues(list, levelNumber, listLevel);
+			let levelSteps = updateListValues(list, levelNumber, listLevel);
 			if (isAnchor(block)) {
-				console.log(step, 'step-----------------------');
-				return getListText(list, levelNumber, listLevel);
+				// getListText(list, levelNumber, listLevel);
+				return getAllListText(levelSteps);
 			}
 		}
 		return null;

@@ -1432,7 +1432,7 @@ export default {
       },
       "followCharacter": "Tab",
       "listLevelPattern": "LowLetter",
-      "numberFormat": "%2.",
+      "numberFormat": "%2)",
       "restartLevel": 1,
       "startAt": 1
      },
@@ -1471,7 +1471,7 @@ export default {
       },
       "followCharacter": "Tab",
       "listLevelPattern": "LowLetter",
-      "numberFormat": "%5.",
+      "numberFormat": "%5)",
       "restartLevel": 4,
       "startAt": 1
      },
@@ -1510,7 +1510,7 @@ export default {
       },
       "followCharacter": "Tab",
       "listLevelPattern": "LowLetter",
-      "numberFormat": "%8.",
+      "numberFormat": "%8)",
       "restartLevel": 7,
       "startAt": 1
      },
@@ -1541,7 +1541,7 @@ export default {
       },
       "followCharacter": "Space",
       "listLevelPattern": "LowRoman",
-      "numberFormat": "%1.",
+      "numberFormat": "%1)",
       "restartLevel": 0,
       "startAt": 1
      }

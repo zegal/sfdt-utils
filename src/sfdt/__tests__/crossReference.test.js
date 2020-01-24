@@ -12,7 +12,7 @@ describe('crossReference', () => {
 
 		let newSfdt = updateRef(originalSfdt);
 
-		expect(newSfdt.sections[0].blocks[0].inlines[8].text).toBe('4.1');
+		expect(newSfdt.sections[0].blocks[0].inlines[8].text).toBe('4.1.');
 	});
 
 	it('findAnchorAndUpdate multiple nested list condition', () => {
@@ -20,6 +20,9 @@ describe('crossReference', () => {
 
 		let newSfdt = updateRef(originalSfdt);
 
-		expect('4.1').toBe('4.1');
+		expect(newSfdt.sections[0].blocks[0].inlines[2].text).toBe('2.');
+		expect(newSfdt.sections[0].blocks[3].inlines[3].text).toBe('4.c)iv.');
+		expect(newSfdt.sections[0].blocks[6].inlines[2].text).toBe('2.');
+		expect(newSfdt.sections[0].blocks[31].inlines[2].text).toBe('iii)');
 	});
 });
