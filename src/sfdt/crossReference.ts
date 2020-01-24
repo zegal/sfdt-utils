@@ -23,7 +23,6 @@ const getRefName = (refBookMark) => refBookMark.split(REF)[1];
 const inlinesWithAnchor = (inlines) =>
 	doInlinesContain(inlines, (inline) => {
 		const name = get(inline, 'name');
-		// console.log(inline, name, '^^^^^^^^^^^^^^^^^^^^^');
 		if (isBookmark(inline) && name.includes(ANCHOR)) {
 			return true;
 		}
@@ -146,7 +145,6 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 					// keep the normal non-inside bookmark and not bookmark start test
 					newInlines.push(newInline);
 				});
-				console.log(newInlines);
 				return newInlines;
 			}
 			return inlines;
@@ -162,7 +160,6 @@ export const manipulateSfdtForCrossRef = (sfdt, block: BlockType) => {
 			// Before number format = 1.2. <= remove the point. Now, only number is returned
 			// number = number.substring(number.length - 1) === '.' ? number.substring(0, number.length - 1) : number;
 
-			console.log(number, '------------');
 			updateRefBlockOfAnchor(sfdt.sfdt, number, block);
 		}
 	}
