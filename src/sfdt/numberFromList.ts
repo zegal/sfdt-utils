@@ -160,6 +160,10 @@ function createSfdt(sfdt) {
 			for (let i = 0; i <= listLevelNumber; i++) {
 				startVal.add(i, getListStartValue(i, list));
 			}
+			nestedListVal = {
+				levels: Array.isArray(startVal.valuesInternal) ? startVal.valuesInternal : [startVal.valuesInternal],
+				formats: {[listLevelNumber]: listLevel}
+			};
 		} else {
 			// tslint:disable-next-line:max-line-length
 			let levels = renderedLists.get(getAbstractListById(abstractListId));
@@ -298,7 +302,6 @@ function createSfdt(sfdt) {
 		if (list) {
 			let levelSteps = updateListValues(list, levelNumber, listLevel);
 			if (isAnchor(block)) {
-				// getListText(list, levelNumber, listLevel);
 				return getAllListText(levelSteps);
 			}
 		}
