@@ -11,7 +11,12 @@ import SFDTType from '../../types/sfdt'
 *
 * eg: bookmarkHighlight(sfdt, ['bookmark_id'], '#ff0000') // red
 */
-export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor') => {
+export default (
+	sfdt: SFDTType,
+	bookmarks: string[],
+	highlightColor = 'NoColor',
+	characterType = 'highlightColor'
+) => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {
@@ -21,7 +26,7 @@ export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor')
 			inline.characterFormat = {}
 		}
 		// console.log('Smoking colour.')
-		inline.characterFormat.highlightColor = highlightColor
+		inline.characterFormat[characterType] = highlightColor
 
 		return inline
 	}
@@ -32,7 +37,7 @@ export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor')
 		}
 
 		if (block.characterFormat) {
-			block.characterFormat.highlightColor = highlightColor
+			block.characterFormat[characterType] = highlightColor
 		}
 
 		return block
