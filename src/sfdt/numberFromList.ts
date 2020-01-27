@@ -20,16 +20,20 @@ export const getListFormatFromBlock = (block: BlockType) => {
 	return {};
 };
 
-const renderedLists = new Dictionary();
-let renderedListFormats = {};
-
 function createSfdt(sfdt) {
 	const newSfdt = {...sfdt};
+	const renderedLists = new Dictionary();
+	let renderedListFormats = {};
+	// clear all the rendered list stored
 	const clearList = () => {
 		renderedLists.clear();
 		renderedListFormats = {};
 	};
 
+	/**
+	 * Get list by listId
+	 * @param {Number} listId listFormat listId from lists array
+	 */
 	function getListById(listId) {
 		// extract list from newSfdt
 		const lists = get(newSfdt, 'lists');
@@ -45,6 +49,10 @@ function createSfdt(sfdt) {
 		return undefined;
 	}
 
+	/**
+	 * Get abstract list by id
+	 * @param id listId
+	 */
 	function getAbstractListById(id) {
 		// extract abstractLists from sfdt
 		const abstractLists = get(sfdt, 'abstractLists');
@@ -60,6 +68,10 @@ function createSfdt(sfdt) {
 		return undefined;
 	}
 
+	/**
+	 * Get list level pattern
+	 * @param value value for listLevelPattern
+	 */
 	function getListLevelPattern(value) {
 		switch (value) {
 			case '0':
@@ -84,6 +96,10 @@ function createSfdt(sfdt) {
 		}
 	}
 
+	/**
+	 * Add list levels from the abstractLists
+	 * @param abstractList abstractList to get the level of the list for
+	 */
 	function addListLevels(abstractList) {
 		for (let i = abstractList.levels.length; i < 9; i++) {
 			let listLevel = {} as any;
@@ -106,6 +122,11 @@ function createSfdt(sfdt) {
 		}
 	}
 
+	/**
+	 * Get list level
+	 * @param list List from lists array
+	 * @param listLevelNumber level from listFormat
+	 */
 	function getListLevel(list, listLevelNumber) {
 		if (!isNullOrUndefined(list)) {
 			let abstractList = getAbstractListById(list.abstractListId);
@@ -136,6 +157,11 @@ function createSfdt(sfdt) {
 		return undefined;
 	}
 
+	/**
+	 *
+	 * @param listLevelNumber level from listFormat
+	 * @param list list from lists array
+	 */
 	function getListStartValue(listLevelNumber, list) {
 		// tslint:disable-next-line:max-line-length
 		let levelOverride = !isNullOrUndefined(list.levelOverrides) ? list.levelOverrides[listLevelNumber] : undefined;
@@ -150,6 +176,12 @@ function createSfdt(sfdt) {
 		}
 	}
 
+	/**
+	 * Update the rendered list with correct list number and return the current list format and the list number
+	 * @param list list from lists array
+	 * @param listLevelNumber levelNumber from listFormat
+	 * @param listLevel list object from abstractlist levels
+	 */
 	function updateListValues(list, listLevelNumber, listLevel) {
 		const abstractListId = get(list, 'abstractListId');
 		let nestedListVal = {};
@@ -208,6 +240,11 @@ function createSfdt(sfdt) {
 		return nestedListVal;
 	}
 
+	/**
+	 * Convert the list number to correct format
+	 * @param listLevel List level to get the pattern
+	 * @param listValue current list value
+	 */
 	function getListTextListLevel(listLevel, listValue: number): string {
 		const getRoman: any = getAsRoman();
 		switch (listLevel.listLevelPattern) {
@@ -243,7 +280,6 @@ function createSfdt(sfdt) {
 	 * @param listAdv
 	 * @param listLevelNumber
 	 * @param currentListLevel
-	 * @param document
 	 */
 	function getListText(listAdv, listLevelNumber, currentListLevel) {
 		let listText = currentListLevel.numberFormat;
@@ -269,6 +305,12 @@ function createSfdt(sfdt) {
 		return listText;
 	}
 
+	/**
+	 * Get list text with correct format
+	 * @param listFormat list object with number format
+	 * @param listNumber current list number
+	 * @param depth child list depth
+	 */
 	function getListTextAsFormat(listFormat, listNumber, depth) {
 		const {numberFormat} = listFormat;
 
@@ -280,9 +322,9 @@ function createSfdt(sfdt) {
 		return listTextWithFormat.replace(/\d/g, number);
 	}
 	/**
-   
-   * @param {Object} levelSteps format gives numberformat for each level number in the levels
-   */
+	 * Return the correct list number with the format (with child list's parent combined)
+	 * @param {Object} levelSteps format gives numberformat for each level number in the levels
+	 */
 	function getAllListText(levelSteps) {
 		const {formats, levels} = levelSteps;
 		let listText = [];
@@ -292,6 +334,11 @@ function createSfdt(sfdt) {
 		return listText.join('');
 	}
 
+	/**
+	 * Get the number of the list
+	 * @param block current sfdt block
+	 * @param isAnchor returns if the block containes XREFANCHOR
+	 */
 	function getNumberFromList(block: BlockType, isAnchor) {
 		const listFormat = getListFormatFromBlock(block);
 		const list = getListById(listFormat.listId);
