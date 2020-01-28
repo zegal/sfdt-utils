@@ -4,102 +4,97 @@ import isObject from 'lodash/isObject';
 import uniqueId from 'lodash/uniqueId';
 
 export const getSFDT = (inlines, extraBlocks) => {
-  // console.log('inlines', inlines, blocks)
+	// console.log('inlines', inlines, blocks)
 
-  let blocks = [];
+	let blocks = [];
 
-  if (inlines) {
-    blocks.push({ inlines });
-  }
+	if (inlines) {
+		blocks.push({inlines});
+	}
 
-  if (extraBlocks) {
-    blocks = blocks.concat(extraBlocks);
-  }
+	if (extraBlocks) {
+		blocks = blocks.concat(extraBlocks);
+	}
 
-  const sfdt = {
-    sections: [
-      {
-        blocks
-      }
-    ]
-  };
+	const sfdt = {
+		sections: [
+			{
+				blocks
+			}
+		]
+	};
 
-  return sfdt;
+	return sfdt;
 };
 
 export const getBookmark = (id, prefix = 'DATA::') => {
-  const name = id || '_bm_' + uniqueId();
+	const name = id || '_bm_' + uniqueId();
 
-  return [
-    {
-      bookmarkType: 0,
-      name: `${prefix}${name}`
-    },
-    {
-      text: 'REPLACE-ME-' + name
-    },
-    {
-      bookmarkType: 1,
-      name: `${prefix}${name}`
-    }
-  ];
+	return [
+		{
+			bookmarkType: 0,
+			name: `${prefix}${name}`
+		},
+		{
+			text: 'REPLACE-ME-' + name
+		},
+		{
+			bookmarkType: 1,
+			name: `${prefix}${name}`
+		}
+	];
 };
 
 export const getInlines = () => {
-  // console.log('extras', extras)
+	// console.log('extras', extras)
 
-  const inlines = [
-    {
-      text: 'starting'
-    },
+	const inlines = [
+		{
+			text: 'starting'
+		},
 
-    ...getBookmark('K1'),
+		...getBookmark('K1'),
+		...getBookmark('K2'),
+		{
+			text: 'ending'
+		}
+	];
 
-    {
-      text: 'ending'
-    }
-  ];
-
-  return inlines;
+	return inlines;
 };
 
-export const getFirstInlines = sfdt => getInline(sfdt, 0);
+export const getFirstInlines = (sfdt) => getInline(sfdt, 0);
 
 export const getInline = (
-  sfdt,
-  position = 0,
-  blockPosition,
-  option = {
-    rowPosition: 0,
-    cellPosition: 0,
-    blockPositionInCell: 0
-  }
-) => {
-  if (!blockPosition) {
-    blockPosition = position;
-  }
-
-  const inlines = get(
-    sfdt,
-    `sections[${position}].blocks[${blockPosition}].inlines`
-  );
-
-  if (isArray(inlines)) {
-    return get(
-      sfdt,
-      `sections[${position}].blocks[${blockPosition}].inlines`,
-      []
-    );
-  }
-
-  if (isObject(inlines)) {
-    return get(
-      inlines,
-      `rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}]`
-    );
+	sfdt,
+	position = 0,
+	blockPosition,
+	option = {
+		rowPosition: 0,
+		cellPosition: 0,
+		blockPositionInCell: 0
 	}
-	if(!inlines) {
-	 	return	get(sfdt,
-					`sections[${position}].blocks[${blockPosition}].rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}].inlines`)
+) => {
+	if (!blockPosition) {
+		blockPosition = position;
+	}
+
+	const inlines = get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`);
+
+	if (isArray(inlines)) {
+		return get(sfdt, `sections[${position}].blocks[${blockPosition}].inlines`, []);
+	}
+
+	if (isObject(inlines)) {
+		return get(
+			inlines,
+			`rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}]`
+		);
+	}
+	if (!inlines) {
+		return get(
+			sfdt,
+			`sections[${position}].blocks[${blockPosition}].rows[${option.rowPosition}].cells[${option.cellPosition}].blocks[${option.blockPositionInCell}].inlines`
+		);
 	}
 };
