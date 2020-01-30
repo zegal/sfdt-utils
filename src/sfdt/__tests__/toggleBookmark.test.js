@@ -27,13 +27,13 @@ describe('toggleBookmark', function() {
 		test('Toggle off', function() {
 			const sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')));
 			const ourInlinesBeforeToggle = getFirstInlines(sfdt);
-			expect(ourInlinesBeforeToggle.length).toEqual(8);
+			expect(ourInlinesBeforeToggle.length).toEqual(11);
 
 			const result = toggleBookmark(sfdt, name, false);
 
 			const ourInlinesAfterToggle = getFirstInlines(result);
 
-			expect(ourInlinesAfterToggle.length).toEqual(5);
+			expect(ourInlinesAfterToggle.length).toEqual(8);
 		});
 
 		test('Toggle on', function() {
@@ -41,13 +41,13 @@ describe('toggleBookmark', function() {
 			const toggledSfdt = toggleBookmark(sfdt, name, false);
 
 			const initialInlines = getFirstInlines(toggledSfdt);
-			expect(initialInlines.length).toEqual(5);
+			expect(initialInlines.length).toEqual(8);
 
 			const result = toggleBookmark(sfdt, name, true);
 
 			const ourInlines = getFirstInlines(result);
 
-			expect(ourInlines.length).toEqual(5);
+			expect(ourInlines.length).toEqual(8);
 		});
 	});
 

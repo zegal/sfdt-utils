@@ -45,6 +45,7 @@ export default (data, sfdt, prefix = 'DATA::') => {
 					currentlyProcessing = '';
 					// keep end tag
 					newInlines.push(newInline);
+
 					return;
 				}
 
@@ -53,11 +54,20 @@ export default (data, sfdt, prefix = 'DATA::') => {
 				// (so it does not also process the opening tag etc)
 				if (dataMode) {
 					// if (processing[inline.name]) {
+					const processingSplits = currentlyProcessing.split('::');
+					const processingId = processingSplits[processingSplits.length - 1];
 					if (!doneProcessing[currentlyProcessing]) {
 						debug && console.log('Replacing:', newInline, data[currentlyProcessing]);
 						if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
-							// console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
-							newInline.text = data[currentlyProcessing];
+							// Sfdt will break if the "text" value is not string. Data coming can be number/bool too. So, convert all to string
+							newInline.text = String(data[currentlyProcessing]);
+
+							if (newInline.characterFormat) {
+								newInline.characterFormat.highlightColor = 'NoColor';
+							}
+						} else if (data[processingId]) {
+							// This else condition is for the req params party block, that has no bookmark in fields but only the ids in the params
+							newInline.text = String(data[processingId]);
 
 							if (newInline.characterFormat) {
 								newInline.characterFormat.highlightColor = 'NoColor';

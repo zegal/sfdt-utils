@@ -7,6 +7,10 @@ import populate from '../populate';
 const data = {
 	'DATA::K1': '123'
 };
+const data1 = {
+	'DATA::K1': -12,
+	'DATA::K2': false
+};
 
 const inlines = getInlines();
 
@@ -60,6 +64,20 @@ describe('SFDT Parser', function() {
 
 		// check replacement went well
 		expect(currentInlines[2].text).toEqual('123');
+	});
+
+	test('populate and inject string data to stop breaking sfdt', function() {
+		const orignalLength = getInline(sfdt).length;
+		const result = populate(data1, sfdt);
+
+		const currentInlines = getInline(result);
+
+		// make sure we get the same amount of data back, no additions.
+		expect(currentInlines.length).toEqual(orignalLength);
+
+		// check replacement went well and data is converted to string
+		expect(currentInlines[2].text).toEqual('-12');
+		expect(currentInlines[5].text).toEqual('false');
 	});
 });
 
