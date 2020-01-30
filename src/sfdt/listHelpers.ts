@@ -1,4 +1,4 @@
-import {sfdt} from './../../types/sfdt.d';
+import {sfdt as Tsfdt} from './../../types/sfdt.d';
 import {isNull, isUndefined, get, find} from 'lodash';
 
 // import Dictionary from '../dictionary';
@@ -7,8 +7,8 @@ export const isNullOrUndefined = (arg) => {
 	return isNull(arg) || isUndefined(arg);
 };
 
-const getAbstractListById = (sfdt, abstractListId) => {
-	let abstractLists = get(sfdt, 'abstractLists');
+const getAbstractListById = (sfdt: Tsfdt, abstractListId) => {
+	const abstractLists = get(sfdt, 'abstractLists');
 
 	const filteredAbstractList = find(abstractLists, (el) => {
 		if (get(el, 'abstractListId') === abstractListId) {
@@ -20,7 +20,7 @@ const getAbstractListById = (sfdt, abstractListId) => {
 	return filteredAbstractList;
 };
 
-export const getListById = (sfdt, listId) => {
+export const getListById = (sfdt: Tsfdt, listId) => {
 	// console.log('getListById----------------', sfdt.lists, listId);
 	const list = get(sfdt, 'lists');
 
@@ -74,8 +74,8 @@ const getListLevelPattern = function(value) {
  */
 function addListLevels(abstractList) {
 	for (let i = abstractList.levels.length; i < 9; i++) {
-		let listLevel = {} as any;
-		let val = i % 3;
+		const listLevel = {} as any;
+		const val = i % 3;
 		if (abstractList.levels[0].listLevelPattern === 'Bullet') {
 			listLevel.listLevelPattern = 'Bullet';
 			listLevel.numberFormat = val === 0 ? '\uf0b7' : val === 1 ? '\uf0a7' : '\uf0d8';

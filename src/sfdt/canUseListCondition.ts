@@ -18,6 +18,18 @@ const doBlockInlcude = (isIncluded) => (block, name) => {
 	return conditionalEndingBookmarks.length;
 };
 
+export const conditionEndInSameLastInlines = (block, name) => {
+	const inlines = get(block, 'inlines');
+	const lastElementOfInlines = last(inlines);
+	return isMatchingBookmark(lastElementOfInlines, name) && isConditionalBookmark(lastElementOfInlines);
+};
+
+export const conditionStartInFirstInlines = (block, name) => {
+	const inlines = get(block, 'inlines');
+	const firstElementOfInlines = first(inlines);
+	return isMatchingBookmark(firstElementOfInlines, name) && isConditionalBookmark(firstElementOfInlines);
+};
+
 export const blockIncludeEndingConditon = doBlockInlcude((inline, name) => {
 	return (
 		isConditionalBookmark(inline) &&
@@ -46,18 +58,6 @@ export const conditionStartEndInSameInlines = (block, name) => {
 		isMatchingBookmark(lastElementOfInlines, name) &&
 		isConditionalBookmark(lastElementOfInlines)
 	);
-};
-
-export const conditionStartInFirstInlines = (block, name) => {
-	const inlines = get(block, 'inlines');
-	const firstElementOfInlines = first(inlines);
-	return isMatchingBookmark(firstElementOfInlines, name) && isConditionalBookmark(firstElementOfInlines);
-};
-
-export const conditionEndInSameLastInlines = (block, name) => {
-	const inlines = get(block, 'inlines');
-	const lastElementOfInlines = last(inlines);
-	return isMatchingBookmark(lastElementOfInlines, name) && isConditionalBookmark(lastElementOfInlines);
 };
 
 function isBlank(str) {

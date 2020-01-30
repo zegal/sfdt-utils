@@ -3,7 +3,7 @@ import first from 'lodash/first';
 
 import toggleBookmark from '../toggleBookmark';
 
-import list2Inlines from './fixtures/list-2';
+// import list2Inlines from './fixtures/list-2';
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
@@ -228,7 +228,7 @@ describe('toggleBookmark', () => {
 	});
 
 	it('toggle off deed separation-2', () => {
-		let toggledOff = toggleBookmark(deedSeparationSfdt2, 'COND::cad2523d-7c56-498d-8ad7-4cc89c82bd5f', false);
+		const toggledOff = toggleBookmark(deedSeparationSfdt2, 'COND::cad2523d-7c56-498d-8ad7-4cc89c82bd5f', false);
 
 		const firstElementOfBlocks = get(toggledOff, 'sections[0].blocks');
 		expect(firstElementOfBlocks.length).toBe(1);

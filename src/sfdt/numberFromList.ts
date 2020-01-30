@@ -19,6 +19,7 @@ export const getListFormatFromBlock = (block: BlockType) => {
 	return {};
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class WUniqueFormats {
 	items: any[];
 	constructor() {
@@ -36,6 +37,7 @@ class WUniqueFormats {
 			}
 		}
 		if (isNullOrUndefined(matchedFormat)) {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			matchedFormat = new WUniqueFormat(type);
 			matchedFormat.propertiesHash = format;
 			matchedFormat.referenceCount = 1;
@@ -57,6 +59,7 @@ class WUniqueFormats {
 			}
 		}
 		if (isNullOrUndefined(matchedFormat)) {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			matchedFormat = new WUniqueFormat(uniqueFormat.uniqueFormatType);
 			matchedFormat.cloneItems(uniqueFormat, property, value, uniqueFormat.uniqueFormatType);
 			matchedFormat.referenceCount = 1;
@@ -152,7 +155,7 @@ class WUniqueFormat {
 	// tslint:disable-next-line:max-line-length
 	isNotEqual(property, source, modifiedProperty, modifiedValue, uniqueFormatType) {
 		let targetValue = undefined;
-		let propertyType = WUniqueFormat.getPropertyType(uniqueFormatType, property);
+		const propertyType = WUniqueFormat.getPropertyType(uniqueFormatType, property);
 		if (this.propertiesHash.containsKey(propertyType)) {
 			targetValue = this.propertiesHash.get(propertyType);
 		}
@@ -806,8 +809,8 @@ class WUniqueFormat {
 	 * @private
 	 */
 	cloneItems(format, property, value, uniqueFormatType) {
-		let propertyType = WUniqueFormat.getPropertyType(uniqueFormatType, property);
-		let keys = format.propertiesHash.keys;
+		const propertyType = WUniqueFormat.getPropertyType(uniqueFormatType, property);
+		const keys = format.propertiesHash.keys;
 		for (let i = 0; i < keys.length; i++) {
 			if (keys[i] === propertyType) {
 				this.propertiesHash.add(propertyType, value);
@@ -823,8 +826,8 @@ class WUniqueFormat {
 	 * @private
 	 */
 	mergeProperties(format) {
-		let hash = format.cloneProperties();
-		let keys = this.propertiesHash.keys;
+		const hash = format.cloneProperties();
+		const keys = this.propertiesHash.keys;
 		for (let i = 0; i < keys.length; i++) {
 			if (!hash.containsKey(keys[i])) {
 				hash.add(keys[i], this.propertiesHash.get(keys[i]));
@@ -836,8 +839,8 @@ class WUniqueFormat {
 	 * @private
 	 */
 	cloneProperties() {
-		let hash = new Dictionary();
-		let keys = this.propertiesHash.keys;
+		const hash = new Dictionary();
+		const keys = this.propertiesHash.keys;
 		for (let i = 0; i < keys.length; i++) {
 			hash.add(keys[i], this.propertiesHash.get(keys[i]));
 		}
@@ -905,7 +908,7 @@ class WListLevel {
 		this.setPropertyValue('restartLevel', restartLevel);
 	}
 	getPropertyValue(property) {
-		let propertyType = WUniqueFormat.getPropertyType(get(WListLevel, 'uniqueFormatType'), property);
+		const propertyType = WUniqueFormat.getPropertyType(get(WListLevel, 'uniqueFormatType'), property);
 		if (!isNullOrUndefined(this.uniqueListLevel) && this.uniqueListLevel.propertiesHash.containsKey(propertyType)) {
 			return this.uniqueListLevel.propertiesHash.get(propertyType);
 		}
@@ -918,7 +921,7 @@ class WListLevel {
 		if (isNullOrUndefined(this.uniqueListLevel)) {
 			this.initializeUniqueWListLevel(property, value);
 		} else {
-			let propertyType = WUniqueFormat.getPropertyType(this.uniqueListLevel.uniqueFormatType, property);
+			const propertyType = WUniqueFormat.getPropertyType(this.uniqueListLevel.uniqueFormatType, property);
 			if (
 				this.uniqueListLevel.propertiesHash.containsKey(propertyType) &&
 				// tslint:disable-next-line:max-line-length
@@ -936,7 +939,7 @@ class WListLevel {
 		}
 	}
 	initializeUniqueWListLevel(property, propValue) {
-		let uniqueListLevelTemp = new Dictionary();
+		const uniqueListLevelTemp = new Dictionary();
 		this.addUniqueWListLevel('listLevelPattern', property, propValue, uniqueListLevelTemp);
 		this.addUniqueWListLevel('startAt', property, propValue, uniqueListLevelTemp);
 		this.addUniqueWListLevel('followCharacter', property, propValue, uniqueListLevelTemp);
@@ -950,8 +953,7 @@ class WListLevel {
 	}
 	// tslint:disable-next-line:max-line-length
 	addUniqueWListLevel(property, modifiedProperty, propValue, uniqueCharFormatTemp) {
-		let propertyType;
-		propertyType = WUniqueFormat.getPropertyType(get(WListLevel, 'uniqueFormatType'), property);
+		const propertyType = WUniqueFormat.getPropertyType(get(WListLevel, 'uniqueFormatType'), property);
 		if (property === modifiedProperty) {
 			uniqueCharFormatTemp.add(propertyType, propValue);
 		} else {
@@ -1017,7 +1019,7 @@ function createSfdt(sfdt) {
 			return undefined;
 		}
 
-		for (let element of lists) {
+		for (const element of lists) {
 			if (!isNullOrUndefined(element) && get(element, 'listId') === listId) {
 				return element;
 			}
@@ -1032,7 +1034,7 @@ function createSfdt(sfdt) {
 			return undefined;
 		}
 
-		for (let element of abstractLists) {
+		for (const element of abstractLists) {
 			if (get(element, 'abstractListId') === id) {
 				return element;
 			}
@@ -1066,8 +1068,8 @@ function createSfdt(sfdt) {
 
 	function addListLevels(abstractList) {
 		for (let i = abstractList.levels.length; i < 9; i++) {
-			let listLevel = {} as any;
-			let val = i % 3;
+			const listLevel = {} as any;
+			const val = i % 3;
 			if (abstractList.levels[0].listLevelPattern === 'Bullet') {
 				listLevel.listLevelPattern = 'Bullet';
 				listLevel.numberFormat = val === 0 ? '\uf0b7' : val === 1 ? '\uf0a7' : '\uf0d8';
@@ -1088,7 +1090,7 @@ function createSfdt(sfdt) {
 
 	function getListLevel(list, listLevelNumber) {
 		if (!isNullOrUndefined(list)) {
-			let abstractList = getAbstractListById(list.abstractListId);
+			const abstractList = getAbstractListById(list.abstractListId);
 			if (
 				!isNullOrUndefined(list) &&
 				abstractList.levels.length <= listLevelNumber &&
@@ -1118,11 +1120,13 @@ function createSfdt(sfdt) {
 
 	function getListStartValue(listLevelNumber, list) {
 		// tslint:disable-next-line:max-line-length
-		let levelOverride = !isNullOrUndefined(list.levelOverrides) ? list.levelOverrides[listLevelNumber] : undefined;
+		const levelOverride = !isNullOrUndefined(list.levelOverrides)
+			? list.levelOverrides[listLevelNumber]
+			: undefined;
 		if (!isNullOrUndefined(levelOverride) && isNullOrUndefined(levelOverride.overrideListLevel)) {
 			return levelOverride.startAt;
 		}
-		let listLevel = getListLevel(list, listLevelNumber);
+		const listLevel = getListLevel(list, listLevelNumber);
 		if (isNullOrUndefined(listLevel)) {
 			return 0;
 		} else {
@@ -1133,22 +1137,22 @@ function createSfdt(sfdt) {
 	function updateListValues(list, listLevelNumber) {
 		const abstractListId = get(list, 'abstractListId');
 		if (!renderedLists.containsKey(getAbstractListById(abstractListId))) {
-			let startVal = new Dictionary();
+			const startVal = new Dictionary();
 
 			renderedLists.add(getAbstractListById(abstractListId), startVal);
-			let listLevel = getListLevel(list, listLevelNumber);
+			const listLevel = getListLevel(list, listLevelNumber);
 			for (let i = 0; i <= listLevelNumber; i++) {
 				startVal.add(i, getListStartValue(i, list));
 			}
 		} else {
 			// tslint:disable-next-line:max-line-length
-			let levels = renderedLists.get(getAbstractListById(abstractListId));
+			const levels = renderedLists.get(getAbstractListById(abstractListId));
 			if (levels.containsKey(listLevelNumber)) {
-				let startAt = levels.get(listLevelNumber);
+				const startAt = levels.get(listLevelNumber);
 				levels.set(listLevelNumber, startAt + 1);
 				let levelNumber = listLevelNumber + 1;
 				while (levelNumber < getAbstractListById(abstractListId).levels.length) {
-					let listLevel = getListLevel(list, levelNumber);
+					const listLevel = getListLevel(list, levelNumber);
 					// if (!isNullOrUndefined(listLevel)) {
 					if (levels.containsKey(levelNumber) && get(listLevel, 'restartLevel') > listLevelNumber) {
 						levels.remove(levelNumber);
@@ -1162,7 +1166,7 @@ function createSfdt(sfdt) {
 			} else {
 				let levelNumber = listLevelNumber;
 				while (!levels.containsKey(levelNumber - 1) && levelNumber > 0) {
-					let listLevel = getListLevel(list, levelNumber - 1);
+					const listLevel = getListLevel(list, levelNumber - 1);
 					// if (!isNullOrUndefined(listLevel)) {
 					levels.add(levelNumber - 1, getListStartValue(levelNumber - 1, list));
 					// if (document.renderedListLevels.indexOf(listLevel) !== -1) {
@@ -1171,7 +1175,7 @@ function createSfdt(sfdt) {
 					// }
 					levelNumber--;
 				}
-				let startAt = getListStartValue(listLevelNumber, list);
+				const startAt = getListStartValue(listLevelNumber, list);
 
 				levels.add(listLevelNumber, startAt);
 			}
@@ -1219,12 +1223,12 @@ function createSfdt(sfdt) {
 		let listText = currentListLevel.numberFormat;
 		// tslint:disable-next-line:max-line-length
 		if (renderedLists.containsKey(getAbstractListById(listAdv.abstractListId))) {
-			let levels = renderedLists.get(getAbstractListById(listAdv.abstractListId));
-			let keys = levels.keys();
+			const levels = renderedLists.get(getAbstractListById(listAdv.abstractListId));
+			const keys = levels.keys();
 			for (let i = 0; i < keys.length; i++) {
-				let levelNumber = keys[i];
-				let levelKey = '%' + (levelNumber + 1).toString();
-				let listLevel = getListLevel(listAdv, levelNumber);
+				const levelNumber = keys[i];
+				const levelKey = '%' + (levelNumber + 1).toString();
+				const listLevel = getListLevel(listAdv, levelNumber);
 				if (listText.match(levelKey)) {
 					if (levelNumber > listLevelNumber) {
 						return '';

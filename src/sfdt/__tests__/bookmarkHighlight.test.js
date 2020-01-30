@@ -7,7 +7,7 @@ import fixture from './fixtures/highlights';
 const getData = () => cloneDeep(fixture);
 
 const NOT_DONE = '#FFC0CB';
-const DONE = '';
+// const DONE = '';
 const NO_COLOR = 'NoColor';
 
 describe('SFDT: Bookmark highlight', () => {

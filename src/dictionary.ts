@@ -27,7 +27,7 @@ class Dictionary {
 		if (isNullOrUndefined(key)) {
 			throw new ReferenceError('Provided key or value is not valid.');
 		}
-		let index = this.keysInternal.indexOf(key);
+		const index = this.keysInternal.indexOf(key);
 		// if (index < 0 || index > this.keysInternal.length - 1) {
 		if (index < 0) {
 			this.keysInternal.push(key);
@@ -45,7 +45,7 @@ class Dictionary {
 		if (isNullOrUndefined(key)) {
 			throw new ReferenceError('Provided key is not valid.');
 		}
-		let index = this.keysInternal.indexOf(key);
+		const index = this.keysInternal.indexOf(key);
 		if (index < 0 || index > this.keysInternal.length - 1) {
 			throw new RangeError('No item with the specified key has been added.');
 		} else {
@@ -59,7 +59,7 @@ class Dictionary {
 		if (isNullOrUndefined(key)) {
 			throw new ReferenceError('Provided key is not valid.');
 		}
-		let index = this.keysInternal.indexOf(key);
+		const index = this.keysInternal.indexOf(key);
 		if (index < 0 || index > this.keysInternal.length - 1) {
 			throw new RangeError('No item with the specified key has been added.');
 		} else {
@@ -73,7 +73,7 @@ class Dictionary {
 		if (isNullOrUndefined(key)) {
 			throw new ReferenceError('Provided key is not valid.');
 		}
-		let index = this.keysInternal.indexOf(key);
+		const index = this.keysInternal.indexOf(key);
 		if (index < 0 || index > this.keysInternal.length - 1) {
 			throw new RangeError('No item with the specified key has been added.');
 		} else {
@@ -89,7 +89,7 @@ class Dictionary {
 		if (isNullOrUndefined(key)) {
 			throw new ReferenceError('Provided key is not valid.');
 		}
-		let index = this.keysInternal.indexOf(key);
+		const index = this.keysInternal.indexOf(key);
 		if (index < 0 || index > this.keysInternal.length - 1) {
 			return false;
 		}

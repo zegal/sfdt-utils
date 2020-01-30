@@ -24,8 +24,8 @@ export default (data, sfdt, prefix = 'DATA::') => {
 			let dataMode = false;
 
 			// using objects here allows for nested bookmarks
-			let processing = {};
-			let doneProcessing = {};
+			const processing = {};
+			const doneProcessing = {};
 			// keep track of the current one
 			let currentlyProcessing;
 

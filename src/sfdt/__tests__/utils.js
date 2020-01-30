@@ -1,40 +1,40 @@
 export const getBlock = (id, inlines = []) => {
 	return {
-		'paragraphFormat': {
-			'styleName': 'Normal',
-			'listFormat': {}
+		paragraphFormat: {
+			styleName: 'Normal',
+			listFormat: {}
 		},
-		'characterFormat': {},
-		'inlines': [
+		characterFormat: {},
+		inlines: [
 			{
-				'characterFormat': {
-					'bidi': false
+				characterFormat: {
+					bidi: false
 				},
-				'text': 'block ' + id
+				text: 'block ' + id
 			},
 			...inlines
 		]
-	}
-}
+	};
+};
 
 export const getBookmarkInlines = (id) => {
 	return [
 		{
-			'characterFormat': {},
-			'bookmarkType': 0,
-			'name': 'DATA::UUID::' + id
+			characterFormat: {},
+			bookmarkType: 0,
+			name: 'DATA::UUID::' + id
 		},
 		{
-			'characterFormat': {
-				'highlightColor': '#FFC0CB',
-				'bidi': false
+			characterFormat: {
+				highlightColor: '#FFC0CB',
+				bidi: false
 			},
-			'text': 'BOOKMARKED TEXT ' + id
+			text: 'BOOKMARKED TEXT ' + id
 		},
 		{
-			'characterFormat': {},
-			'bookmarkType': 1,
-			'name': 'DATA::UUID::' + id
+			characterFormat: {},
+			bookmarkType: 1,
+			name: 'DATA::UUID::' + id
 		}
-	]
-}
+	];
+};

@@ -18,7 +18,7 @@ const ANCHOR = 'XREFANCHOR:';
 const REF = 'XREF:';
 
 const getAnchorName = (anchorBookmark) => anchorBookmark.split(ANCHOR)[1];
-const getRefName = (refBookMark) => refBookMark.split(REF)[1];
+// const getRefName = (refBookMark) => refBookMark.split(REF)[1];
 
 const inlinesWithAnchor = (inlines) =>
 	doInlinesContain(inlines, (inline) => {
@@ -47,14 +47,14 @@ const isRefBlock = (block) => {
 	return false;
 };
 
-const getAnchorListFormat = (block) => {
-	if (isAnchorBlock(block)) return block.paragraphFormat.listFormat;
-};
+// const getAnchorListFormat = (block) => {
+// 	if (isAnchorBlock(block)) return block.paragraphFormat.listFormat;
+// };
 
 const getAnchorBookmark = (block) => {
 	if (isAnchorBlock(block)) {
 		// Get Start inline
-		let inlines = doInlinesContain(
+		const inlines = doInlinesContain(
 			block.inlines,
 			(inline) => get(inline, 'bookmarkType') === 0 && get(inline, 'name').includes(ANCHOR)
 		);
@@ -81,14 +81,14 @@ const updateRefBlockOfAnchor = (sfdt, anchorListNumber, anchorBlock: BlockType) 
 			}
 		};
 		const callbackInline = (block) => {
-			let inlines = block.inlines;
+			const inlines = block.inlines;
 			// Check the inline for the bookmark as anchorbookmark
 			if (anchorListNumber && isRefBlock(block)) {
 				// This is same as populate function (can be refactored)
 				let dataMode = false;
 
 				// // using objects here allows for nested bookmarks
-				let doneProcessing = {};
+				const doneProcessing = {};
 				// keep track of the current one
 				let currentlyProcessing;
 

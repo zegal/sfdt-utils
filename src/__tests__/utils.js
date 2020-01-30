@@ -63,8 +63,6 @@ export const getInlines = () => {
 	return inlines;
 };
 
-export const getFirstInlines = (sfdt) => getInline(sfdt, 0);
-
 export const getInline = (
 	sfdt,
 	position = 0,
@@ -98,3 +96,5 @@ export const getInline = (
 		);
 	}
 };
+
+export const getFirstInlines = (sfdt) => getInline(sfdt, 0);

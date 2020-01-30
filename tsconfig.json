@@ -10,7 +10,8 @@
 			"esnext"
 		],
 		"module": "esnext",
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"target": "ES5"
 	},
 	"typeRoots": [
 		"./types/sfdt.d.ts"

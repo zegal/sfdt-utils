@@ -1,12 +1,5 @@
-const addRow = () => {
+const addRow = () => {};
 
-}
+const addColumn = () => {};
 
-const addColumn = () => {
-
-}
-
-export {
-	addRow,
-	addColumn,
-}
+export {addRow, addColumn};

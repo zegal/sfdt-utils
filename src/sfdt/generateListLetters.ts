@@ -17,7 +17,7 @@ export const getAsLeadingZero = function(listValue: number): string {
  * @param letter
  */
 function generateRomanNumber(number: number, magnitude: number, letter: string): string {
-	let numberstring: string = '';
+	let numberstring = '';
 	while (number >= magnitude) {
 		number -= magnitude;
 		numberstring += letter;
@@ -30,7 +30,7 @@ function generateRomanNumber(number: number, magnitude: number, letter: string):
  * @param number
  */
 export const getAsRoman = function(number: number): string {
-	let retval: string = '';
+	let retval = '';
 	this.value = number;
 	retval += generateRomanNumber(this.value, 1000, 'M');
 	retval += generateRomanNumber(this.value, 900, 'CM');
@@ -64,8 +64,8 @@ export const getAsLetter = function(number: number): string {
 		quotient--;
 	}
 	//Index of A char in the ASCII table.
-	let letter: string = String.fromCharCode(65 - 1 + remainder);
-	let listValue: string = '';
+	const letter: string = String.fromCharCode(65 - 1 + remainder);
+	let listValue = '';
 	while (quotient >= 0) {
 		listValue = listValue + letter.toString();
 		quotient--;
