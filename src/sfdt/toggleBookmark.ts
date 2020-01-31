@@ -1,6 +1,8 @@
 import {isConditionalBookmark} from './../queryBookmark';
 // DEPRECATED, use sfdt/blocksProcess
 import filter from 'lodash/filter';
+import get from 'lodash/get';
+
 import forEach from 'lodash/forEach';
 import process from './processInlines';
 import {
@@ -12,6 +14,7 @@ import {
 import {isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart} from '../queryBookmark';
 import {normalizeBlockInlines} from './canUseListCondition';
 import Stack from '../stack';
+import {isNullOrUndefined} from './listHelpers';
 
 /**
  * Toggle Bookmark - Hide or show the content of a bookmark
@@ -90,7 +93,32 @@ const toggleBookmark = (sfdt: any, name: string, toggleOn = true) => {
 
 		const processListBlock = (block) => {
 			const normalizedBlock = normalizeBlockInlines(block);
-			const doWeNeedListCondition = canUseListCondition(normalizedBlock, name);
+			const checkList = (name) => {
+				const styles = get(sfdt, 'styles');
+				if (isNullOrUndefined(styles)) {
+					return undefined;
+				}
+				for (let element of styles) {
+					if (get(element, 'name') === name) {
+						const paraFormat = get(element, 'paragraphFormat');
+						const listFormat = get(paraFormat, 'listFormat');
+
+						if (!listFormat || !listFormat.listId) {
+							return undefined;
+							// console.log('returning elelemtn', name, element);
+							// return element;
+						} else if (element.basedOn) {
+							console.log('calling again-------------------------');
+							checkList(element.basedOn);
+						}
+						console.log('return', name, element);
+						return element;
+					}
+				}
+				return undefined;
+			};
+			const doWeNeedListCondition = canUseListCondition(normalizedBlock, name, checkList);
+			// console.log(doWeNeedListCondition, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
 			if (doWeNeedListCondition) {
 				if (conditionStartEndInSameInlines(normalizedBlock, name)) {
 					return false;

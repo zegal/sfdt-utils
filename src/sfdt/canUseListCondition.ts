@@ -102,6 +102,8 @@ export const normalizeBlockInlines = (block) => {
 	return newBlock;
 };
 
+const getListFormatFromStyleName = (styleName) => {};
+
 export const isBlockList = (block: BlockType) => {
 	const blockParagraphFormat = get(block, 'paragraphFormat');
 	const listFormat = get(blockParagraphFormat, 'listFormat');
@@ -117,14 +119,7 @@ export const isBlockList = (block: BlockType) => {
 	return true;
 };
 
-export function canUseListCondition(block, name) {
-	// condition for numbering condition
-
-	// 1. if block don't have paragraphFormat.listFormat
-	// represent block is not list
-	const blockParagraphFormat = get(block, 'paragraphFormat');
-	const listFormat = get(blockParagraphFormat, 'listFormat');
-
+const isis = (listFormat) => {
 	if (!listFormat) {
 		return false;
 	}
@@ -133,6 +128,28 @@ export function canUseListCondition(block, name) {
 		return false;
 	}
 
+	return true;
+};
+export function canUseListCondition(block, name, cb) {
+	// condition for numbering condition
+
+	// 1. if block don't have paragraphFormat.listFormat
+	// represent block is not list
+	const blockParagraphFormat = get(block, 'paragraphFormat');
+	const listFormat = get(blockParagraphFormat, 'listFormat');
+	let pgFormat;
+	if (!listFormat) {
+		return false;
+	}
+
+	if (listFormat && isEmpty(listFormat)) {
+		// pgFormat = cb(blockParagraphFormat.styleName);
+		// console.log(blockParagraphFormat.styleName, pgFormat);
+		// if (!pgFormat || !isis(pgFormat.listFormat)) return false;
+		// // return false;
+	}
+
+	// console.log('not return here', block);
 	// 2. if block.inlines first element is conditional bookmark
 	// represent block may have partials condition
 	// condition don't start from the beginning of the line

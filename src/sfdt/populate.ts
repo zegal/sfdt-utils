@@ -6,7 +6,7 @@ import {processSFDT, processBlock} from './blocksProcess';
 const debug = false;
 
 export default (data, sfdt, prefix = 'DATA::') => {
-	debug && console.log('data, sfdt', {data, sfdt});
+	// debug && console.log('data, sfdt', {data, sfdt});
 
 	if (!sfdt) {
 		return;
@@ -54,10 +54,10 @@ export default (data, sfdt, prefix = 'DATA::') => {
 				if (dataMode) {
 					// if (processing[inline.name]) {
 					if (!doneProcessing[currentlyProcessing]) {
-						debug && console.log('Replacing:', newInline, data[currentlyProcessing]);
+						debug && console.log('Replacing:', newInline, data, currentlyProcessing);
 						if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
 							// console.log('Doing processing on:', newInline, {newText: data[currentlyProcessing]})
-							newInline.text = data[currentlyProcessing];
+							newInline.text = String(data[currentlyProcessing]);
 
 							if (newInline.characterFormat) {
 								newInline.characterFormat.highlightColor = 'NoColor';
@@ -94,9 +94,8 @@ export default (data, sfdt, prefix = 'DATA::') => {
 
 				// keep the normal non-inside bookmark and not bookmark start test
 				newInlines.push(newInline);
+				// console.log('Processing results:', newInlines);
 			});
-
-			// console.log('Processing results:', {processing, doneProcessing})
 
 			return newInlines;
 		};
