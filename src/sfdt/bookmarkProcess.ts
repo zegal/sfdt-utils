@@ -7,11 +7,8 @@
  *
  */
 
-import {
-	without,
-	intersection
-	// get,
-} from 'lodash';
+import without from 'lodash/without';
+import intersection from 'lodash/intersection';
 
 import SFDTType, {block as BlockType} from '../../types/sfdt';
 
@@ -24,7 +21,8 @@ export default (
 	sfdt: SFDTType,
 	bookmarks: string[],
 	doInlineMatchingAction: (block: BlockType) => void,
-	doBlockMatchingAction: (block: BlockType) => void
+	doBlockMatchingAction: (block: BlockType) => void,
+	doImmediateBlockParentMatchingAction?: (block: BlockType) => BlockType,
 ) => {
 	let currentlyInsideBookmarks = []; // at top, so we can process bookmarks that span blocks
 
@@ -38,6 +36,12 @@ export default (
 			if (intersection(bookmarks, currentlyInsideBookmarks).length > 0) {
 				// console.log('Inside!', {highlightColor: get(block, 'characterFormat.highlightColor')}, {intersection: intersection(bookmarks, currentlyInsideBookmarks)})
 				return doBlockMatchingAction(block);
+			}
+
+			// above condition checks for block inside bookmark,
+			// process those blocks outside them also.
+			if (doImmediateBlockParentMatchingAction) {
+				block = doImmediateBlockParentMatchingAction(block);
 			}
 
 			return block;

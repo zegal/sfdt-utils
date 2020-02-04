@@ -2,6 +2,8 @@ import process from './bookmarkProcess';
 
 import SFDTType from '../../types/sfdt';
 
+const NO_COLOR = 'NoColor';
+
 /*
  * Change the highlights of bookmark(s) contents
  *
@@ -11,7 +13,12 @@ import SFDTType from '../../types/sfdt';
  *
  * eg: bookmarkHighlight(sfdt, ['bookmark_id'], '#ff0000') // red
  */
-export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor', characterType = 'highlightColor') => {
+export default (
+	sfdt: SFDTType,
+	bookmarks: string[],
+	highlightColor = NO_COLOR,
+	characterType = 'highlightColor'
+) => {
 	// console.log('Checking bookmarks:', bookmarks)
 
 	const processInline = (inline) => {
@@ -38,5 +45,17 @@ export default (sfdt: SFDTType, bookmarks: string[], highlightColor = 'NoColor',
 		return block;
 	};
 
-	return process(sfdt, bookmarks, processInline, processBlock);
+	const processImmediateBlockParent = (block) => {
+		if (Array.isArray(block.inlines)) {
+			const color = block.characterFormat?.[characterType];
+
+			if (color !== NO_COLOR && color !== highlightColor) {
+				block.characterFormat[characterType] = highlightColor;
+			}
+		}
+
+		return block;
+	};
+
+	return process(sfdt, bookmarks, processInline, processBlock, processImmediateBlockParent);
 };
