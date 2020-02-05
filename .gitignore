@@ -49,3 +49,4 @@ node_modules/
 !**/__tests__/**
 !jest.setup.js
 !rollup.config.js
+!.eslintrc.js
