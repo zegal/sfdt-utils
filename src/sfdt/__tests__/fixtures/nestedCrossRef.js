@@ -172,7 +172,7 @@ export default {
        {
         "characterFormat": {},
         "bookmarkType": 0,
-        "name": "XREF::2"
+        "name": "XREF::3.3"
        },
        {
         "characterFormat": {},
@@ -201,7 +201,7 @@ export default {
        {
         "characterFormat": {},
         "bookmarkType": 1,
-        "name": "XREF::2"
+        "name": "XREF::3.3"
        }
       ]
      },
