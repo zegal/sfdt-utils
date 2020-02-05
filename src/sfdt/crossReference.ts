@@ -11,7 +11,7 @@ import {isNullOrUndefined} from './sfdtHelpers/utils';
 
 const debug = false;
 
-export const doInlinesContain = (inlines, callback) => {
+const doInlinesContain = (inlines, callback) => {
 	const newInlines = filter(inlines, (inline) => {
 		return callback(inline);
 	});
@@ -19,8 +19,8 @@ export const doInlinesContain = (inlines, callback) => {
 	return newInlines;
 };
 
-const ANCHOR = 'XREFANCHOR:';
-const REF = 'XREF:';
+const ANCHOR = 'XREFANCHOR::';
+const REF = 'XREF::';
 
 const getAnchorName = (anchorBookmark) => anchorBookmark.split(ANCHOR)[1];
 
@@ -63,7 +63,7 @@ const getUpdatedREFData = (listLevel, listFormat, block: BlockType) => {
 		debug && console.log('updated list values: ', listNumberText);
 		// only need to return number of anchor block
 		if (listNumberText && isAnchorBlock(block)) {
-			const currentREFName = REF + getAnchorName(getAnchorBookmark(block));
+			const currentREFName = getAnchorName(getAnchorBookmark(block));
 			debug && console.log(currentREFName + '->' + listNumberText);
 			return {currentREFName, listNumberText};
 		}
@@ -75,7 +75,7 @@ const getUpdatedREFData = (listLevel, listFormat, block: BlockType) => {
  * Returns updated ref data by processing the whole sfdt
  * @param sfdt
  */
-export const getCrossRefData = (sfdt) => {
+const getCrossRefData = (sfdt) => {
 	const refData: any = {};
 	if (!sfdt) {
 		return;
@@ -106,3 +106,5 @@ export const getCrossRefData = (sfdt) => {
 
 	return refData;
 };
+
+export default getCrossRefData;
