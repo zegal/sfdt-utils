@@ -3272,7 +3272,7 @@ module.exports = {
 								underline: 'Single',
 								fontColor: '#5B86B0'
 							},
-							text: '4.2'
+							text: '4.3'
 						},
 						{
 							characterFormat: {

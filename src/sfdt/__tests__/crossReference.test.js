@@ -1,4 +1,4 @@
-import {getCrossRefData} from '../crossReference';
+import getCrossRefData from '../crossReference';
 
 import crossRefSfdt from './fixtures/crossRefSfdt';
 import crossRefWithStyle from './fixtures/crossreference-fromStyleName';
@@ -11,7 +11,7 @@ describe('crossReference', () => {
 		const blocks = originalSfdt.sections[0].blocks;
 		originalSfdt.sections[0].blocks = blocks.slice(0, 5).concat(blocks.slice(6, blocks.length));
 		const refData = getCrossRefData(originalSfdt);
-		expect(refData['XREF::TermsConditions']).toBe('4.1.');
+		expect(refData['TermsConditions']).toBe('4.1.');
 	});
 
 	it('findAnchorAndUpdate multiple nested list condition', () => {
@@ -19,10 +19,10 @@ describe('crossReference', () => {
 
 		let refData = getCrossRefData(originalSfdt);
 
-		expect(refData['XREF::2']).toBe('2.');
-		expect(refData['XREF::iii']).toBe('4.c)iv.');
-		expect(refData['XREF::mkg']).toBe('iii)');
-		expect(refData['XREF:3.3']).toBe(undefined); // this ref has no anchor
+		expect(refData['2']).toBe('2.');
+		expect(refData['iii']).toBe('4.c)iv.');
+		expect(refData['mkg']).toBe('iii)');
+		expect(refData['3.3']).toBe(undefined); // this ref has no anchor
 	});
 
 	it('findAnchorAndUpdate multiple nested list condition defined by style', () => {
@@ -30,7 +30,7 @@ describe('crossReference', () => {
 
 		let refData = getCrossRefData(originalSfdt);
 
-		expect(refData['XREF::4.2']).toBe('4.2');
-		expect(refData['XREF::4.1(b)']).toBe('4.1(a)');
+		expect(refData['4.2']).toBe('4.2');
+		expect(refData['4.1(b)']).toBe('4.1(a)');
 	});
 });
