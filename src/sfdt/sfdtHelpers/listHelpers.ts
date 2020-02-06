@@ -64,7 +64,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 		this.renderedLists = new WeakMap();
 	};
 
-	this.setListLevel = function(list: ListType, listLevelNumber: number): void {
+	this.setList = function(list: ListType, listLevelNumber: number): void {
 		this.list = list;
 		this.listLevelNumber = listLevelNumber;
 	};
@@ -136,6 +136,55 @@ export function ParseListLevel(sfdt: SFDTType) {
 	};
 
 	/**
+	 * Set renderedList with current abstractList: first occurance with startVal of related list and listLevelNumber
+	 */
+	this.setRenderedList = function(currentAbstractList: AbstractListType) {
+		// startVal to store the level number with it's format
+
+		this.startVal = new Map();
+		// use map rather than object as the key is known in runtime
+		this.renderedLists.set(currentAbstractList, this.startVal);
+		for (let i = 0; i <= this.listLevelNumber; i++) {
+			this.startVal.set(i, {
+				number: this.getListStartValue(i, this.list),
+				format: currentAbstractList.levels[i]
+			});
+		}
+	};
+
+	this.updateListLevel = function(levels: Map<any, any>, currentAbstractList: AbstractListType) {
+		const startAt = levels.get(this.listLevelNumber).number;
+		levels.set(this.listLevelNumber, {
+			number: startAt + 1,
+			format: currentAbstractList.levels[this.listLevelNumber]
+		});
+		let levelNumber = this.listLevelNumber + 1;
+		while (levelNumber < currentAbstractList.levels.length) {
+			if (
+				levels.has(levelNumber) &&
+				get(currentAbstractList.levels[this.listLevelNumber], 'restartLevel') > this.listLevelNumber
+			) {
+				levels.delete(levelNumber);
+			}
+			levelNumber++;
+		}
+	};
+	this.setListLevel = function(levels: Map<any, any>, currentAbstractList: AbstractListType) {
+		let levelNumber = this.listLevelNumber;
+		while (!levels.has(levelNumber - 1) && levelNumber > 0) {
+			levels.set(levelNumber - 1, {
+				number: this.getListStartValue(levelNumber - 1, this.list),
+				format: currentAbstractList.levels[this.listLevelNumber]
+			});
+			levelNumber--;
+		}
+		const startAt = this.getListStartValue(this.listLevelNumber, this.list);
+		levels.set(this.listLevelNumber, {
+			number: startAt,
+			format: currentAbstractList.levels[this.listLevelNumber]
+		});
+	};
+	/**
 	 * Update the rendered list with correct list number and return the current list format and the list number
 	 */
 	this.updateListValues = function(): Map<any, any> {
@@ -146,47 +195,15 @@ export function ParseListLevel(sfdt: SFDTType) {
 		}
 		// store processed abstractList to count the levels later
 		if (!this.renderedLists.has(currentAbstractList)) {
-			// startVal to store the level number with it's format
-			const startVal = new Map();
-			// use map rather than object as the key is known in runtime
-			this.renderedLists.set(currentAbstractList, startVal);
-			for (let i = 0; i <= this.listLevelNumber; i++) {
-				startVal.set(i, {number: this.getListStartValue(i, this.list), format: currentAbstractList.levels[i]});
-			}
-			return startVal;
+			this.setRenderedList(currentAbstractList);
+			return this.startVal;
 		}
 
 		const levels = this.renderedLists.get(currentAbstractList);
 		if (levels.has(this.listLevelNumber)) {
-			const startAt = levels.get(this.listLevelNumber).number;
-			levels.set(this.listLevelNumber, {
-				number: startAt + 1,
-				format: currentAbstractList.levels[this.listLevelNumber]
-			});
-			let levelNumber = this.listLevelNumber + 1;
-			while (levelNumber < currentAbstractList.levels.length) {
-				if (
-					levels.has(levelNumber) &&
-					get(currentAbstractList.levels[this.listLevelNumber], 'restartLevel') > this.listLevelNumber
-				) {
-					levels.delete(levelNumber);
-				}
-				levelNumber++;
-			}
+			this.updateListLevel(levels, currentAbstractList);
 		} else {
-			let levelNumber = this.listLevelNumber;
-			while (!levels.has(levelNumber - 1) && levelNumber > 0) {
-				levels.set(levelNumber - 1, {
-					number: this.getListStartValue(levelNumber - 1, this.list),
-					format: currentAbstractList.levels[this.listLevelNumber]
-				});
-				levelNumber--;
-			}
-			const startAt = this.getListStartValue(this.listLevelNumber, this.list);
-			levels.set(this.listLevelNumber, {
-				number: startAt,
-				format: currentAbstractList.levels[this.listLevelNumber]
-			});
+			this.setListLevel(levels, currentAbstractList);
 		}
 		// Case: using styleName: the listlevelNumber can change with the same listId too. For same style 'abc' the stored data can have upto 'n' depth levels, but we need to only return upto listLevelNumber 'x':'x'<='n'. So delete 'n-x' entries
 		while (levels.size > this.listLevelNumber + 1) {
@@ -201,7 +218,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	this.parseAllListValue = function(listFormat: ListFormatType): Map<any, any> {
 		const list = this.getListById(listFormat.listId);
 		const listLevelNumber = listFormat.listLevelNumber;
-		this.setListLevel(list, listLevelNumber);
+		this.setList(list, listLevelNumber);
 		if (isValidListFormat(listFormat)) {
 			return this.updateListValues();
 		}
