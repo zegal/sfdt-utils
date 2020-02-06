@@ -96,7 +96,7 @@ describe('Populate', () => {
 			cellPosition: 2,
 			blockPositionInCell: 0
 		});
-		expect(get(updatedBlockAfterPopulate, `inlines[1].text`)).toEqual('Monday');
+		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
 	});
 	test('update cross ref data', () => {
 		const crossRefSfdt = sfdtWithCrossRef;

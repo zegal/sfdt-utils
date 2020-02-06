@@ -18,7 +18,7 @@ const getAsLeadingZero = function(listValue: number): string {
 export function getAsRoman(number: number) {
 	this.value = number;
 	this.generateRomanNumber = function(magnitude: number, letter: string): string {
-		let numberString: string = '';
+		let numberString = '';
 		while (this.value >= magnitude) {
 			this.value -= magnitude;
 			numberString += letter;
@@ -26,7 +26,7 @@ export function getAsRoman(number: number) {
 		return numberString.toString();
 	};
 	this.convertToRoman = function() {
-		let romval: string = '';
+		let romval = '';
 		this.value = number;
 		romval += this.generateRomanNumber(1000, 'M');
 		romval += this.generateRomanNumber(900, 'CM');

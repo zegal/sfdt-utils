@@ -1,5 +1,3 @@
-import {types} from '@babel/core';
-
 export type inline = {
 	characterFormat?: any;
 	paragraphFormat?: any;

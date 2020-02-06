@@ -17,7 +17,7 @@ describe('crossReference', () => {
 	it('findAnchorAndUpdate multiple nested list condition', () => {
 		const originalSfdt = multiNestedCrossRef;
 
-		let refData = getCrossRefData(originalSfdt);
+		const refData = getCrossRefData(originalSfdt);
 
 		expect(refData['2']).toBe('2.');
 		expect(refData['iii']).toBe('4.c)iv.');
@@ -28,7 +28,7 @@ describe('crossReference', () => {
 	it('findAnchorAndUpdate multiple nested list condition defined by style', () => {
 		const originalSfdt = crossRefWithStyle;
 
-		let refData = getCrossRefData(originalSfdt);
+		const refData = getCrossRefData(originalSfdt);
 
 		expect(refData['4.2']).toBe('4.2');
 		expect(refData['4.1(b)']).toBe('4.1(a)');

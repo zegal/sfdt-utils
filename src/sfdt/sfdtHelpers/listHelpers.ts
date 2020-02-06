@@ -147,7 +147,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 		// store processed abstractList to count the levels later
 		if (!this.renderedLists.has(currentAbstractList)) {
 			// startVal to store the level number with it's format
-			let startVal = new Map();
+			const startVal = new Map();
 			// use map rather than object as the key is known in runtime
 			this.renderedLists.set(currentAbstractList, startVal);
 			for (let i = 0; i <= this.listLevelNumber; i++) {
@@ -156,7 +156,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 			return startVal;
 		}
 
-		let levels = this.renderedLists.get(currentAbstractList);
+		const levels = this.renderedLists.get(currentAbstractList);
 		if (levels.has(this.listLevelNumber)) {
 			const startAt = levels.get(this.listLevelNumber).number;
 			levels.set(this.listLevelNumber, {
@@ -182,7 +182,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 				});
 				levelNumber--;
 			}
-			let startAt = this.getListStartValue(this.listLevelNumber, this.list);
+			const startAt = this.getListStartValue(this.listLevelNumber, this.list);
 			levels.set(this.listLevelNumber, {
 				number: startAt,
 				format: currentAbstractList.levels[this.listLevelNumber]

@@ -18,13 +18,13 @@ export const getStyleFromName = (name: string, styles: StyleType[] = []) => {
  * @param currentParaFormat running paraFormat in each iteration updated with the given style paraFormat
  */
 const parseParaStyle = (name: string, stylesArray: StyleType[], currentParaFormat: ParagraphFormatType) => {
-	let paraStyle = getStyleFromName(name, stylesArray);
+	const paraStyle = getStyleFromName(name, stylesArray);
 	// Only for paragraph style type
 	if (paraStyle.type !== baseStyles.paragraph.type) {
 		return {};
 	}
 
-	let paraFormatFromStyle = get(paraStyle, 'paragraphFormat');
+	const paraFormatFromStyle = get(paraStyle, 'paragraphFormat');
 	// Update the paraFormat value with the format from style; currentParaFormat is the main priority source
 	currentParaFormat = merge({}, paraFormatFromStyle, currentParaFormat);
 

@@ -22,7 +22,7 @@ const processTable = (parent, callbackInline: TCallback, callbackBlock, checkFor
 			}
 
 			cell.blocks.forEach((block) => {
-				block = callbackBlock(block);
+				callbackBlock(block);
 
 				if (!block.inlines) {
 					return false;
@@ -54,28 +54,6 @@ export const processBlock = (block: any, callbackInline: TCallback, callbackBloc
 	return block;
 };
 
-export const processBlockForCrossRef = (block: any, callbackInline: TCallback, callbackBlock: TCallback): boolean => {
-	// 1. process block top level content first
-	// For processBlock REF update, we need to make sure the block contains ref
-
-	let newBlock = callbackBlock(block);
-	// 2. then delve into inlines. The callbackInline for cross reference takes block to process on it's inlines (block is required to check if it is the block containing reference/anchor or not). This is not compatible with the processTable callbackInline
-	if (newBlock) {
-		const processedBlock = processTable(newBlock, callbackInline, callbackBlock, true);
-
-		if (processedBlock) {
-			newBlock = processedBlock;
-		}
-
-		if (newBlock.inlines) {
-			newBlock.inlines = callbackInline(newBlock);
-		}
-		return newBlock;
-	}
-
-	return block;
-};
-
 // callback is run on each block
 // things in blocks we care about:
 //  - rows            // for tables
@@ -92,7 +70,7 @@ export const processBlocks = (parent: any, callback: TCallback) => {
 		}
 
 		section.blocks.forEach((block) => {
-			block = callback(block);
+			callback(block);
 		});
 	});
 

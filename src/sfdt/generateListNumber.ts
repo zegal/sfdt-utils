@@ -10,19 +10,19 @@ const debug = false;
 function getListFormatListText(formattedListValues: Array<string>, formats: string): string {
 	formattedListValues.forEach((value) => {
 		// Replace the first occurance in each iteration
-		formats = formats.replace(/\%\d/, value);
+		formats = formats.replace(/%\d/, value);
 	});
 	return formats;
 }
 
 export function getFullListLevelText(levels: Map<any, any>): string {
-	let formattedListValues = [];
-	let levelFormats = [];
+	const formattedListValues = [];
+	const levelFormats = [];
 	levels.forEach((level) => {
 		const {format, number} = level;
 		const {numberFormat} = format;
 		// placeHolder is a collection of format placeHolder "%1" (without it's format- dot or braces), to know how many list levels does a numberFormat contain (%1.%2...)
-		let placeHolder = numberFormat.match(/\%\d/g);
+		const placeHolder = numberFormat.match(/%\d/g);
 		// if matched, returns array else null. If null, skip
 		if (placeHolder) {
 			/*if multiple placeHolders, need to remove the prev calculated level

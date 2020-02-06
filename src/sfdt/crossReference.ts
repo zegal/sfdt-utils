@@ -1,4 +1,4 @@
-import {isBookmark, isBookmarkStart} from './../queryBookmark';
+import {isBookmarkStart} from './../queryBookmark';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
 import {block as BlockType} from '../../types/sfdt';
@@ -20,7 +20,6 @@ const doInlinesContain = (inlines, callback) => {
 };
 
 const ANCHOR = 'XREFANCHOR::';
-const REF = 'XREF::';
 
 const getAnchorName = (anchorBookmark) => anchorBookmark.split(ANCHOR)[1];
 
