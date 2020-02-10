@@ -72,7 +72,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	 * Get list by listId (from lists array in sfdt)
 	 * @param listId listFormat listId from lists array
 	 */
-	this.getListById = function(listId: number): ListType {
+	this.getListById = function(listId: number): ListType | undefined {
 		const lists = get(this.sfdt, 'lists');
 		if (isNullOrUndefined(lists)) {
 			return undefined;
@@ -89,7 +89,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	 * Get abstract list by abstractList id (from abstractLists array in sfdt)
 	 * @param id listId
 	 */
-	this.getAbstractListById = function(id: number): AbstractListType {
+	this.getAbstractListById = function(id: number): AbstractListType | undefined {
 		// extract abstractLists from sfdt
 		const abstractLists = get(this.sfdt, 'abstractLists');
 		if (isNullOrUndefined(abstractLists)) {
@@ -107,7 +107,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	/**
 	 * Get list level from the given list and listLevelNumber
 	 */
-	this.getListLevel = function(): ListLevelType {
+	this.getListLevel = function(): ListLevelType | undefined {
 		// This is not for parsing list level, but just to return the list level if present. For cases with no listLevel defined, need to update from SF code
 		if (!isNullOrUndefined(this.list)) {
 			const abstractList = this.getAbstractListById(this.list.abstractListId);
@@ -187,7 +187,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	/**
 	 * Update the rendered list with correct list number and return the current list format and the list number
 	 */
-	this.updateListValues = function(): Map<any, any> {
+	this.updateListValues = function(): Map<any, any> | undefined {
 		const abstractListId = get(this.list, 'abstractListId');
 		const currentAbstractList = this.getAbstractListById(abstractListId);
 		if (isNullOrUndefined(currentAbstractList)) {
@@ -215,7 +215,7 @@ export function ParseListLevel(sfdt: SFDTType) {
 	/**
 	 * Processes the given list to generate its list level values
 	 */
-	this.parseAllListValue = function(listFormat: ListFormatType): Map<any, any> {
+	this.parseAllListValue = function(listFormat: ListFormatType): Map<any, any> | undefined {
 		const list = this.getListById(listFormat.listId);
 		const listLevelNumber = listFormat.listLevelNumber;
 		this.setList(list, listLevelNumber);

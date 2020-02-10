@@ -20,7 +20,7 @@ export const getStyleFromName = (name: string, styles: StyleType[] = []) => {
 const parseParaStyle = (name: string, stylesArray: StyleType[], currentParaFormat: ParagraphFormatType) => {
 	const paraStyle = getStyleFromName(name, stylesArray);
 	// Only for paragraph style type
-	if (paraStyle.type !== baseStyles.paragraph.type) {
+	if (!paraStyle || paraStyle.type !== baseStyles.paragraph.type) {
 		return {};
 	}
 
