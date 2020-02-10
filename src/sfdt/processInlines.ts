@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import filter from 'lodash/filter';
 import forEach from 'lodash/forEach';
 // DEPRECATED, use sfdt/blocksProcess
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 	if (!sfdt.sections) {
 		console.warn('Missing: sfdt.sections', sfdt);
@@ -16,13 +17,13 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 		const newBlocks = filter(section.blocks, (block) => {
 			if (!block.inlines) {
 				if (block.rows) {
-					var rows = block.rows;
+					const rows = block.rows;
 					forEach(rows, function(row: any) {
-						if (row.hasOwnProperty('cells')) {
-							var cells = row.cells;
+						if (Object.prototype.hasOwnProperty.call(row, 'cells')) {
+							const cells = row.cells;
 							forEach(cells, function(cell: any) {
-								if (cell.hasOwnProperty('blocks')) {
-									var cellBlocks = cell.blocks;
+								if (Object.prototype.hasOwnProperty.call(cell, 'blocks')) {
+									const cellBlocks = cell.blocks;
 									forEach(cellBlocks, function(cellBlock: any) {
 										cellBlock.inlines = callback(cellBlock.inlines);
 										return true;
@@ -40,7 +41,7 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 				return false;
 			} else {
 				// block.inlines = callback(block.inlines)
-				let newInlines = callback(block.inlines);
+				const newInlines = callback(block.inlines);
 				// Remove the blocks if the inline is removed i.e [] from the condition in callback function
 				if (!newInlines || (newInlines.length === 0 && block.inlines.length > 0)) {
 					return false;
@@ -52,7 +53,7 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 		section.blocks = newBlocks;
 
 		if (get(section, 'headersFooters')) {
-			for (let eachKey in section.headersFooters) {
+			for (const eachKey in section.headersFooters) {
 				const child = section.headersFooters[eachKey];
 
 				if (child.blocks) {

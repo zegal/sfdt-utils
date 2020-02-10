@@ -1,7 +1,7 @@
-import {DocumentEditor} from '../types/documentEditor'
+import {DocumentEditor} from '../types/documentEditor';
 
 const gotoBookmark = (bookmark: string, documentEditor: DocumentEditor) => {
-	documentEditor.selection.navigateBookmark(bookmark)
-}
+	documentEditor.selection.navigateBookmark(bookmark);
+};
 
-export default gotoBookmark
+export default gotoBookmark;

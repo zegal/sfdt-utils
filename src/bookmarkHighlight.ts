@@ -1,14 +1,18 @@
-import {DocumentEditor} from '../types/documentEditor'
+import {DocumentEditor} from '../types/documentEditor';
 
-import action from './bookmarkAction'
+import action from './bookmarkAction';
 
 /**
-* @param {String} name -
-* @param {Object} documentEditor - Instance of the SF document editor
-* @param {String} colour -
-*/
-export default (name: string, documentEditor: DocumentEditor, colour: string = '') => {
-	action(name, ({selection}) => {
-		selection.characterFormat.highlightColor = colour
-	}, documentEditor)
-}
+ * @param {String} name -
+ * @param {Object} documentEditor - Instance of the SF document editor
+ * @param {String} colour -
+ */
+export default (name: string, documentEditor: DocumentEditor, colour = '') => {
+	action(
+		name,
+		({selection}) => {
+			selection.characterFormat.highlightColor = colour;
+		},
+		documentEditor
+	);
+};

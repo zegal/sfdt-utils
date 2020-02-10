@@ -1,6 +1,6 @@
-import {DocumentEditor} from '../types/documentEditor'
+import {DocumentEditor} from '../types/documentEditor';
 
-import hasBookmark from './hasBookmark'
+import hasBookmark from './hasBookmark';
 
 export default function remove(bookmarkName: string, documentEditor: DocumentEditor): boolean {
 	if (hasBookmark(bookmarkName, documentEditor)) {
@@ -19,8 +19,8 @@ export default function remove(bookmarkName: string, documentEditor: DocumentEdi
 
 		documentEditor.editor.deleteBookmark(bookmarkName);
 
-		return true
+		return true;
 	} else {
-		return false
+		return false;
 	}
 }

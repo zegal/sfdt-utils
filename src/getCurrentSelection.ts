@@ -1,7 +1,7 @@
-import {DocumentEditor} from '../types/documentEditor'
+import {DocumentEditor} from '../types/documentEditor';
 
 const getCurrentSelection = (documentEditor: DocumentEditor): string => {
-	return documentEditor.editor.selection.text
-}
+	return documentEditor.editor.selection.text;
+};
 
-export default getCurrentSelection
+export default getCurrentSelection;
