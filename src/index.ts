@@ -1,7 +1,7 @@
 export {default as populate} from './sfdt/populate';
 export {default as processInlines} from './sfdt/processInlines';
 export {default as toggleBookmark} from './sfdt/toggleBookmark';
-export {default as updateRef} from './sfdt/updateRef';
+export {default as getCrossRefData} from './sfdt/crossReference';
 import unsafe_getCurrentSelection from './getCurrentSelection';
 import unsafe_unselect from './unselect';
 import unsafe_showCaret from './showCaret';

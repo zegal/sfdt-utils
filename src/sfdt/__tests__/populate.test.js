@@ -1,15 +1,16 @@
 import get from 'lodash/get';
 import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
 import tableInlines from './fixtures/tableInlines';
-
+import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
+import getCrossRefData from '../crossReference';
 import populate from '../populate';
 
 const data = {
-	'DATA::K1': '123'
+	K1: '123'
 };
 const data1 = {
-	'DATA::K1': -12,
-	'DATA::K2': false
+	K1: -12,
+	K2: false
 };
 
 const inlines = getInlines();
@@ -85,7 +86,7 @@ describe('Populate', () => {
 	test('inject data in table', () => {
 		const sfdtWithInlines = getSFDT(tableInlines);
 		const data = {
-			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks': 'Monday'
+			'field.list.weeks': 'Monday'
 		};
 
 		const updatedSfdt = populate(data, sfdtWithInlines);
@@ -95,6 +96,13 @@ describe('Populate', () => {
 			cellPosition: 2,
 			blockPositionInCell: 0
 		});
-		expect(get(updatedBlockAfterPopulate, `inlines[1].text`)).toEqual('Monday');
+		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
+	});
+	test('update cross ref data', () => {
+		const crossRefSfdt = sfdtWithCrossRef;
+		const data = getCrossRefData(crossRefSfdt);
+		const updatedSfdt = populate(data, crossRefSfdt);
+		expect(updatedSfdt.sections[0].blocks[43].inlines[15].text).toEqual('4.1(a)');
+		expect(updatedSfdt.sections[0].blocks[41].inlines[15].text).toEqual('4.2');
 	});
 });

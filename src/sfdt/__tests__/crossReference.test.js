@@ -1,17 +1,36 @@
-import updateRef from '../updateRef';
+import getCrossRefData from '../crossReference';
 
 import crossRefSfdt from './fixtures/crossRefSfdt';
+import crossRefWithStyle from './fixtures/crossreference-fromStyleName';
+import multiNestedCrossRef from './fixtures/nestedCrossRef';
 
 describe('crossReference', () => {
 	it('findAnchorAndUpdate', () => {
 		const originalSfdt = crossRefSfdt;
-		const sfdt = updateRef(crossRefSfdt);
-		// Delete a list block (array position 5)
+		// // Delete a list block (array position 5)
 		const blocks = originalSfdt.sections[0].blocks;
 		originalSfdt.sections[0].blocks = blocks.slice(0, 5).concat(blocks.slice(6, blocks.length));
+		const refData = getCrossRefData(originalSfdt);
+		expect(refData['TermsConditions']).toBe('4.1.');
+	});
 
-		const newSfdt = updateRef(originalSfdt);
+	it('findAnchorAndUpdate multiple nested list condition', () => {
+		const originalSfdt = multiNestedCrossRef;
 
-		expect(newSfdt.sections[0].blocks[0].inlines[8].text).toBe('4.1');
+		const refData = getCrossRefData(originalSfdt);
+
+		expect(refData['2']).toBe('2.');
+		expect(refData['iii']).toBe('4.c)iv.');
+		expect(refData['mkg']).toBe('iii)');
+		expect(refData['3.3']).toBe(undefined); // this ref has no anchor
+	});
+
+	it('findAnchorAndUpdate multiple nested list condition defined by style', () => {
+		const originalSfdt = crossRefWithStyle;
+
+		const refData = getCrossRefData(originalSfdt);
+
+		expect(refData['4.2']).toBe('4.2');
+		expect(refData['4.1(b)']).toBe('4.1(a)');
 	});
 });

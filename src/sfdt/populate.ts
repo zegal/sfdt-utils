@@ -1,13 +1,15 @@
 import get from 'lodash/get';
 import {block as BlockType} from './../../types/sfdt.d';
 import {processSFDT, processBlock} from './blocksProcess';
+import {isInvalid} from './sfdtHelpers/utils';
 // import process from './processInlines'
 
 const debug = false;
 
-export default (data, sfdt, prefix = 'DATA::') => {
-	debug && console.log('data, sfdt', {data, sfdt});
+const allowedPrefix = ['DATA::', 'XREF::'];
+const containsAllowedPrefix = (name, prefixes) => prefixes.some((prefix) => name.includes(prefix));
 
+export default (data, sfdt, prefixes = allowedPrefix) => {
 	if (!sfdt) {
 		return;
 	}
@@ -38,7 +40,7 @@ export default (data, sfdt, prefix = 'DATA::') => {
 				if (inline.bookmarkType === 1) {
 					processing[inline.name] = false;
 					debug && console.log('Stopping processing', inline.name, inline);
-					if (inline.name.includes(prefix)) {
+					if (containsAllowedPrefix(inline.name, prefixes)) {
 						dataMode = false;
 					}
 
@@ -49,24 +51,15 @@ export default (data, sfdt, prefix = 'DATA::') => {
 					return;
 				}
 
-				// middle of a bookmark
+				// middle of a bookmark (TODO: overlapping bookmarks)
 				// NOTE: needs to be above the start processing but below end
 				// (so it does not also process the opening tag etc)
 				if (dataMode) {
-					// if (processing[inline.name]) {
-					const processingSplits = currentlyProcessing.split('::');
-					const processingId = processingSplits[processingSplits.length - 1];
+					const bookmarkSplits = currentlyProcessing.split('::');
+					const processingId = bookmarkSplits[bookmarkSplits.length - 1];
 					if (!doneProcessing[currentlyProcessing]) {
-						debug && console.log('Replacing:', newInline, data[currentlyProcessing]);
-						if (data[currentlyProcessing] !== undefined && data[currentlyProcessing] !== '') {
-							// Sfdt will break if the "text" value is not string. Data coming can be number/bool too. So, convert all to string
-							newInline.text = String(data[currentlyProcessing]);
-
-							if (newInline.characterFormat) {
-								newInline.characterFormat.highlightColor = 'NoColor';
-							}
-						} else if (data[processingId]) {
-							// This else condition is for the req params party block, that has no bookmark in fields but only the ids in the params
+						if (!isInvalid(data[processingId])) {
+							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
 							newInline.text = String(data[processingId]);
 
 							if (newInline.characterFormat) {
@@ -88,7 +81,7 @@ export default (data, sfdt, prefix = 'DATA::') => {
 
 				// bookmark start
 				if (inline.bookmarkType === 0) {
-					if (inline.name.includes(prefix)) {
+					if (containsAllowedPrefix(inline.name, prefixes)) {
 						dataMode = true;
 					}
 
@@ -105,8 +98,6 @@ export default (data, sfdt, prefix = 'DATA::') => {
 				// keep the normal non-inside bookmark and not bookmark start test
 				newInlines.push(newInline);
 			});
-
-			// console.log('Processing results:', {processing, doneProcessing})
 
 			return newInlines;
 		};
