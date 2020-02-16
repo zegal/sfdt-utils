@@ -60,14 +60,22 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 					if (!doneProcessing[currentlyProcessing]) {
 						if (!isInvalid(data[processingId])) {
 							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
-							newInline.text = String(data[processingId]);
+							//for long text type field we need to translate user inputted line breaks into sfdt new line
+							String(data[processingId]).split("\n").forEach(dataLine => {
+								const splitInline = {...inline};
 
-							if (newInline.characterFormat) {
-								newInline.characterFormat.highlightColor = 'NoColor';
-							}
+								splitInline.text = dataLine;
+								
+								if (splitInline.characterFormat) {
+									splitInline.characterFormat.highlightColor = 'NoColor';
+								}
+
+								newInlines.push(splitInline);
+							})	
+						} else {
+							//keeping original line if nothing to inject
+							newInlines.push(newInline);
 						}
-
-						newInlines.push(newInline);
 
 						doneProcessing[currentlyProcessing] = true;
 					} else {
