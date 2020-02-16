@@ -61,7 +61,7 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 						if (!isInvalid(data[processingId])) {
 							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
 							//for long text type field we need to translate user inputted line breaks into sfdt new line
-							String(data[processingId]).split("\n").forEach(dataLine => {
+							String(data[processingId]).split('\n').forEach(dataLine => {
 								const splitInline = {...inline};
 
 								splitInline.text = dataLine;
@@ -71,7 +71,7 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 								}
 
 								newInlines.push(splitInline);
-							})	
+							});
 						} else {
 							//keeping original line if nothing to inject
 							newInlines.push(newInline);
