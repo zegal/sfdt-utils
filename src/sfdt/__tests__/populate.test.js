@@ -122,18 +122,18 @@ describe('Populate', () => {
 		expect(currentInlines.length).toEqual(originalInlines.length + 4);
 
 		const targetInlines = [
-			{ text: "starting" },
-			{ bookmarkType: 0, name: "DATA::K1" },
-			{ text: "Line 1" },
-			{ text: "\u000b" },
-			{ text: "Line 2" },
-			{ text: "\u000b" },
-			{ text: "Line 3" },
-			{ bookmarkType: 1, name: "DATA::K1" },
-			{ bookmarkType: 0, name: "DATA::K2" },
-			{ text: "false" },
-			{ bookmarkType: 1, name: "DATA::K2" },
-			{ text: "ending" }];
+			{ text: 'starting' },
+			{ bookmarkType: 0, name: 'DATA::K1' },
+			{ text: 'Line 1' },
+			{ text: '\u000b' },
+			{ text: 'Line 2' },
+			{ text: '\u000b' },
+			{ text: 'Line 3' },
+			{ bookmarkType: 1, name: 'DATA::K1' },
+			{ bookmarkType: 0, name: 'DATA::K2' },
+			{ text: 'false' },
+			{ bookmarkType: 1, name: 'DATA::K2' },
+			{ text: 'ending' }];
 
 		expect(currentInlines).toEqual(targetInlines);
 	});
