@@ -113,17 +113,28 @@ describe('Populate', () => {
 		};
 		const originalInlines = getInline(sfdt);
 
-		const updatedSfdt = populate(data, {...sfdt});
-				
+		const updatedSfdt = populate(data, { ...sfdt });
+
 		const currentInlines = getInline(updatedSfdt);
 
-		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines => size + 2
-		expect(currentInlines.length).toEqual(originalInlines.length + 2);
+		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines 
+		// and 2 inlines with vertival tab as separator => size + 4
+		expect(currentInlines.length).toEqual(originalInlines.length + 4);
 
-		// check replacement went well
-		data.K1.split('\n').forEach((value, index) => {
-			//first 2 inlines are unrelated text and the bookmark
-			expect(currentInlines[index+2].text).toEqual(value);
-		});
+		const targetInlines = [
+			{ text: "starting" },
+			{ bookmarkType: 0, name: "DATA::K1" },
+			{ text: "Line 1" },
+			{ text: "\u000b" },
+			{ text: "Line 2" },
+			{ text: "\u000b" },
+			{ text: "Line 3" },
+			{ bookmarkType: 1, name: "DATA::K1" },
+			{ bookmarkType: 0, name: "DATA::K2" },
+			{ text: "false" },
+			{ bookmarkType: 1, name: "DATA::K2" },
+			{ text: "ending" }];
+
+		expect(currentInlines).toEqual(targetInlines);
 	});
 });

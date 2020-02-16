@@ -61,10 +61,10 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 						if (!isInvalid(data[processingId])) {
 							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
 							//for long text type field we need to translate user inputted line breaks into sfdt new line
-							String(data[processingId]).split('\n').forEach(dataLine => {
+							String(data[processingId]).split(/(\n)/g).forEach(dataLine => {
 								const splitInline = {...inline};
-
-								splitInline.text = dataLine;
+								//SF recognize vertical tab character to split as new line. Seems it's not the case of LS, PS, CR...
+								splitInline.text = dataLine === '\n' ? '\u000B' : dataLine;
 								
 								if (splitInline.characterFormat) {
 									splitInline.characterFormat.highlightColor = 'NoColor';
