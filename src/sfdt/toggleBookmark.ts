@@ -49,7 +49,7 @@ function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 
 		paraBlock.inlines.forEach(inline => {
 			if (inline.characterFormat) inline.characterFormat.highlightColor = 'NoColor';
-		})
+		});
 		return;
 	}
 
@@ -68,12 +68,12 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 	//console.log('processTable', condition, options);
 	let startDeleteRow, endDeleteRow;
 	tableBlock.rows.forEach((row, i) => {
-		row.cells.forEach((cell, j) => {
+		row.cells.forEach(cell => {
 			for (let k = 0; k < cell.blocks.length;) {
 				if (!processBlock(cell.blocks, k, condition, options, true, toggleOn)) {
 					k++;
 				} else {
-					cell.blocks.splice(k, 1)
+					cell.blocks.splice(k, 1);
 				}
 			}
 
@@ -86,8 +86,8 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 					endDeleteRow = i;
 				}
 			}
-		})
-	})
+		});
+	});
 
 
 	if (startDeleteRow >= 0) {
@@ -108,7 +108,7 @@ function checkInlinesEmpty(block) {
 		return true;
 	}
 
-	let inlines = block.inlines.filter(inline => { return inline.text });
+	const inlines = block.inlines.filter(inline => { return inline.text });
 	if (inlines.length == 0) {
 		return true;
 	}
