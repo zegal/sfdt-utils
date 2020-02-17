@@ -15,15 +15,15 @@ function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 				//console.log('FOUND START CONDITION', condition, paraBlock)
 				if (!toggleOn) {
 					options.withinDeleteContext = true;
+					inline.markDelete = true;
 				}
-				inline.markDelete = true;
 				options.withinBookmarkContext = true;
 			} else if (inline.bookmarkType == 1) {
 				//console.log('FOUND END CONDITION', condition, paraBlock)
 				if (!toggleOn) {
 					delete options.withinDeleteContext;
+					inline.markDelete = true;
 				}
-				inline.markDelete = true;
 				delete options.withinBookmarkContext;
 			}
 		} else {
