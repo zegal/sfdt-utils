@@ -64,7 +64,7 @@ describe('toggleBookmark', function() {
 		});
 
 		test('Toggle parent on', function() {
-			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			let newSfdt = JSON.parse(JSON.stringify(nestedConditionWithParentOffOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
@@ -120,6 +120,7 @@ describe('toggleBookmark', function() {
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
 				true
 			);
+			console.log("toggleOff", JSON.stringify(toggleOff));
 			const firstInlineAfterToggle = getInline(toggleOff, 0);
 			const lastInlineAfterToggle = getInline(toggleOff, 0, 2);
 
