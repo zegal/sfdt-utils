@@ -53,7 +53,8 @@ describe('toggleBookmark', function() {
 
 	describe('Nested', function() {
 		test('Toggle parent off', function() {
-			const nestedBookmarkSfdt = getSFDT(false, nestedConditionListWithParentOnOneChildOff);
+			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
 			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
@@ -63,7 +64,8 @@ describe('toggleBookmark', function() {
 		});
 
 		test('Toggle parent on', function() {
-			const nestedBookmarkSfdt = getSFDT(false, nestedConditionWithParentOffOneChildOff);
+			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
 			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
@@ -79,7 +81,8 @@ describe('toggleBookmark', function() {
 
 		/** parent should only toggle off in this case */
 		test('Toggle parent off along with one child off', () => {
-			const nestedBookmarkSfdt = getSFDT(false, nestedConditionListWithParentOnOneChildOff);
+			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 
 			expect(initialInlines.length).toEqual(10);
