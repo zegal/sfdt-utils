@@ -69,6 +69,7 @@ describe('toggleBookmark', function() {
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
 			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
+			console.log(JSON.stringify(initialInlines[1]));
 			expect(initialInlines[1].hasFieldEnd).toBeTruthy();
 			expect(initialInlines[8].fieldType).toBe(1);
 
