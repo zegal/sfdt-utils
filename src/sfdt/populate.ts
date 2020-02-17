@@ -60,14 +60,22 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 					if (!doneProcessing[currentlyProcessing]) {
 						if (!isInvalid(data[processingId])) {
 							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
-							newInline.text = String(data[processingId]);
+							//for long text type field we need to translate user inputted line breaks into sfdt new line
+							String(data[processingId]).split(/(\n)/g).forEach(dataLine => {
+								const splitInline = {...inline};
+								//SF recognize vertical tab character to split as new line. Seems it's not the case of LS, PS, CR...
+								splitInline.text = dataLine === '\n' ? '\u000B' : dataLine;
+								
+								if (splitInline.characterFormat) {
+									splitInline.characterFormat.highlightColor = 'NoColor';
+								}
 
-							if (newInline.characterFormat) {
-								newInline.characterFormat.highlightColor = 'NoColor';
-							}
+								newInlines.push(splitInline);
+							});
+						} else {
+							//keeping original line if nothing to inject
+							newInlines.push(newInline);
 						}
-
-						newInlines.push(newInline);
 
 						doneProcessing[currentlyProcessing] = true;
 					} else {

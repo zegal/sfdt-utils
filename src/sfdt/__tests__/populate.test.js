@@ -98,11 +98,43 @@ describe('Populate', () => {
 		});
 		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
 	});
+
 	test('update cross ref data', () => {
 		const crossRefSfdt = sfdtWithCrossRef;
 		const data = getCrossRefData(crossRefSfdt);
 		const updatedSfdt = populate(data, crossRefSfdt);
 		expect(updatedSfdt.sections[0].blocks[43].inlines[15].text).toEqual('4.1(a)');
 		expect(updatedSfdt.sections[0].blocks[41].inlines[15].text).toEqual('4.2');
+	});
+
+	test('Text with line separator is split in multiple lines', () => {
+		const data = {
+			K1: 'Line 1\nLine 2\nLine 3'
+		};
+		const originalInlines = getInline(sfdt);
+
+		const updatedSfdt = populate(data, { ...sfdt });
+
+		const currentInlines = getInline(updatedSfdt);
+
+		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines 
+		// and 2 inlines with vertival tab as separator => size + 4
+		expect(currentInlines.length).toEqual(originalInlines.length + 4);
+
+		const targetInlines = [
+			{ text: 'starting' },
+			{ bookmarkType: 0, name: 'DATA::K1' },
+			{ text: 'Line 1' },
+			{ text: '\u000b' },
+			{ text: 'Line 2' },
+			{ text: '\u000b' },
+			{ text: 'Line 3' },
+			{ bookmarkType: 1, name: 'DATA::K1' },
+			{ bookmarkType: 0, name: 'DATA::K2' },
+			{ text: 'false' },
+			{ bookmarkType: 1, name: 'DATA::K2' },
+			{ text: 'ending' }];
+
+		expect(currentInlines).toEqual(targetInlines);
 	});
 });
