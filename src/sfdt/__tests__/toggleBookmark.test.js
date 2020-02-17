@@ -25,7 +25,7 @@ const name = `${bookmarkType}::${uuid}`;
 describe('toggleBookmark', function() {
 	describe('Simple', function() {
 		test('Toggle off', function() {
-			let sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')));
+			const sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')));
 			const ourInlinesBeforeToggle = getFirstInlines(sfdt);
 			expect(ourInlinesBeforeToggle.length).toEqual(11);
 
@@ -53,7 +53,7 @@ describe('toggleBookmark', function() {
 
 	describe('Nested', function() {
 		test('Toggle parent off', function() {
-			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
@@ -64,7 +64,7 @@ describe('toggleBookmark', function() {
 		});
 
 		test('Toggle parent on', function() {
-			let newSfdt = JSON.parse(JSON.stringify(nestedConditionWithParentOffOneChildOff));
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionWithParentOffOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
@@ -81,7 +81,7 @@ describe('toggleBookmark', function() {
 
 		/** parent should only toggle off in this case */
 		test('Toggle parent off along with one child off', () => {
-			let newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 
@@ -114,7 +114,7 @@ describe('toggleBookmark', function() {
 			expect(firstInline[2].hasFieldEnd).toBe(true);
 			expect(lastInline[1].fieldType).toBe(1);
 
-			let newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
+			const newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
 			const toggleOff = toggleBookmark(
 				newSfdt,
 				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
