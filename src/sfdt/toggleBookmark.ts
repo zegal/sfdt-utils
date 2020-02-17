@@ -1,59 +1,3 @@
-import { isConditionalBookmark } from './../queryBookmark';
-// DEPRECATED, use sfdt/blocksProcess
-import filter from 'lodash/filter';
-import forEach from 'lodash/forEach';
-import process from './processInlines';
-import {
-	canUseListCondition,
-	conditionStartInFirstInlines,
-	conditionEndInSameLastInlines,
-	conditionStartEndInSameInlines
-} from './canUseListCondition';
-import { isMatchingBookmark, isBookmarkStart, isBookmarkEnd, isToggleEnd, isToggleStart } from '../queryBookmark';
-import { normalizeBlockInlines } from './canUseListCondition';
-import Stack from '../stack';
-
-/**
- * Toggle Bookmark - Hide or show the content of a bookmark
- *
- * @param {Object} SFDT - The SF SFDT JSON object
- * @param {String} bookmarkName - Bookmark to toggle on or off
- * @param {Boolean} toggleOn - True to show bookmark content, false to hide it
- *
- * @returns {Object} updatedSFDT
- */
-function toggleBookmark(sfdt, name, toggleOn = true) {
-	sfdt.sections.forEach(section => processSection(section, name, {}, toggleOn));
-	return sfdt;
-}
-
-function processSection(section, condition, options = {}, toggleOn) {
-	//console.log('processing section for condition: ', condition)
-	for (let i = 0; i < section.blocks.length;) {
-		if (!processBlock(section.blocks, i, condition, options, false, toggleOn)) i++;
-	}
-}
-
-function processBlock(blocks, i, condition, options, inTable, toggleOn) {
-	// console.log("processBlock", condition, options)
-	let block = blocks[i];
-	if (block.rows) {
-		if (processTable(block, condition, options, inTable, toggleOn)) {
-			blocks.splice(i, 1);
-			return true;
-		}
-	} else {
-		if (processParagraph(block, condition, options, inTable, toggleOn)) {
-			// if inlines is empty, remove block
-			if (checkInlinesEmpty(block)) {
-				blocks.splice(i, 1);
-				return true;
-			}
-		}
-	}
-}
-
-
 /*
   processParagraph for deletion
   -- a paragraph is made up of inlines[]
@@ -61,21 +5,21 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn) {
   -- if a bookmark spans witihn inline elements, just remove those elements inclusive
   -- if a bookmark spans multiple paragraphs, collapse
 \*/
-function processParagraph(paraBlock, condition, options = {}, inTable = false, toggleOn) {
-	//console.log("processParagraph", condition, options, `inTable: ${inTable}`);
+function processParagraph(paraBlock, condition, options = {}, toggleOn) {
+	//console.log('processParagraph', condition, options, `inTable: ${inTable}`);
 	let processedDelete = false;
 	for (let i = 0; i < paraBlock.inlines.length;) {
-		let inline = paraBlock.inlines[i];
+		const inline = paraBlock.inlines[i];
 		if (inline.name == condition) {
 			if (inline.bookmarkType == 0) {
-				//console.log("FOUND START CONDITION", condition, paraBlock)
+				//console.log('FOUND START CONDITION', condition, paraBlock)
 				if (!toggleOn) {
 					options.withinDeleteContext = true;
 					inline.markDelete = true;
 				}
 				options.withinBookmarkContext = true;
 			} else if (inline.bookmarkType == 1) {
-				//console.log("FOUND END CONDITION", condition, paraBlock)
+				//console.log('FOUND END CONDITION', condition, paraBlock)
 				if (!toggleOn) {
 					delete options.withinDeleteContext;
 					inline.markDelete = true;
@@ -101,10 +45,10 @@ function processParagraph(paraBlock, condition, options = {}, inTable = false, t
 		if (!paraBlock.characterFormat) {
 			paraBlock.characterFormat = {};
 		}
-		paraBlock.characterFormat.highlightColor = "NoColor";
+		paraBlock.characterFormat.highlightColor = 'NoColor';
 
 		paraBlock.inlines.forEach(inline => {
-			if (inline.characterFormat) inline.characterFormat.highlightColor = "NoColor";
+			if (inline.characterFormat) inline.characterFormat.highlightColor = 'NoColor';
 		})
 		return;
 	}
@@ -121,7 +65,7 @@ function processParagraph(paraBlock, condition, options = {}, inTable = false, t
   --   if it spans multiple rows, remove the rows affected.  ALL ROWS
 */
 function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
-	//console.log("processTable", condition, options);
+	//console.log('processTable', condition, options);
 	let startDeleteRow, endDeleteRow;
 	tableBlock.rows.forEach((row, i) => {
 		row.cells.forEach((cell, j) => {
@@ -148,7 +92,7 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 
 	if (startDeleteRow >= 0) {
 		if (!(endDeleteRow >= 0)) endDeleteRow = tableBlock.rows.length - 1;
-		// console.log("table, deleting rows: ", startDeleteRow, endDeleteRow)
+		// console.log('table, deleting rows: ', startDeleteRow, endDeleteRow)
 		tableBlock.rows.splice(startDeleteRow, endDeleteRow - startDeleteRow + 1);
 	}
 
@@ -170,5 +114,44 @@ function checkInlinesEmpty(block) {
 	}
 }
 
+function processBlock(blocks, i, condition, options, inTable, toggleOn) {
+	// console.log('processBlock', condition, options)
+	const block = blocks[i];
+	if (block.rows) {
+		if (processTable(block, condition, options, inTable, toggleOn)) {
+			blocks.splice(i, 1);
+			return true;
+		}
+	} else {
+		if (processParagraph(block, condition, options, toggleOn)) {
+			// if inlines is empty, remove block
+			if (checkInlinesEmpty(block)) {
+				blocks.splice(i, 1);
+				return true;
+			}
+		}
+	}
+}
+
+function processSection(section, condition, options = {}, toggleOn) {
+	//console.log('processing section for condition: ', condition)
+	for (let i = 0; i < section.blocks.length;) {
+		if (!processBlock(section.blocks, i, condition, options, false, toggleOn)) i++;
+	}
+}
+
+/**
+ * Toggle Bookmark - Hide or show the content of a bookmark
+ *
+ * @param {Object} SFDT - The SF SFDT JSON object
+ * @param {String} bookmarkName - Bookmark to toggle on or off
+ * @param {Boolean} toggleOn - True to show bookmark content, false to hide it
+ *
+ * @returns {Object} updatedSFDT
+ */
+function toggleBookmark(sfdt, name, toggleOn = true) {
+	sfdt.sections.forEach(section => processSection(section, name, {}, toggleOn));
+	return sfdt;
+}
 
 export default toggleBookmark;
