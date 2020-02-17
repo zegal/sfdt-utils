@@ -56,6 +56,36 @@ function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 	return processedDelete || options.withinDeleteContext;
 }
 
+function checkInlinesEmpty(block) {
+	if (block.inlines.length == 0) {
+		return true;
+	}
+
+	const inlines = block.inlines.filter(inline => { return inline.text; });
+	if (inlines.length == 0) {
+		return true;
+	}
+}
+
+function processBlock(blocks, i, condition, options, inTable, toggleOn) {
+	// console.log('processBlock', condition, options)
+	const block = blocks[i];
+	if (block.rows) {
+		if (processTable(block, condition, options, inTable, toggleOn)) {
+			blocks.splice(i, 1);
+			return true;
+		}
+	} else {
+		if (processParagraph(block, condition, options, toggleOn)) {
+			// if inlines is empty, remove block
+			if (checkInlinesEmpty(block)) {
+				blocks.splice(i, 1);
+				return true;
+			}
+		}
+	}
+}
+
 /*
   processTable for delete
   -- if a bookmark is within a cell, use processParagraph
@@ -101,36 +131,6 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 		return true;
 	}
 
-}
-
-function checkInlinesEmpty(block) {
-	if (block.inlines.length == 0) {
-		return true;
-	}
-
-	const inlines = block.inlines.filter(inline => { return inline.text });
-	if (inlines.length == 0) {
-		return true;
-	}
-}
-
-function processBlock(blocks, i, condition, options, inTable, toggleOn) {
-	// console.log('processBlock', condition, options)
-	const block = blocks[i];
-	if (block.rows) {
-		if (processTable(block, condition, options, inTable, toggleOn)) {
-			blocks.splice(i, 1);
-			return true;
-		}
-	} else {
-		if (processParagraph(block, condition, options, toggleOn)) {
-			// if inlines is empty, remove block
-			if (checkInlinesEmpty(block)) {
-				blocks.splice(i, 1);
-				return true;
-			}
-		}
-	}
 }
 
 function processSection(section, condition, options = {}, toggleOn) {
