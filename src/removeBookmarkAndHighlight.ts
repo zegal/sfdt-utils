@@ -8,7 +8,8 @@ export default function remove(bookmarkName: string, documentEditor: DocumentEdi
 		documentEditor.selection.selectBookmark(bookmarkName);
 
 		if (documentEditor.selection.contextType === 'TableText') {
-			documentEditor.selection.cellFormat.background = 'NoColor';
+			// can't use `NoColor` for table
+			documentEditor.selection.cellFormat.background = '';
 		}
 
 		documentEditor.selection.characterFormat.highlightColor = 'NoColor';
