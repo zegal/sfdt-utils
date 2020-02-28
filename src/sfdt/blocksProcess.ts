@@ -70,9 +70,9 @@ export const processBlocks = (parent: any, callback: TCallback) => {
 		}
 		if (section.headersFooters) {
 			Object.keys(section.headersFooters).forEach((key) => {
-        if(!section.headersFooters[key].blocks) {
-          return false;
-        }
+				if (!section.headersFooters[key].blocks) {
+					return false;
+				}
 				const blocks = section.headersFooters[key].blocks;
 				blocks.forEach((block) => {
 					callback(block);
