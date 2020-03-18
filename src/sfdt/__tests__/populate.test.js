@@ -2,8 +2,10 @@ import get from 'lodash/get';
 import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
 import tableInlines from './fixtures/tableInlines';
 import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
+import emptyBlockSection from './fixtures/emptyBlockSection';
 import getCrossRefData from '../crossReference';
 import populate from '../populate';
+import toggleBookmark from '../toggleBookmark';
 
 const data = {
 	K1: '123'
@@ -113,28 +115,38 @@ describe('Populate', () => {
 		};
 		const originalInlines = getInline(sfdt);
 
-		const updatedSfdt = populate(data, { ...sfdt });
+		const updatedSfdt = populate(data, {...sfdt});
 
 		const currentInlines = getInline(updatedSfdt);
 
-		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines 
+		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines
 		// and 2 inlines with vertival tab as separator => size + 4
 		expect(currentInlines.length).toEqual(originalInlines.length + 4);
 
 		const targetInlines = [
-			{ text: 'starting' },
-			{ bookmarkType: 0, name: 'DATA::K1' },
-			{ text: 'Line 1' },
-			{ text: '\u000b' },
-			{ text: 'Line 2' },
-			{ text: '\u000b' },
-			{ text: 'Line 3' },
-			{ bookmarkType: 1, name: 'DATA::K1' },
-			{ bookmarkType: 0, name: 'DATA::K2' },
-			{ text: 'false' },
-			{ bookmarkType: 1, name: 'DATA::K2' },
-			{ text: 'ending' }];
+			{text: 'starting'},
+			{bookmarkType: 0, name: 'DATA::K1'},
+			{text: 'Line 1'},
+			{text: '\u000b'},
+			{text: 'Line 2'},
+			{text: '\u000b'},
+			{text: 'Line 3'},
+			{bookmarkType: 1, name: 'DATA::K1'},
+			{bookmarkType: 0, name: 'DATA::K2'},
+			{text: 'false'},
+			{bookmarkType: 1, name: 'DATA::K2'},
+			{text: 'ending'}
+		];
 
 		expect(currentInlines).toEqual(targetInlines);
+	});
+});
+
+describe('Remove empty section from sfdt', () => {
+	it('Removes whole section if block is empty', () => {
+		const name = 'COND::e2fb3aa8-6f6f-45da-bae5-b0c2d8989686';
+		const updatedSfdt = toggleBookmark(emptyBlockSection, name, false);
+		const finalSfdt = populate({test: 'test'}, updatedSfdt);
+		expect(get(finalSfdt, 'sections').length).toBe(2);
 	});
 });
