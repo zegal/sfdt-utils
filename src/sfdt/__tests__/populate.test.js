@@ -143,10 +143,16 @@ describe('Populate', () => {
 });
 
 describe('Remove empty section from sfdt', () => {
+	it('Checks the sfdt is correct or not', () => {
+		const originalSfdt = emptyBlockSection;
+		expect(get(originalSfdt, 'sections').length).toBe(3);
+	});
+
 	it('Removes whole section if block is empty', () => {
 		const name = 'COND::e2fb3aa8-6f6f-45da-bae5-b0c2d8989686';
+		const sectionLength = emptyBlockSection.sections.length;
 		const updatedSfdt = toggleBookmark(emptyBlockSection, name, false);
 		const finalSfdt = populate({test: 'test'}, updatedSfdt);
-		expect(get(finalSfdt, 'sections').length).toBe(2);
+		expect(get(finalSfdt, 'sections').length).toBe(sectionLength - 1);
 	});
 });
