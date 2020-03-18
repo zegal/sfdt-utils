@@ -149,7 +149,7 @@ describe('Remove empty section from sfdt', () => {
 	});
 
 	it('Removes whole section if block is empty', () => {
-		const name = 'COND::e2fb3aa8-6f6f-45da-bae5-b0c2d8989686';
+		const name = 'COND::877ba8ee-1ccc-4979-86fb-5467b1f919b7';
 		const sectionLength = emptyBlockSection.sections.length;
 		const updatedSfdt = toggleBookmark(emptyBlockSection, name, false);
 		const finalSfdt = populate({test: 'test'}, updatedSfdt);
