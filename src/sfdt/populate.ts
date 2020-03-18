@@ -61,19 +61,23 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 						if (!isInvalid(data[processingId])) {
 							debug && console.log('Replacing:', newInline, data[processingId], currentlyProcessing);
 							//for long text type field we need to translate user inputted line breaks into sfdt new line
-							String(data[processingId]).split(/(\n)/g).forEach(dataLine => {
-								const splitInline = {...inline};
-								//SF recognize vertical tab character to split as new line. Seems it's not the case of LS, PS, CR...
-								splitInline.text = dataLine === '\n' ? '\u000B' : dataLine;
-								
-								if (splitInline.characterFormat) {
-									splitInline.characterFormat.highlightColor = 'NoColor';
-								}
+							String(data[processingId])
+								.split(/(\n)/g)
+								.forEach((dataLine) => {
+									const splitInline = {...inline};
+									//SF recognize vertical tab character to split as new line. Seems it's not the case of LS, PS, CR...
+									splitInline.text = dataLine === '\n' ? '\u000B' : dataLine;
 
-								newInlines.push(splitInline);
-							});
+									if (splitInline.characterFormat) {
+										splitInline.characterFormat.highlightColor = 'NoColor';
+									}
+
+									newInlines.push(splitInline);
+								});
 						} else {
-							//keeping original line if nothing to inject
+							// keeping original line if nothing to inject
+							// make sure the newInline has text field (for multiple inline populate, if there is hasFieldEnd field with no text and end fieldType, then sfdt will not be parsed after that)
+							newInline.text = newInline.text || '';
 							newInlines.push(newInline);
 						}
 
