@@ -64,10 +64,18 @@ export const processBlocks = (parent: any, callback: TCallback) => {
 		return false;
 	}
 
-	parent.sections.forEach((section) => {
+	parent.sections.forEach((section, key) => {
 		if (!section.blocks) {
 			return false;
 		}
+
+		// If section.blocks = [] (empty array) remove the whole section from sfdt
+		if (!Array.isArray(section.blocks) || section.blocks.length == 0) {
+			parent.sections.splice(key, 1);
+			return false;
+		}
+
+		// Check section header and footer for bookmarks
 		if (section.headersFooters) {
 			Object.keys(section.headersFooters).forEach((key) => {
 				if (!section.headersFooters[key].blocks) {
