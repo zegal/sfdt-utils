@@ -76,6 +76,9 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 								});
 						} else {
 							// keeping original line if nothing to inject
+							// fieldType and hasFieldEnd expects ending fieldType. Since populate removes all inbetween inlines and only set first one if there is no data to update, we need to make sure to remove ^^ if they are in the inbetween inlines
+							delete newInline['fieldType'];
+							delete newInline['hasFieldEnd'];
 							// make sure the newInline has text field (for multiple inline populate, if there is hasFieldEnd field with no text and end fieldType, then sfdt will not be parsed after that)
 							newInline.text = newInline.text || '';
 							newInlines.push(newInline);
