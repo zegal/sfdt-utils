@@ -72,6 +72,8 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 										splitInline.characterFormat.highlightColor = 'NoColor';
 									}
 
+									delete splitInline['fieldType'];
+									delete splitInline['hasFieldEnd'];
 									newInlines.push(splitInline);
 								});
 						} else {
