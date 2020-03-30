@@ -36,6 +36,8 @@ describe('SFDT Parser', function() {
 
 		// check replacement went well
 		expect(currentInlines[2].text).toEqual('123');
+		expect(currentInlines[2].fieldType).toBeUndefined();
+		expect(currentInlines[2].hasFieldEnd).toBeUndefined();
 	});
 
 	test('populate when data already exists', function() {
