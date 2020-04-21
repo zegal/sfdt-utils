@@ -50,3 +50,7 @@ node_modules/
 !jest.setup.js
 !rollup.config.js
 !.eslintrc.js
+
+# IDEs
+.vscode
+.idea

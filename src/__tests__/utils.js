@@ -36,6 +36,8 @@ export const getBookmark = (id, prefix = 'DATA::') => {
 			name: `${prefix}${name}`
 		},
 		{
+			fieldType: 0,
+			hasFieldEnd: true, // Check to make sure the populate removes these fields
 			text: 'REPLACE-ME-' + name
 		},
 		{

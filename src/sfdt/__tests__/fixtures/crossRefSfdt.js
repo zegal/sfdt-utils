@@ -37,7 +37,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 0,
-							name: 'XREF:CheckTermsConditions'
+							name: 'XREF::CheckTermsConditions'
 						},
 						{
 							characterFormat: {
@@ -71,7 +71,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 1,
-							name: 'XREF:CheckTermsConditions'
+							name: 'XREF::CheckTermsConditions'
 						},
 						{
 							characterFormat: {
@@ -118,7 +118,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 0,
-							name: 'XREF:TermsConditions'
+							name: 'XREF::TermsConditions'
 						},
 						{
 							characterFormat: {
@@ -152,7 +152,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 1,
-							name: 'XREF:TermsConditions'
+							name: 'XREF::TermsConditions'
 						}
 					]
 				},
@@ -289,7 +289,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 0,
-							name: 'XREFANCHOR:TermsConditions'
+							name: 'XREFANCHOR::TermsConditions'
 						},
 						{
 							characterFormat: {
@@ -302,7 +302,7 @@ const crossRefSfdt = {
 						{
 							characterFormat: {},
 							bookmarkType: 1,
-							name: 'XREFANCHOR:TermsConditions'
+							name: 'XREFANCHOR::TermsConditions'
 						}
 					]
 				}

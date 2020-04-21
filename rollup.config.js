@@ -13,7 +13,7 @@ export default {
 		getCurrentSelection: 'src/getCurrentSelection.ts',
 		unselect: 'src/unselect.ts',
 
-		updateRef: 'src/sfdt/updateRef.ts',
+		getCrossRefData: 'src/sfdt/crossReference.ts',
 		updateBookmarkContent: 'src/updateBookmarkContent.ts',
 		insertBookmark: 'src/insertBookmark.ts',
 		queryBookmark: 'src/queryBookmark.ts',

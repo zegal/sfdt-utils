@@ -1,15 +1,18 @@
 import get from 'lodash/get';
 import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
 import tableInlines from './fixtures/tableInlines';
-
+import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
+import emptyBlockSection from './fixtures/emptyBlockSection';
+import getCrossRefData from '../crossReference';
 import populate from '../populate';
+import toggleBookmark from '../toggleBookmark';
 
 const data = {
-	'DATA::K1': '123'
+	K1: '123'
 };
 const data1 = {
-	'DATA::K1': -12,
-	'DATA::K2': false
+	K1: -12,
+	K2: false
 };
 
 const inlines = getInlines();
@@ -33,6 +36,8 @@ describe('SFDT Parser', function() {
 
 		// check replacement went well
 		expect(currentInlines[2].text).toEqual('123');
+		expect(currentInlines[2].fieldType).toBeUndefined();
+		expect(currentInlines[2].hasFieldEnd).toBeUndefined();
 	});
 
 	test('populate when data already exists', function() {
@@ -85,7 +90,7 @@ describe('Populate', () => {
 	test('inject data in table', () => {
 		const sfdtWithInlines = getSFDT(tableInlines);
 		const data = {
-			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks': 'Monday'
+			'field.list.weeks': 'Monday'
 		};
 
 		const updatedSfdt = populate(data, sfdtWithInlines);
@@ -95,6 +100,61 @@ describe('Populate', () => {
 			cellPosition: 2,
 			blockPositionInCell: 0
 		});
-		expect(get(updatedBlockAfterPopulate, `inlines[1].text`)).toEqual('Monday');
+		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
+	});
+
+	test('update cross ref data', () => {
+		const crossRefSfdt = sfdtWithCrossRef;
+		const data = getCrossRefData(crossRefSfdt);
+		const updatedSfdt = populate(data, crossRefSfdt);
+		expect(updatedSfdt.sections[0].blocks[43].inlines[15].text).toEqual('4.1(a)');
+		expect(updatedSfdt.sections[0].blocks[41].inlines[15].text).toEqual('4.2');
+	});
+
+	test('Text with line separator is split in multiple lines', () => {
+		const data = {
+			K1: 'Line 1\nLine 2\nLine 3'
+		};
+		const originalInlines = getInline(sfdt);
+
+		const updatedSfdt = populate(data, {...sfdt});
+
+		const currentInlines = getInline(updatedSfdt);
+
+		//we should have `Line 1` injected in a present inline, line 2 and 3 are new inlines
+		// and 2 inlines with vertival tab as separator => size + 4
+		expect(currentInlines.length).toEqual(originalInlines.length + 4);
+
+		const targetInlines = [
+			{text: 'starting'},
+			{bookmarkType: 0, name: 'DATA::K1'},
+			{text: 'Line 1'},
+			{text: '\u000b'},
+			{text: 'Line 2'},
+			{text: '\u000b'},
+			{text: 'Line 3'},
+			{bookmarkType: 1, name: 'DATA::K1'},
+			{bookmarkType: 0, name: 'DATA::K2'},
+			{text: 'false'},
+			{bookmarkType: 1, name: 'DATA::K2'},
+			{text: 'ending'}
+		];
+
+		expect(currentInlines).toEqual(targetInlines);
+	});
+});
+
+describe('Remove empty section from sfdt', () => {
+	it('Checks the sfdt is correct or not', () => {
+		const originalSfdt = emptyBlockSection;
+		expect(get(originalSfdt, 'sections').length).toBe(3);
+	});
+
+	it('Removes whole section if block is empty', () => {
+		const name = 'COND::877ba8ee-1ccc-4979-86fb-5467b1f919b7';
+		const sectionLength = emptyBlockSection.sections.length;
+		const updatedSfdt = toggleBookmark(emptyBlockSection, name, false);
+		const finalSfdt = populate({test: 'test'}, updatedSfdt);
+		expect(get(finalSfdt, 'sections').length).toBe(sectionLength - 1);
 	});
 });

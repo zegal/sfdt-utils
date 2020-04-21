@@ -25,7 +25,12 @@ export default (sfdt, callback, listConditionCallback = (arg) => true) => {
 								if (Object.prototype.hasOwnProperty.call(cell, 'blocks')) {
 									const cellBlocks = cell.blocks;
 									forEach(cellBlocks, function(cellBlock: any) {
-										cellBlock.inlines = callback(cellBlock.inlines);
+										// TODO: check for nested table data: Need to process the table if there is cellBlock.rows again
+										// Cases: a cellblock; which is basically a block; can either have rows (table) OR inlines. SFDT parsing if gets the case where there are both rows AND inlines, will replace the rows processing by inlines. So, if rows, skip inlines parsing here
+										// callback will return [] from filter >> So only add inlines if there is inlines in the cellblock, else skip it
+										if (cellBlock.inlines) {
+											cellBlock.inlines = callback(cellBlock.inlines);
+										}
 										return true;
 									});
 								}
