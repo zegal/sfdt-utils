@@ -28,8 +28,8 @@ describe('sfdt bookmark modify', function() {
 		// make sure we get the same length of inlines, no addition, no subtraction
 		expect(currentInlines.length).toEqual(originalLength);
 		// check replacement went well
-		expect(currentInlines[1].name).toEqual('DATA::123');
-		expect(currentInlines[3].name).toEqual('DATA::123');
+		expect(currentInlines[1].name).toEqual('DATA::bookmarkOne::123');
+		expect(currentInlines[3].name).toEqual('DATA::bookmarkOne::123');
 	});
 
 	test('when data already exists', function() {
@@ -45,7 +45,7 @@ describe('sfdt bookmark modify', function() {
 			]
 		};
 		const originalLength = getInline(sfdtWithData).length;
-		sfdtWithData.sections[0].blocks[0].inlines[1].name = 'DATA::123';
+		sfdtWithData.sections[0].blocks[0].inlines[1].name = 'DATA::bookmark::123';
 
 		const result = replaceSfdtBookmarks(data, sfdtWithData);
 		// get results we want to check
@@ -54,7 +54,39 @@ describe('sfdt bookmark modify', function() {
 		// make sure we get the same length of inlines, no addition, no subtraction
 		expect(currentInlines.length).toEqual(originalLength);
 		// check replacement went well
-		expect(currentInlines[1].name).toEqual('DATA::123');
+		expect(currentInlines[1].name).toEqual('DATA::bookmark::123');
+	});
+
+	test('when id includes another id in its string', function() {
+		// it should change only that bookmark whose processId matches the key of existingData
+		const existingData = {
+			abc: 'def'
+		};
+		const sfdtWithData = {
+			sections: [
+				{
+					blocks: [
+						{
+							inlines: [...inlines]
+						}
+					]
+				}
+			]
+		};
+		const originalLength = getInline(sfdtWithData).length;
+		sfdtWithData.sections[0].blocks[0].inlines[1].name = 'DATA::bookmark::abc';
+		// case :- for id having its id including another id
+		sfdtWithData.sections[0].blocks[0].inlines[4].name = 'DATA::bookmark::abcd';
+
+		const result = replaceSfdtBookmarks(existingData, sfdtWithData);
+		// get results we want to check
+		const currentInlines = getInline(result);
+
+		// make sure we get the same length of inlines, no addition, no subtraction
+		expect(currentInlines.length).toEqual(originalLength);
+		// check replacement went well
+		expect(currentInlines[1].name).toEqual('DATA::bookmark::def');
+		expect(currentInlines[4].name).toEqual('DATA::bookmark::abcd');
 	});
 
 	test('call function and replace bookmarks', function() {
@@ -66,8 +98,8 @@ describe('sfdt bookmark modify', function() {
 		// make sure we get the same length of inlines, no addition, no subtraction
 		expect(currentInlines.length).toEqual(originalLength);
 		// check replacement went well and id in bookmarks is replaced
-		expect(currentInlines[4].name).toEqual('DATA::def');
-		expect(currentInlines[6].name).toEqual('DATA::def');
+		expect(currentInlines[4].name).toEqual('DATA::bookmarkTwo::def');
+		expect(currentInlines[6].name).toEqual('DATA::bookmarkTwo::def');
 	});
 });
 

@@ -21,8 +21,7 @@ export default (data, sfdt) => {
 			inlines.forEach((inline) => {
 				let newInline = {...inline};
 				if (inline.name) {
-					let processingSplits = inline.name.split('::');
-					let processId = processingSplits[processingSplits.length - 1];
+					let processId = inline.name.split('::')[2];
 					if (data[processId]) {
 						if (newInline.bookmarkType == 0 || newInline.bookmarkType == 1) {
 							newInline.name = newInline.name.replace(processId, data[processId]);
