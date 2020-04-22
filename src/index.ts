@@ -1,8 +1,8 @@
-export { default as populate } from './sfdt/populate';
-export { default as processInlines } from './sfdt/processInlines';
-export { default as toggleBookmark } from './sfdt/toggleBookmark';
-export { default as getCrossRefData } from './sfdt/crossReference';
-export { default as replaceSfdtBookmarks } from './sfdt/replaceSfdtBookmarks';
+export {default as populate} from './sfdt/populate';
+export {default as processInlines} from './sfdt/processInlines';
+export {default as toggleBookmark} from './sfdt/toggleBookmark';
+export {default as getCrossRefData} from './sfdt/crossReference';
+export {default as replaceSfdtBookmarks} from './sfdt/replaceSfdtBookmarks';
 import unsafe_getCurrentSelection from './getCurrentSelection';
 import unsafe_unselect from './unselect';
 import unsafe_showCaret from './showCaret';
@@ -17,8 +17,8 @@ import {
 	isConditionalBookmark
 } from './queryBookmark';
 
-export { default as getSFDTjson } from './getSFDTjson';
-export { default as getSFDTstring } from './getSFDTstring';
+export {default as getSFDTjson} from './getSFDTjson';
+export {default as getSFDTstring} from './getSFDTstring';
 
 import unsafe_updateBookmarkContent from './updateBookmarkContent';
 import unsafe_insertBookmark from './insertBookmark';
