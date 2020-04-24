@@ -127,16 +127,16 @@ describe('Populate', () => {
 
 		const targetInlines = [
 			{text: 'starting'},
-			{bookmarkType: 0, name: 'DATA::K1'},
+			{bookmarkType: 0, name: 'DATA::bookmarkOne::K1'},
 			{text: 'Line 1'},
 			{text: '\u000b'},
 			{text: 'Line 2'},
 			{text: '\u000b'},
 			{text: 'Line 3'},
-			{bookmarkType: 1, name: 'DATA::K1'},
-			{bookmarkType: 0, name: 'DATA::K2'},
+			{bookmarkType: 1, name: 'DATA::bookmarkOne::K1'},
+			{bookmarkType: 0, name: 'DATA::bookmarkTwo::K2'},
 			{text: 'false'},
-			{bookmarkType: 1, name: 'DATA::K2'},
+			{bookmarkType: 1, name: 'DATA::bookmarkTwo::K2'},
 			{text: 'ending'}
 		];
 

@@ -38,7 +38,7 @@ export const getBookmark = (id, prefix = 'DATA::') => {
 		{
 			fieldType: 0,
 			hasFieldEnd: true, // Check to make sure the populate removes these fields
-			text: 'REPLACE-ME-' + name
+			text: 'REPLACE-ME-' + name.split('::')[1]
 		},
 		{
 			bookmarkType: 1,
@@ -55,8 +55,8 @@ export const getInlines = () => {
 			text: 'starting'
 		},
 
-		...getBookmark('K1'),
-		...getBookmark('K2'),
+		...getBookmark('bookmarkOne::K1'),
+		...getBookmark('bookmarkTwo::K2'),
 		{
 			text: 'ending'
 		}

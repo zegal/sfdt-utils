@@ -19,6 +19,7 @@ export default {
 		queryBookmark: 'src/queryBookmark.ts',
 		bookmarkHighlight: 'src/bookmarkHighlight.ts',
 		removeBookmarkAndHighlight: 'src/removeBookmarkAndHighlight.ts',
+		replaceSfdtBookmarks: 'src/sfdt/replaceSfdtBookmarks.ts',
 
 		getSFDTjson: 'src/getSFDTjson.ts',
 		getSFDTstring: 'src/getSFDTstring.ts',
