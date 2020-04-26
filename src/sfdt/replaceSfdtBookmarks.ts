@@ -17,11 +17,11 @@ export default (data, sfdt) => {
 		};
 
 		const callbackInline = (inlines: any[]) => {
-			let arrInline = [];
+			const arrInline = [];
 			inlines.forEach((inline) => {
-				let newInline = {...inline};
+				const newInline = {...inline};
 				if (inline.name) {
-					let processId = inline.name.split('::')[2];
+					const processId = inline.name.split('::')[2];
 					if (data[processId]) {
 						if (newInline.bookmarkType == 0 || newInline.bookmarkType == 1) {
 							newInline.name = newInline.name.replace(processId, data[processId]);
