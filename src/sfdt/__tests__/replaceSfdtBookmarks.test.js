@@ -121,10 +121,10 @@ describe('replace table bookmark', function() {
 			blockPositionInCell: 0
 		});
 
-		expect(get(currentTableInlines, `inlines[0].name`)).toEqual(
+		expect(get(currentTableInlines, 'inlines[0].name')).toEqual(
 			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.days'
 		);
-		expect(get(currentTableInlines, `inlines[2].name`)).toEqual(
+		expect(get(currentTableInlines, 'inlines[2].name')).toEqual(
 			'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.days'
 		);
 	});
