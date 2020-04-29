@@ -1,11 +1,12 @@
 import get from 'lodash/get';
-import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
-import tableInlines from './fixtures/tableInlines';
-import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
-import emptyBlockSection from './fixtures/emptyBlockSection';
-import getCrossRefData from '../crossReference';
 import populate from '../populate';
 import toggleBookmark from '../toggleBookmark';
+import getCrossRefData from '../crossReference';
+import tableInlines from './fixtures/tableInlines';
+import emptyBlockSection from './fixtures/emptyBlockSection';
+import multiRefInSingleInline from './fixtures/mutiRefInSingleInline';
+import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
+import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
 
 const data = {
 	K1: '123'
@@ -103,14 +104,6 @@ describe('Populate', () => {
 		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
 	});
 
-	test('update cross ref data', () => {
-		const crossRefSfdt = sfdtWithCrossRef;
-		const data = getCrossRefData(crossRefSfdt);
-		const updatedSfdt = populate(data, crossRefSfdt);
-		expect(updatedSfdt.sections[0].blocks[43].inlines[15].text).toEqual('4.1(a)');
-		expect(updatedSfdt.sections[0].blocks[41].inlines[15].text).toEqual('4.2');
-	});
-
 	test('Text with line separator is split in multiple lines', () => {
 		const data = {
 			K1: 'Line 1\nLine 2\nLine 3'
@@ -156,5 +149,27 @@ describe('Remove empty section from sfdt', () => {
 		const updatedSfdt = toggleBookmark(emptyBlockSection, name, false);
 		const finalSfdt = populate({test: 'test'}, updatedSfdt);
 		expect(get(finalSfdt, 'sections').length).toBe(sectionLength - 1);
+	});
+});
+
+describe('Populate with Cross reference', () => {
+	test('update cross ref data', () => {
+		const crossRefSfdt = sfdtWithCrossRef;
+		const data = getCrossRefData(crossRefSfdt);
+		const updatedSfdt = populate(data, crossRefSfdt);
+		expect(updatedSfdt.sections[0].blocks[43].inlines[15].text).toEqual('4.1(a)');
+		expect(updatedSfdt.sections[0].blocks[41].inlines[15].text).toEqual('4.2');
+	});
+
+	test('populate with multiple crossref reference in same inline', () => {
+		const crossRefSfdt = multiRefInSingleInline;
+		const cfData = getCrossRefData(crossRefSfdt);
+		const updatedSfdt = populate(cfData, crossRefSfdt);
+		const inlines = updatedSfdt.sections[0].blocks[6].inlines;
+		const data = [];
+		inlines.forEach((inline, i) => {
+			if (inline.bookmarkType === 0 && inline.name === 'XREF::three') data.push(inlines[i + 1].text);
+		});
+		expect(data).toEqual(['3.', '3.', '3.']);
 	});
 });
