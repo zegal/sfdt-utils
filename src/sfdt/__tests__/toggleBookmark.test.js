@@ -114,12 +114,12 @@ describe('toggleBookmark', function() {
 			expect(firstInline[2].hasFieldEnd).toBe(true);
 			expect(lastInline[1].fieldType).toBe(1);
 
-			const newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
-			const toggleOff = toggleBookmark(
-				newSfdt,
-				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
-				true
-			);
+			// const newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
+			// const toggleOff = toggleBookmark(
+			// 	newSfdt,
+			// 	'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
+			// 	true
+			// );
 			//const firstInlineAfterToggle = getInline(toggleOff, 0);
 			//const lastInlineAfterToggle = getInline(toggleOff, 0, 2);
 
@@ -129,23 +129,19 @@ describe('toggleBookmark', function() {
 
 		test('Toggle off', function() {
 			let newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
-			const toggleOn = toggleBookmark(
-				newSfdt,
-				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
-				true
-			);
-			const firstInlineAfterToggle = getInline(toggleOn, 0);
-			const lastInlineAfterToggle = getInline(toggleOn, 0, 2);
+			// const toggleOn = toggleBookmark(
+			// 	newSfdt,
+			// 	'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
+			// 	true
+			// );
+			// const firstInlineAfterToggle = getInline(toggleOn, 0);
+			// const lastInlineAfterToggle = getInline(toggleOn, 0, 2);
 
 			//expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
 			//expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
 
 			newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
-			const toggleOff = toggleBookmark(
-				newSfdt,
-				'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
-				false
-			);
+			const toggleOff = toggleBookmark(newSfdt, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', false);
 			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
 			expect(firstInlineAfterToggleOn.length).toBe(1);
 		});
