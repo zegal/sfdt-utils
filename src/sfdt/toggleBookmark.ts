@@ -8,7 +8,7 @@
 function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 	//console.log('processParagraph', condition, options, `inTable: ${inTable}`);
 	let processedDelete = false;
-	for (let i = 0; i < paraBlock.inlines.length;) {
+	for (let i = 0; i < paraBlock.inlines.length; ) {
 		const inline = paraBlock.inlines[i];
 		if (inline.name == condition) {
 			if (inline.bookmarkType == 0) {
@@ -41,13 +41,14 @@ function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 		}
 	}
 
-	if (toggleOn && options.withinBookmarkContext) { // if toggling on, for now just unhiighlight the paraBlock....assume inlines are already taken care of
+	if (toggleOn && options.withinBookmarkContext) {
+		// if toggling on, for now just unhiighlight the paraBlock....assume inlines are already taken care of
 		if (!paraBlock.characterFormat) {
 			paraBlock.characterFormat = {};
 		}
 		paraBlock.characterFormat.highlightColor = 'NoColor';
 
-		paraBlock.inlines.forEach(inline => {
+		paraBlock.inlines.forEach((inline) => {
 			if (inline.characterFormat) inline.characterFormat.highlightColor = 'NoColor';
 		});
 		return;
@@ -61,7 +62,9 @@ function checkInlinesEmpty(block) {
 		return true;
 	}
 
-	const inlines = block.inlines.filter(inline => { return inline.text; });
+	const inlines = block.inlines.filter((inline) => {
+		return inline.text;
+	});
 	if (inlines.length == 0) {
 		return true;
 	}
@@ -98,8 +101,8 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 	//console.log('processTable', condition, options);
 	let startDeleteRow, endDeleteRow;
 	tableBlock.rows.forEach((row, i) => {
-		row.cells.forEach(cell => {
-			for (let k = 0; k < cell.blocks.length;) {
+		row.cells.forEach((cell) => {
+			for (let k = 0; k < cell.blocks.length; ) {
 				if (!processBlock(cell.blocks, k, condition, options, true, toggleOn)) {
 					k++;
 				} else {
@@ -119,7 +122,6 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 		});
 	});
 
-
 	if (startDeleteRow >= 0) {
 		if (!(endDeleteRow >= 0)) endDeleteRow = tableBlock.rows.length - 1;
 		// console.log('table, deleting rows: ', startDeleteRow, endDeleteRow)
@@ -130,12 +132,11 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 		// if no more rows, return true to parent to have parent delete block
 		return true;
 	}
-
 }
 
 function processSection(section, condition, options = {}, toggleOn) {
 	//console.log('processing section for condition: ', condition)
-	for (let i = 0; i < section.blocks.length;) {
+	for (let i = 0; i < section.blocks.length; ) {
 		if (!processBlock(section.blocks, i, condition, options, false, toggleOn)) i++;
 	}
 }
@@ -150,7 +151,7 @@ function processSection(section, condition, options = {}, toggleOn) {
  * @returns {Object} updatedSFDT
  */
 function toggleBookmark(sfdt, name, toggleOn = true) {
-	sfdt.sections.forEach(section => processSection(section, name, {}, toggleOn));
+	sfdt.sections.forEach((section) => processSection(section, name, {}, toggleOn));
 	return sfdt;
 }
 

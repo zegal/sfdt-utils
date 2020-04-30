@@ -5,8 +5,11 @@ import {isInvalid} from './sfdtHelpers/utils';
 // import process from './processInlines'
 
 const debug = false;
-
-const allowedPrefix = ['DATA::', 'XREF::'];
+const bkmk = {
+	data: 'DATA::',
+	ref: 'XREF::'
+};
+const allowedPrefix = Object.values(bkmk);
 const containsAllowedPrefix = (name, prefixes) => prefixes.some((prefix) => name.includes(prefix));
 
 export default (data, sfdt, prefixes = allowedPrefix) => {
@@ -107,6 +110,14 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 
 					processing[inline.name] = true;
 					// keep bookmark start tag
+					// Case xref: The ref bookmark has no uuid to separate multiple reference in same inline. Hence, they have same bookmark inline.name
+					// if its in doneProcessing, then only first occurance will be populated while others are removed (as in above case !doneProcessing[currentlyProcessing])
+					// Note that this fix will not work in nested bookmark: only in case bk 0 ends with bk 1 >> we don't need nested bookmark for ref for now anyway
+					// Do this in start of bookmark:0 else multi inlines between bookmark 0 and 1 will not work otherwise (all inlines will be updated with text)
+					const bookmarkSplits = currentlyProcessing.split('::');
+					if (bkmk.ref.includes(bookmarkSplits[0])) {
+						doneProcessing[inline.name] = false;
+					}
 					newInlines.push(newInline);
 					debug && console.log('Starting processing', inline.name, inline);
 					return;
