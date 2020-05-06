@@ -22,17 +22,17 @@ const processTable = (parent, callbackInline: TCallback, callbackBlock, checkFor
 			}
 
 			cell.blocks.forEach((block) => {
-        if (block.rows) {
-          processTable(block, callbackInline, callbackBlock)
-        } else {
-          callbackBlock(block);
+				if (block.rows) {
+					processTable(block, callbackInline, callbackBlock);
+				} else {
+					callbackBlock(block);
 
-          if (!block.inlines) {
-            return false;
-          }
-          if (checkForRef) block.inlines = callbackInline(block);
-          else block.inlines = callbackInline(block.inlines);
-        }
+					if (!block.inlines) {
+						return false;
+					}
+					if (checkForRef) block.inlines = callbackInline(block);
+					else block.inlines = callbackInline(block.inlines);
+				}
 			});
 		});
 	});
