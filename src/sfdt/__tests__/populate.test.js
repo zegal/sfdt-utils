@@ -6,6 +6,7 @@ import tableInlines from './fixtures/tableInlines';
 import emptyBlockSection from './fixtures/emptyBlockSection';
 import multiRefInSingleInline from './fixtures/mutiRefInSingleInline';
 import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
+import nestedTableInlines from './fixtures/nestedTableInlines';
 import {getSFDT, getInline, getInlines} from '../../__tests__/utils';
 
 const data = {
@@ -102,6 +103,19 @@ describe('Populate', () => {
 			blockPositionInCell: 0
 		});
 		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
+	});
+
+	test('inject data in nested table', () => {
+		const data = {
+			name: 'testData'
+		};
+
+		const updatedSfdt = populate(data, nestedTableInlines);
+		const updatedSfdtTable = updatedSfdt.sections[0].blocks[0];
+		const levelOne = updatedSfdtTable.rows[0].cells[0].blocks[0];
+		const levelTwo = updatedSfdtTable.rows[0].cells[1].blocks[0].rows[0].cells[0].blocks[0];
+		expect(get(levelOne, 'inlines[1].text')).toEqual('testData');
+		expect(get(levelTwo, 'inlines[1].text')).toEqual('testData');
 	});
 
 	test('Text with line separator is split in multiple lines', () => {
