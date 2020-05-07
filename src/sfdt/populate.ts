@@ -85,7 +85,7 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 							delete newInline['fieldType'];
 							delete newInline['hasFieldEnd'];
 							// make sure the newInline has text field (for multiple inline populate, if there is hasFieldEnd field with no text and end fieldType, then sfdt will not be parsed after that)
-							newInline.text = newInline.text || '';
+							// newInline.text = newInline.text || '';
 							newInlines.push(newInline);
 						}
 
