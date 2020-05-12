@@ -105,8 +105,6 @@ function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
 			for (let k = 0; k < cell.blocks.length; ) {
 				if (!processBlock(cell.blocks, k, condition, options, true, toggleOn)) {
 					k++;
-				} else {
-					cell.blocks.splice(k, 1);
 				}
 			}
 
