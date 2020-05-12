@@ -13,6 +13,7 @@ import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
 import tableConditionSfdt from './fixtures/tableConditionSfdt';
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
 import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
+import tableConditionsMultiBlock from './fixtures/tableConditionsMultiBlock';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -220,6 +221,37 @@ describe('toggleBookmark', () => {
 			blockPositionInCell: 0
 		});
 		expect(inlineAfterToggleOn).toEqual(expect.arrayContaining([]));
+	});
+
+	it('toggle of inside multiple block table', () => {
+		const toggleFirstCondition = toggleBookmark(
+			tableConditionsMultiBlock,
+			'COND::ce700982-fa4b-47ac-9d11-d0d5b36c8210',
+			false
+		);
+		const toggleSecondCondition = toggleBookmark(
+			toggleFirstCondition,
+			'COND::d99eede9-0af7-4dae-8f0a-53521fc9289b',
+			true
+		);
+		const toggleThirdCondition = toggleBookmark(
+			toggleSecondCondition,
+			'COND::13fb99cf-32b5-4cfc-b69b-e46c06443f30',
+			false
+		);
+		const inlineAfterToggleOn = getInline(toggleThirdCondition, 0, 0, {
+			rowPosition: 0,
+			cellPosition: 1,
+			blockPositionInCell: 0
+		});
+		const nextBlockInline = getInline(toggleThirdCondition, 0, 0, {
+			rowPosition: 0,
+			cellPosition: 1,
+			blockPositionInCell: 1
+		});
+		expect(get(inlineAfterToggleOn, '[0]').name).toEqual('COND::d99eede9-0af7-4dae-8f0a-53521fc9289b');
+		expect(get(inlineAfterToggleOn, '[1]').text).toEqual('Apple');
+		expect(get(nextBlockInline, '[0]').text).toEqual('Extra Block');
 	});
 
 	it('toggle off in deed separation list', () => {
