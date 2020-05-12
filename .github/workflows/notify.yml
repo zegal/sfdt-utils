@@ -1,7 +1,14 @@
-- name: Google Chat Notification
-  uses: Co-qn/google-chat-notification@releases/v1
-  with:
-    name: Build
-    url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-    status: ${{ job.status }}
-  if: always()
+name: notify
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+  pull_request_review_comment:
+    types: [created]
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Google Chat Notification
+      uses: CommonMarvel/google-chat-notification@v1.1.1
+      with:
+        url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
