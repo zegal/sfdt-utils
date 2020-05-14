@@ -118,6 +118,7 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 					if (bkmk.ref.includes(bookmarkSplits[0])) {
 						doneProcessing[inline.name] = false;
 					}
+					// ^^ above is for backward compatibility. Now, we have xref with uuid
 					newInlines.push(newInline);
 					debug && console.log('Starting processing', inline.name, inline);
 					return;

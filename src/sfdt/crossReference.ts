@@ -20,8 +20,15 @@ const doInlinesContain = (inlines, callback) => {
 };
 
 const ANCHOR = 'XREFANCHOR::';
-
-const getAnchorName = (anchorBookmark) => anchorBookmark.split(ANCHOR)[1];
+/**
+ * Bookmarks are in the format NAME::uuid::name::others... splitted by `::`. The name of bookmark is always in 3rd position. The `others...` is mostly in field types
+ * But for backward compatibility; and assuming we don't have `others...` in bookmark for REF; we take last value for this
+ * @param anchorBookmark bookmark value to split
+ */
+const getAnchorName = (anchorBookmark) => {
+	const values = anchorBookmark.split('::');
+	return values[values.length - 1];
+};
 
 const inlinesWithAnchor = (inlines) =>
 	doInlinesContain(inlines, (inline) => {
