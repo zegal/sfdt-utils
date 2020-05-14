@@ -24,7 +24,8 @@ export default (
 	sfdt: SFDTType,
 	bookmarks: string[],
 	doInlineMatchingAction: (block: BlockType) => void,
-	doBlockMatchingAction: (block: BlockType) => void
+	doBlockMatchingAction: (block: BlockType) => void,
+	lineProcess?: (block: BlockType) => void,
 ) => {
 	let currentlyInsideBookmarks = []; // at top, so we can process bookmarks that span blocks
 
@@ -32,12 +33,16 @@ export default (
 		return;
 	}
 
-	return processSFDT(sfdt, (block: BlockType) => {
+	return processSFDT(sfdt, (blockFromParentCb: BlockType) => {
 		const callbackBlock = (block: BlockType) => {
 			// console.log('Checking block:', block)
 			if (intersection(bookmarks, currentlyInsideBookmarks).length > 0) {
 				// console.log('Inside!', {highlightColor: get(block, 'characterFormat.highlightColor')}, {intersection: intersection(bookmarks, currentlyInsideBookmarks)})
 				return doBlockMatchingAction(block);
+			} else {
+				if (lineProcess) {
+					lineProcess(block);
+				}
 			}
 
 			return block;
@@ -69,6 +74,6 @@ export default (
 			return inlines;
 		};
 
-		return processBlock(block, callbackInline, callbackBlock);
+		return processBlock(blockFromParentCb, callbackInline, callbackBlock);
 	});
 };
