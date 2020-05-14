@@ -3,6 +3,7 @@ import populate from '../populate';
 import toggleBookmark from '../toggleBookmark';
 import getCrossRefData from '../crossReference';
 import tableInlines from './fixtures/tableInlines';
+import nestedCrossRef from './fixtures/nestedCrossRef';
 import emptyBlockSection from './fixtures/emptyBlockSection';
 import multiRefInSingleInline from './fixtures/mutiRefInSingleInline';
 import sfdtWithCrossRef from './fixtures/crossreference-fromStyleName';
@@ -184,6 +185,20 @@ describe('Populate with Cross reference', () => {
 		inlines.forEach((inline, i) => {
 			if (inline.bookmarkType === 0 && inline.name === 'XREF::three') data.push(inlines[i + 1].text);
 		});
+		// this below test shows the crossref without uuid
 		expect(data).toEqual(['3.', '3.', '3.']);
+	});
+	test('populate with same crossref reference in same inline', () => {
+		const crossRefSfdt = nestedCrossRef;
+		const cfData = getCrossRefData(crossRefSfdt);
+
+		const updatedSfdt = populate(cfData, crossRefSfdt);
+		const inlines = updatedSfdt.sections[0].blocks[0].inlines;
+		const data = [];
+		inlines.forEach((inline, i) => {
+			if (inline.bookmarkType === 0 && inline.name.includes('XREF::uuid')) data.push(inlines[i + 1].text);
+    });
+    // this is for uuid based xref ^^ for uuid1::2 and uuid2::2
+		expect(data).toEqual(['2.', '2.']);
 	});
 });
