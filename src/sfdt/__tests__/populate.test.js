@@ -197,8 +197,8 @@ describe('Populate with Cross reference', () => {
 		const data = [];
 		inlines.forEach((inline, i) => {
 			if (inline.bookmarkType === 0 && inline.name.includes('XREF::uuid')) data.push(inlines[i + 1].text);
-    });
-    // this is for uuid based xref ^^ for uuid1::2 and uuid2::2
+		});
+		// this is for uuid based xref ^^ for uuid1::2 and uuid2::2
 		expect(data).toEqual(['2.', '2.']);
 	});
 });

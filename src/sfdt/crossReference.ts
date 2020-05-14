@@ -26,7 +26,7 @@ const ANCHOR = 'XREFANCHOR::';
  * @param anchorBookmark bookmark value to split
  */
 const getAnchorName = (anchorBookmark) => {
-	const values = anchorBookmark.split(ANCHOR);
+	const values = anchorBookmark.split('::');
 	return values[values.length - 1];
 };
 

@@ -64,19 +64,19 @@ export default {
 							characterFormat: {},
 							bookmarkType: 0,
 							name: 'XREF::uuid2::2'
-            },
-            {
+						},
+						{
 							characterFormat: {
 								underline: 'Single',
 								fontColor: '#0563c1'
 							},
 							text: '3 again'
 						},
-            {
+						{
 							characterFormat: {},
 							bookmarkType: 1,
 							name: 'XREF::uuid2::2'
-						},
+						}
 					]
 				},
 				{
