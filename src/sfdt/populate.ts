@@ -12,6 +12,16 @@ const bkmk = {
 const allowedPrefix = Object.values(bkmk);
 const containsAllowedPrefix = (name, prefixes) => prefixes.some((prefix) => name.includes(prefix));
 
+const updateTextFormatFields = (obj) => {
+	// in populate, we need to make sure to delete fieldtype, end and fontColor. Populate will fill text for the document >> hence remove unnecessary formatting, and update if needed
+	if (obj.characterFormat) {
+		obj.characterFormat.highlightColor = 'NoColor';
+		delete obj.characterFormat.fontColor;
+	}
+	delete obj['fieldType'];
+	delete obj['hasFieldEnd'];
+};
+
 export default (data, sfdt, prefixes = allowedPrefix) => {
 	if (!sfdt) {
 		return;
@@ -71,19 +81,17 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 									//SF recognize vertical tab character to split as new line. Seems it's not the case of LS, PS, CR...
 									splitInline.text = dataLine === '\n' ? '\u000B' : dataLine;
 
-									if (splitInline.characterFormat) {
-										splitInline.characterFormat.highlightColor = 'NoColor';
-									}
+									// if (splitInline.characterFormat) {
+									// 	splitInline.characterFormat.highlightColor = 'NoColor';
+									// }
 
-									delete splitInline['fieldType'];
-									delete splitInline['hasFieldEnd'];
+									updateTextFormatFields(splitInline);
 									newInlines.push(splitInline);
 								});
 						} else {
 							// keeping original line if nothing to inject
 							// fieldType and hasFieldEnd expects ending fieldType. Since populate removes all inbetween inlines and only set first one if there is no data to update, we need to make sure to remove ^^ if they are in the inbetween inlines
-							delete newInline['fieldType'];
-							delete newInline['hasFieldEnd'];
+							updateTextFormatFields(newInline);
 							// make sure the newInline has text field (for multiple inline populate, if there is hasFieldEnd field with no text and end fieldType, then sfdt will not be parsed after that)
 							// newInline.text = newInline.text || '';
 							newInlines.push(newInline);
