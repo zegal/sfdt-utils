@@ -1,3 +1,21 @@
+/**
+ * TOGGLEBOOKMARK WORKING PROCESS
+ * for nested bookmark A wrapping [B,C] >> [A[B,C]]
+ * If A=false >> all is removed regardless of child toggle option
+ * If B is true with no value passed for A >> A is undefined from eval for toggle result which is true >> hence B is seen
+ * Similar for C
+ * For both B,C all A,B,C should be true
+ * Algorithm:
+ if(A){
+   if(B) show B
+   if (C) show C
+   if (Both B and C) show both B and C
+ } else (!A){
+   remove all regardless of B and C
+ }
+ * So make sure the wrapper condition and child condition rule is made accordingly (they are mutually exclusive rule)
+ */
+
 /*
   processParagraph for deletion
   -- a paragraph is made up of inlines[]

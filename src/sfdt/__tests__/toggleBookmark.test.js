@@ -25,6 +25,7 @@ const uuid = 'K1';
 const name = `${bookmarkType}::${uuid}`;
 
 describe('toggleBookmark', function() {
+
 	describe('Simple', function() {
 		test('Toggle off', function() {
 			const sfdt = getSFDT(inlines.concat(getBookmark(uuid, 'COND::')));
@@ -65,36 +66,72 @@ describe('toggleBookmark', function() {
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
 		});
 
+		// Parent toggle on should show child unless there is toggle specified for child >> if no toggle is specified for child i.e. undefined >> we assume it to be true
 		test('Toggle parent on', function() {
 			const newSfdt = JSON.parse(JSON.stringify(nestedConditionWithParentOffOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
 			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
-			expect(initialInlines[1].hasFieldEnd).toBeTruthy();
-			expect(initialInlines[8].fieldType).toBe(1);
-
 			const toggledOn = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606');
 			const toggledOnInlines = getFirstInlines(toggledOn);
-			expect(toggledOnInlines.length).toEqual(10);
-			//expect(toggledOnInlines[1].hasFieldEnd).toBeUndefined();
-			//expect(toggledOnInlines[6].fieldType).toBeUndefined();
+			expect(toggledOnInlines.length).toEqual(INITIAL_INLINE_LENGTH);
 		});
 
-		/** parent should only toggle off in this case */
+		/** with parent toggle on, and both child toggle on (this is same as the ^^ above test)*/
+		test('Toggle parent on along with both child on', () => {
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
+			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
+			const parentBk = 'COND::dafe554d-08b5-463f-a40c-cf5e260be606';
+			const childBkOn1 = 'COND::5f1382fd-1d8e-475d-8439-8239b3e5397a';
+			const childBkOn2 = 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875';
+			expect(initialInlines.length).toEqual(10);
+
+			toggleBookmark(nestedBookmarkSfdt, parentBk, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOn1, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOn2, true);
+			// this should be same as the document >> all is shown
+			expect(getFirstInlines(nestedBookmarkSfdt).length).toEqual(10);
+		});
+		/** parent should only toggle off in this case, removing all inside inlines */
 		test('Toggle parent off along with one child off', () => {
 			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
-
 			expect(initialInlines.length).toEqual(10);
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
 		});
 
+		/** with parent toggle on, the child toggle should work accordingly */
+		test('Toggle parent on along with only one child on and other false', () => {
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
+			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
+			const parentBk = 'COND::dafe554d-08b5-463f-a40c-cf5e260be606';
+			const childBkOn = 'COND::5f1382fd-1d8e-475d-8439-8239b3e5397a';
+			const childBkOff = 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875';
+			expect(initialInlines.length).toEqual(10);
+
+			toggleBookmark(nestedBookmarkSfdt, parentBk, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOff, false);
+			const toggleResult = toggleBookmark(nestedBookmarkSfdt, childBkOn, true);
+			// childOff should be removed and other should be as it is
+			expect(getFirstInlines(toggleResult).length).toBe(7);
+			const bookmarks = toggleResult.sections[0].blocks[0].inlines.filter((i) => i.bookmarkType && i.name);
+			expect(bookmarks).toEqual(
+				expect.not.arrayContaining([
+					expect.objectContaining({
+						name: childBkOff
+					})
+				])
+			);
+		});
+
 		/**
-		 * Parent toggle off should remove all child options
+		 * Parent toggle off should remove all child options, even if child is on (as above test with different sfdt)
 		 */
 		it('toggle off parent but toggle on child', () => {
 			const childBk = 'COND::a0503e6a-ed71-46b7-8e97-206ff973df6e';
