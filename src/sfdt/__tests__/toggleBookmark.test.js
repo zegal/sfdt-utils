@@ -3,18 +3,23 @@ import first from 'lodash/first';
 
 import toggleBookmark from '../toggleBookmark';
 
-// import list2Inlines from './fixtures/list-2';
+// nested bookmarks
 import nestedBookmark from './fixtures/nestedBookmark';
-import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
+import multiNestedCondition from './fixtures/multiNestedCondition';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
-import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
+// multi inline bookmark
 import newlineSpaceInsideCondition from './fixtures/newlineSpaceInsideCondition';
+import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+// list and table
+// import list2Inlines from './fixtures/list-2';
+import tableConditionSfdt from './fixtures/tableConditionSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
-import tableConditionSfdt from './fixtures/tableConditionSfdt';
+import tableConditionsMultiBlock from './fixtures/tableConditionsMultiBlock';
+// deed separation
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
 import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
-import tableConditionsMultiBlock from './fixtures/tableConditionsMultiBlock';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -305,5 +310,69 @@ describe('toggleBookmark', () => {
 		const firstElementOfBlocks = get(toggledOff, 'sections[0].blocks');
 		expect(firstElementOfBlocks.length).toBe(1);
 		expect(get(firstElementOfBlocks, '[0].inlines[0].text')).toEqual('Outside of Condition');
+	});
+});
+
+describe('toggleBookmark with multiple level of nested condition [A,[B, [C,] D,]E,]', () => {
+	const mainBk = 'COND::1c300d80-8143-47d6-b771-0836ea44d6ac'; // ABCDE
+	const subBk = 'COND::0f01e07b-9ed6-4cd9-a678-7ed396af3388'; // BCD
+	const childBk = 'COND::0bcb7b0f-9291-4768-89cc-f57c4c4feea0'; // C
+
+	const getAllText = (block) => {
+		const texts = [];
+		block.map((b) => {
+			b.inlines.map((i) => {
+				i.text && texts.push(i.text);
+			});
+		});
+		return texts;
+  };
+  
+	it('main toggle off/on', () => {
+		// remove all ABCDE
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, mainBk, false);
+		let initialInlines = getFirstInlines(newSfdtOff);
+		expect(get(initialInlines, '[0]').text).toEqual('F');
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['F', 'main', 'sub', 'child']);
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, mainBk, true);
+		initialInlines = getFirstInlines(newSfdtOn);
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'main', 'sub', 'child']);
+		expect(get(initialInlines, '[2]').text).toEqual('A');
+	});
+	it('sub toggle off/on with main toggle on and child on/off', () => {
+		// remove all BCD ans A and E in main are toggled on
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, subBk, false);
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['A', 'E', 'F', 'main', 'sub', 'child']);
+
+		// Remove child only >> ABDE
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, subBk, true);
+		// turn child off too
+		toggleBookmark(newSfdtOn, childBk, false);
+		// fs.writeFileSync('./test1.json', JSON.stringify(newSfdtOn));
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'D', 'E', 'F', 'main', 'sub', 'child']);
+	});
+	it('child toggle off/on with main toggle on and sub on', () => {
+		// work on C
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, childBk, false);
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'D', 'E', 'F', 'main', 'sub', 'child']);
+
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, childBk, true);
+		// fs.writeFileSync('./test1.json', JSON.stringify(newSfdtOn));
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'main', 'sub', 'child']);
 	});
 });
