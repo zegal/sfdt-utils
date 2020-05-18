@@ -326,8 +326,8 @@ describe('toggleBookmark with multiple level of nested condition [A,[B, [C,] D,]
 			});
 		});
 		return texts;
-  };
-  
+	};
+
 	it('main toggle off/on', () => {
 		// remove all ABCDE
 		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
