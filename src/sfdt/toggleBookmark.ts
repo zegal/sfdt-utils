@@ -5,7 +5,11 @@
   -- if a bookmark spans witihn inline elements, just remove those elements inclusive
   -- if a bookmark spans multiple paragraphs, collapse
 \*/
-function processParagraph(paraBlock, condition, options = {}, toggleOn) {
+type inlineContext = {
+	withinDeleteContext: boolean; // specifies inlines to be deleted
+	withinBookmarkContext: boolean; // specifies inlines inside the currently processing bookmark
+};
+function processParagraph(paraBlock, condition, options: inlineContext, toggleOn) {
 	//console.log('processParagraph', condition, options, `inTable: ${inTable}`);
 	let processedDelete = false;
 	for (let i = 0; i < paraBlock.inlines.length; ) {
@@ -40,7 +44,6 @@ function processParagraph(paraBlock, condition, options = {}, toggleOn) {
 			i++;
 		}
 	}
-
 	if (toggleOn && options.withinBookmarkContext) {
 		// if toggling on, for now just unhiighlight the paraBlock....assume inlines are already taken care of
 		if (!paraBlock.characterFormat) {
@@ -62,8 +65,10 @@ function checkInlinesEmpty(block) {
 		return true;
 	}
 
+	// there may be fieldType/end type matching value in the toggled removed data. We need to make sure to remove those inlines too
+	// but for case of nested bookmark, we need to make sure the inline containing bookmark is not removed
 	const inlines = block.inlines.filter((inline) => {
-		return inline.text;
+		return inline.text || inline.bookmarkType;
 	});
 	if (inlines.length == 0) {
 		return true;
@@ -97,7 +102,7 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn) {
   --   if it spans across cells in one row, then REMOVE THE ENTIRE ROW
   --   if it spans multiple rows, remove the rows affected.  ALL ROWS
 */
-function processTable(tableBlock, condition, options = {}, inTable, toggleOn) {
+function processTable(tableBlock, condition, options: inlineContext, inTable, toggleOn) {
 	//console.log('processTable', condition, options);
 	let startDeleteRow, endDeleteRow;
 	tableBlock.rows.forEach((row, i) => {

@@ -25,7 +25,7 @@ export default (
 	bookmarks: string[],
 	doInlineMatchingAction: (block: BlockType) => void,
 	doBlockMatchingAction: (block: BlockType) => void,
-	lineProcess?: (block: BlockType) => void,
+	lineProcess?: (block: BlockType) => void
 ) => {
 	let currentlyInsideBookmarks = []; // at top, so we can process bookmarks that span blocks
 

@@ -4,6 +4,7 @@ import first from 'lodash/first';
 import toggleBookmark from '../toggleBookmark';
 
 // import list2Inlines from './fixtures/list-2';
+import nestedBookmark from './fixtures/nestedBookmark';
 import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
 import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
@@ -90,6 +91,21 @@ describe('toggleBookmark', function() {
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
+		});
+
+		/**
+		 * Parent toggle off should remove all child options
+		 */
+		it('toggle off parent but toggle on child', () => {
+			const childBk = 'COND::a0503e6a-ed71-46b7-8e97-206ff973df6e';
+			const parentBk = 'COND::2a077d65-5fd4-46b7-8b0d-44ad4780982f';
+			const toggledChildOn = toggleBookmark(nestedBookmark, childBk, true);
+
+			expect(toggledChildOn.sections[0].blocks[0].inlines.length).toEqual(5);
+			expect(toggledChildOn.sections[0].blocks[0].inlines[1].name).toEqual(parentBk);
+
+			const toggledParentOff = toggleBookmark(nestedBookmark, parentBk, false);
+			expect(toggledParentOff.sections[0].blocks[0].inlines[0].text).toBe('C');
 		});
 	});
 
