@@ -16,7 +16,7 @@ export default (
 	bookmarks: string[],
 	highlightColor = 'NoColor',
 	characterType = 'highlightColor',
-	lineProcess,
+	lineProcess
 ) => {
 	// console.log('Checking bookmarks:', bookmarks)
 

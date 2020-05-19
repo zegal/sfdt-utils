@@ -3,17 +3,23 @@ import first from 'lodash/first';
 
 import toggleBookmark from '../toggleBookmark';
 
-// import list2Inlines from './fixtures/list-2';
-import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
+// nested bookmarks
+import nestedBookmark from './fixtures/nestedBookmark';
+import multiNestedCondition from './fixtures/multiNestedCondition';
 import nestedConditionWithParentOffOneChildOff from './fixtures/nestedConditonWithParentOff';
-import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+import nestedConditionListWithParentOnOneChildOff from './fixtures/nestedConditionListWithOneChildToggleOff';
+// multi inline bookmark
 import newlineSpaceInsideCondition from './fixtures/newlineSpaceInsideCondition';
+import bookmarkStartEndingInDifferentInline from './fixtures/bookmarkEndingInMultipleInlineSfdt';
+// list and table
+// import list2Inlines from './fixtures/list-2';
+import tableConditionSfdt from './fixtures/tableConditionSfdt';
 import listWithConditionSfdt from './fixtures/listWithConditionSfdt';
 import listWithConditionSfdt2 from './fixtures/listWithConditionSfdt-2';
-import tableConditionSfdt from './fixtures/tableConditionSfdt';
+import tableConditionsMultiBlock from './fixtures/tableConditionsMultiBlock';
+// deed separation
 import deedSeparationSfdt from './fixtures/deedSeparationSFDT';
 import deedSeparationSfdt2 from './fixtures/deedSeparationSFDT-2';
-import tableConditionsMultiBlock from './fixtures/tableConditionsMultiBlock';
 
 import {getSFDT, getInlines, getFirstInlines, getBookmark, getInline} from '../../__tests__/utils';
 
@@ -64,32 +70,84 @@ describe('toggleBookmark', function() {
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
 		});
 
+		// Parent toggle on should show child unless there is toggle specified for child >> if no toggle is specified for child i.e. undefined >> we assume it to be true
 		test('Toggle parent on', function() {
 			const newSfdt = JSON.parse(JSON.stringify(nestedConditionWithParentOffOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
 			const INITIAL_INLINE_LENGTH = 10;
 			expect(initialInlines.length).toEqual(INITIAL_INLINE_LENGTH);
-			expect(initialInlines[1].hasFieldEnd).toBeTruthy();
-			expect(initialInlines[8].fieldType).toBe(1);
-
 			const toggledOn = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606');
 			const toggledOnInlines = getFirstInlines(toggledOn);
-			expect(toggledOnInlines.length).toEqual(10);
-			//expect(toggledOnInlines[1].hasFieldEnd).toBeUndefined();
-			//expect(toggledOnInlines[6].fieldType).toBeUndefined();
+			expect(toggledOnInlines.length).toEqual(INITIAL_INLINE_LENGTH);
 		});
 
-		/** parent should only toggle off in this case */
+		/** with parent toggle on, and both child toggle on (this is same as the ^^ above test)*/
+		test('Toggle parent on along with both child on', () => {
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
+			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
+			const parentBk = 'COND::dafe554d-08b5-463f-a40c-cf5e260be606';
+			const childBkOn1 = 'COND::5f1382fd-1d8e-475d-8439-8239b3e5397a';
+			const childBkOn2 = 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875';
+			expect(initialInlines.length).toEqual(10);
+
+			toggleBookmark(nestedBookmarkSfdt, parentBk, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOn1, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOn2, true);
+			// this should be same as the document >> all is shown
+			expect(getFirstInlines(nestedBookmarkSfdt).length).toEqual(10);
+		});
+		/** parent should only toggle off in this case, removing all inside inlines */
 		test('Toggle parent off along with one child off', () => {
 			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
 			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
 			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
-
 			expect(initialInlines.length).toEqual(10);
 
 			const toggledOff = toggleBookmark(nestedBookmarkSfdt, 'COND::dafe554d-08b5-463f-a40c-cf5e260be606', false);
 			expect(first(get(toggledOff, 'sections')).blocks.length).toBe(0);
+		});
+
+		/** with parent toggle on, the child toggle should work accordingly */
+		test('Toggle parent on along with only one child on and other false', () => {
+			const newSfdt = JSON.parse(JSON.stringify(nestedConditionListWithParentOnOneChildOff));
+			const nestedBookmarkSfdt = getSFDT(false, newSfdt);
+			const initialInlines = getFirstInlines(nestedBookmarkSfdt);
+
+			const parentBk = 'COND::dafe554d-08b5-463f-a40c-cf5e260be606';
+			const childBkOn = 'COND::5f1382fd-1d8e-475d-8439-8239b3e5397a';
+			const childBkOff = 'COND::cf6913ce-0e3b-4657-a164-88ab7c18a875';
+			expect(initialInlines.length).toEqual(10);
+
+			toggleBookmark(nestedBookmarkSfdt, parentBk, true);
+			toggleBookmark(nestedBookmarkSfdt, childBkOff, false);
+			const toggleResult = toggleBookmark(nestedBookmarkSfdt, childBkOn, true);
+			// childOff should be removed and other should be as it is
+			expect(getFirstInlines(toggleResult).length).toBe(7);
+			const bookmarks = toggleResult.sections[0].blocks[0].inlines.filter((i) => i.bookmarkType && i.name);
+			expect(bookmarks).toEqual(
+				expect.not.arrayContaining([
+					expect.objectContaining({
+						name: childBkOff
+					})
+				])
+			);
+		});
+
+		/**
+		 * Parent toggle off should remove all child options, even if child is on (as above test with different sfdt)
+		 */
+		it('toggle off parent but toggle on child', () => {
+			const childBk = 'COND::a0503e6a-ed71-46b7-8e97-206ff973df6e';
+			const parentBk = 'COND::2a077d65-5fd4-46b7-8b0d-44ad4780982f';
+			const toggledChildOn = toggleBookmark(nestedBookmark, childBk, true);
+
+			expect(toggledChildOn.sections[0].blocks[0].inlines.length).toEqual(5);
+			expect(toggledChildOn.sections[0].blocks[0].inlines[1].name).toEqual(parentBk);
+
+			const toggledParentOff = toggleBookmark(nestedBookmark, parentBk, false);
+			expect(toggledParentOff.sections[0].blocks[0].inlines[0].text).toBe('C');
 		});
 	});
 
@@ -114,37 +172,22 @@ describe('toggleBookmark', function() {
 
 			expect(firstInline[2].hasFieldEnd).toBe(true);
 			expect(lastInline[1].fieldType).toBe(1);
+			const newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
+			const toggleOn = toggleBookmark(newSfdt, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', true);
 
-			// const newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
-			// const toggleOff = toggleBookmark(
-			// 	newSfdt,
-			// 	'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
-			// 	true
-			// );
-			//const firstInlineAfterToggle = getInline(toggleOff, 0);
-			//const lastInlineAfterToggle = getInline(toggleOff, 0, 2);
+			const firstInlineAfterToggle = getInline(toggleOn, 0);
 
-			//expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
-			//expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
+			expect(firstInlineAfterToggle.length).toEqual(firstInline.length);
 		});
 
 		test('Toggle off', function() {
 			let newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
-			// const toggleOn = toggleBookmark(
-			// 	newSfdt,
-			// 	'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4',
-			// 	true
-			// );
-			// const firstInlineAfterToggle = getInline(toggleOn, 0);
-			// const lastInlineAfterToggle = getInline(toggleOn, 0, 2);
-
-			//expect(firstInlineAfterToggle[2].hasFieldEnd).toBeUndefined();
-			//expect(lastInlineAfterToggle[1].fieldType).toBeUndefined();
 
 			newSfdt = JSON.parse(JSON.stringify(bookmarkStartEndingInDifferentInline));
 			const toggleOff = toggleBookmark(newSfdt, 'COND::9e7d0dc1-b9ed-4baa-9399-a4c4c9be96d4', false);
 			const firstInlineAfterToggleOn = getInline(toggleOff, 0);
 			expect(firstInlineAfterToggleOn.length).toBe(1);
+			expect(firstInlineAfterToggleOn[0].text).toBe('Keep Distance with me.');
 		});
 	});
 
@@ -267,5 +310,69 @@ describe('toggleBookmark', () => {
 		const firstElementOfBlocks = get(toggledOff, 'sections[0].blocks');
 		expect(firstElementOfBlocks.length).toBe(1);
 		expect(get(firstElementOfBlocks, '[0].inlines[0].text')).toEqual('Outside of Condition');
+	});
+});
+
+describe('toggleBookmark with multiple level of nested condition [A,[B, [C,] D,]E,]', () => {
+	const mainBk = 'COND::1c300d80-8143-47d6-b771-0836ea44d6ac'; // ABCDE
+	const subBk = 'COND::0f01e07b-9ed6-4cd9-a678-7ed396af3388'; // BCD
+	const childBk = 'COND::0bcb7b0f-9291-4768-89cc-f57c4c4feea0'; // C
+
+	const getAllText = (block) => {
+		const texts = [];
+		block.map((b) => {
+			b.inlines.map((i) => {
+				i.text && texts.push(i.text);
+			});
+		});
+		return texts;
+	};
+
+	it('main toggle off/on', () => {
+		// remove all ABCDE
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, mainBk, false);
+		let initialInlines = getFirstInlines(newSfdtOff);
+		expect(get(initialInlines, '[0]').text).toEqual('F');
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['F', 'main', 'sub', 'child']);
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, mainBk, true);
+		initialInlines = getFirstInlines(newSfdtOn);
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'main', 'sub', 'child']);
+		expect(get(initialInlines, '[2]').text).toEqual('A');
+	});
+	it('sub toggle off/on with main toggle on and child on/off', () => {
+		// remove all BCD ans A and E in main are toggled on
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, subBk, false);
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['A', 'E', 'F', 'main', 'sub', 'child']);
+
+		// Remove child only >> ABDE
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, subBk, true);
+		// turn child off too
+		toggleBookmark(newSfdtOn, childBk, false);
+		// fs.writeFileSync('./test1.json', JSON.stringify(newSfdtOn));
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'D', 'E', 'F', 'main', 'sub', 'child']);
+	});
+	it('child toggle off/on with main toggle on and sub on', () => {
+		// work on C
+		const newSfdtOff = JSON.parse(JSON.stringify(multiNestedCondition));
+		// toggleBk mutates obj; so no need to assign new variable
+		toggleBookmark(newSfdtOff, childBk, false);
+		let texts = getAllText(newSfdtOff.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'D', 'E', 'F', 'main', 'sub', 'child']);
+
+		const newSfdtOn = JSON.parse(JSON.stringify(multiNestedCondition));
+		toggleBookmark(newSfdtOn, childBk, true);
+		// fs.writeFileSync('./test1.json', JSON.stringify(newSfdtOn));
+		texts = getAllText(newSfdtOn.sections[0].blocks);
+		expect(texts).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'main', 'sub', 'child']);
 	});
 });
