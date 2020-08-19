@@ -97,13 +97,28 @@ describe('Populate', () => {
 		};
 
 		const updatedSfdt = populate(data, sfdtWithInlines);
-
 		const updatedBlockAfterPopulate = getInline(updatedSfdt, 0, 0, {
 			rowPosition: 0,
 			cellPosition: 2,
 			blockPositionInCell: 0
 		});
 		expect(get(updatedBlockAfterPopulate, 'inlines[1].text')).toEqual('Monday');
+	});
+
+	test('should keep multiple inline as it is if no data is sent', () => {
+		const sfdtWithInlines = getSFDT(tableInlines);
+		const data = {
+			'field.list.weeks': 'Monday'
+		};
+
+		const updatedSfdt = populate(data, sfdtWithInlines);
+		const updatedBlockAfterPopulate = getInline(updatedSfdt, 0, 0, {
+			rowPosition: 0,
+			cellPosition: 2,
+			blockPositionInCell: 0
+		});
+		expect(get(updatedBlockAfterPopulate, 'inlines[4].text')).toEqual('multiple');
+		expect(get(updatedBlockAfterPopulate, 'inlines[5].text')).toEqual('inline');
 	});
 
 	test('inject data in nested table', () => {

@@ -88,16 +88,14 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 									updateTextFormatFields(splitInline);
 									newInlines.push(splitInline);
 								});
+							doneProcessing[currentlyProcessing] = true;
 						} else {
 							// keeping original line if nothing to inject
-							// fieldType and hasFieldEnd expects ending fieldType. Since populate removes all inbetween inlines and only set first one if there is no data to update, we need to make sure to remove ^^ if they are in the inbetween inlines
-							updateTextFormatFields(newInline);
-							// make sure the newInline has text field (for multiple inline populate, if there is hasFieldEnd field with no text and end fieldType, then sfdt will not be parsed after that)
-							// newInline.text = newInline.text || '';
-							newInlines.push(newInline);
+							// previously we only saved one inline between the bookmark and hence we needed to use updateTextFormatFields(newInline) to remove the fieldType and hasFieldEnd value. But now we add all the inline in between if there is no data[id]
+							if (inline.name === currentlyProcessing && inline.bookmarkType === 1)
+								doneProcessing[currentlyProcessing] = true;
+							else newInlines.push(newInline);
 						}
-
-						doneProcessing[currentlyProcessing] = true;
 					} else {
 						// no else, but just a comment to make it clear
 						// we are dropping this line
