@@ -52,6 +52,28 @@ const inlines = {
 								{
 									bookmarkType: 1,
 									name: 'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.list.weeks'
+								},
+								{
+									bookmarkType: 0,
+									name: 'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.multiple.inline'
+								},
+								{
+									characterFormat: {
+										highlightColor: '#FFC0CB',
+										bidi: false
+									},
+									text: 'multiple'
+								},
+								{
+									characterFormat: {
+										highlightColor: '#FFC0CB',
+										bidi: false
+									},
+									text: 'inline'
+								},
+								{
+									bookmarkType: 1,
+									name: 'DATA::d7cd08cb-8162-42c6-b5de-166087e62b0d::field.multiple.inline'
 								}
 							]
 						}
