@@ -26,8 +26,8 @@
 type inlineContext = {
 	withinDeleteContext: boolean; // specifies inlines to be deleted
 	withinBookmarkContext: boolean; // specifies inlines inside the currently processing bookmark
-	firstTextInline: object;
-	lastTextInline: object;
+	firstTextInline: any;
+	lastTextInline: any;
 };
 
 function processParagraph(paraBlock, condition, options: inlineContext, toggleOn, resultIsUndefined) {
@@ -46,9 +46,9 @@ function processParagraph(paraBlock, condition, options: inlineContext, toggleOn
 			} else if (inline.bookmarkType == 1) {
 				//console.log('FOUND END CONDITION', condition, paraBlock)
                 if(resultIsUndefined) {    // HC ADDED
-                    options.firstTextInline.text = "[" + options.firstTextInline.text;
+                    options.firstTextInline.text = '[' + options.firstTextInline.text;
                     if(options.lastTextInline) {
-                        options.lastTextInline.text = options.lastTextInline.text + "]";
+                        options.lastTextInline.text = options.lastTextInline.text + ']';
                     }
                 } else {
 					if (!toggleOn) {
@@ -117,7 +117,7 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn, resultIs
 	const block = blocks[i];
 	if (block.rows) {
 		if (processTable(block, condition, options, inTable, toggleOn, resultIsUndefined)) {
-            if(!resultIsUndefined)
+			if(!resultIsUndefined)
 				blocks.splice(i, 1);
 			return true;
 		}
@@ -125,7 +125,7 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn, resultIs
 		if (processParagraph(block, condition, options, toggleOn, resultIsUndefined)) {
 			// if inlines is empty, remove block
 			if (checkInlinesEmpty(block)) {
-            	if(!resultIsUndefined)
+				if(!resultIsUndefined)
 					blocks.splice(i, 1);
 				return true;
 			}

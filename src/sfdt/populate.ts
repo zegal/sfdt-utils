@@ -95,7 +95,7 @@ export default (data, sfdt, prefixes = allowedPrefix, blankDataCallback) => {
 							if (inline.name === currentlyProcessing && inline.bookmarkType === 1)
 								doneProcessing[currentlyProcessing] = true;
                             else {
-                                var blankInline: any = {};
+                                const blankInline: any = {};
                                 blankInline.text = blankDataCallback && blankDataCallback(currentlyProcessing, inline);
                                 updateTextFormatFields(blankInline);
                                 newInlines.push(blankInline);
