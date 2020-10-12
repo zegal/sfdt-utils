@@ -22,7 +22,7 @@ const updateTextFormatFields = (obj) => {
 	delete obj['hasFieldEnd'];
 };
 
-export default (data, sfdt, prefixes = allowedPrefix) => {
+export default (data, sfdt, prefixes = allowedPrefix, blankDataCallback) => {
 	if (!sfdt) {
 		return;
 	}
@@ -94,7 +94,12 @@ export default (data, sfdt, prefixes = allowedPrefix) => {
 							// previously we only saved one inline between the bookmark and hence we needed to use updateTextFormatFields(newInline) to remove the fieldType and hasFieldEnd value. But now we add all the inline in between if there is no data[id]
 							if (inline.name === currentlyProcessing && inline.bookmarkType === 1)
 								doneProcessing[currentlyProcessing] = true;
-							else newInlines.push(newInline);
+                            else {
+                                var blankInline: any = {};
+                                blankInline.text = blankDataCallback && blankDataCallback(currentlyProcessing, inline);
+                                updateTextFormatFields(blankInline);
+                                newInlines.push(blankInline);
+                            }
 						}
 					} else {
 						// no else, but just a comment to make it clear
