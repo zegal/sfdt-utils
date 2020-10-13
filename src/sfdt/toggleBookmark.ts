@@ -26,8 +26,11 @@
 type inlineContext = {
 	withinDeleteContext: boolean; // specifies inlines to be deleted
 	withinBookmarkContext: boolean; // specifies inlines inside the currently processing bookmark
+	firstTextInline: any;
+	lastTextInline: any;
 };
-function processParagraph(paraBlock, condition, options: inlineContext, toggleOn) {
+
+function processParagraph(paraBlock, condition, options: inlineContext, toggleOn, resultIsUndefined) {
 	//console.log('processParagraph', condition, options, `inTable: ${inTable}`);
 	let processedDelete = false;
 	for (let i = 0; i < paraBlock.inlines.length; ) {
@@ -42,14 +45,30 @@ function processParagraph(paraBlock, condition, options: inlineContext, toggleOn
 				options.withinBookmarkContext = true;
 			} else if (inline.bookmarkType == 1) {
 				//console.log('FOUND END CONDITION', condition, paraBlock)
-				if (!toggleOn) {
-					delete options.withinDeleteContext;
-					inline.markDelete = true;
+                if(resultIsUndefined) {    // HC ADDED
+                    options.firstTextInline.text = '[' + options.firstTextInline.text;
+                    if(options.lastTextInline) {
+                        options.lastTextInline.text = options.lastTextInline.text + ']';
+                    }
+                } else {
+					if (!toggleOn) {
+						delete options.withinDeleteContext;
+						inline.markDelete = true;
+					}
 				}
 				delete options.withinBookmarkContext;
+                delete options.firstTextInline;
+                delete options.lastTextInline;
 			}
 		} else {
-			if (!toggleOn) {
+            if(resultIsUndefined) { // HC ADDED
+                if(!options.firstTextInline && inline.text && options.withinBookmarkContext) {
+                    options.firstTextInline = inline;
+                }
+                if(inline.text)
+                    options.lastTextInline = inline;
+            }
+			if (!toggleOn && !resultIsUndefined) { // HC ADDED "&& !resultIsUndefined"
 				if (options.withinDeleteContext) {
 					inline.markDelete = true;
 				}
@@ -93,19 +112,21 @@ function checkInlinesEmpty(block) {
 	}
 }
 
-function processBlock(blocks, i, condition, options, inTable, toggleOn) {
+function processBlock(blocks, i, condition, options, inTable, toggleOn, resultIsUndefined) {
 	// console.log('processBlock', condition, options)
 	const block = blocks[i];
 	if (block.rows) {
-		if (processTable(block, condition, options, inTable, toggleOn)) {
-			blocks.splice(i, 1);
+		if (processTable(block, condition, options, inTable, toggleOn, resultIsUndefined)) {
+			if(!resultIsUndefined)
+				blocks.splice(i, 1);
 			return true;
 		}
 	} else {
-		if (processParagraph(block, condition, options, toggleOn)) {
+		if (processParagraph(block, condition, options, toggleOn, resultIsUndefined)) {
 			// if inlines is empty, remove block
 			if (checkInlinesEmpty(block)) {
-				blocks.splice(i, 1);
+				if(!resultIsUndefined)
+					blocks.splice(i, 1);
 				return true;
 			}
 		}
@@ -120,13 +141,13 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn) {
   --   if it spans across cells in one row, then REMOVE THE ENTIRE ROW
   --   if it spans multiple rows, remove the rows affected.  ALL ROWS
 */
-function processTable(tableBlock, condition, options: inlineContext, inTable, toggleOn) {
+function processTable(tableBlock, condition, options: inlineContext, inTable, toggleOn, resultIsUndefined) {
 	//console.log('processTable', condition, options);
 	let startDeleteRow, endDeleteRow;
 	tableBlock.rows.forEach((row, i) => {
 		row.cells.forEach((cell) => {
 			for (let k = 0; k < cell.blocks.length; ) {
-				if (!processBlock(cell.blocks, k, condition, options, true, toggleOn)) {
+				if (!processBlock(cell.blocks, k, condition, options, true, toggleOn, resultIsUndefined)) {
 					k++;
 				}
 			}
@@ -155,10 +176,10 @@ function processTable(tableBlock, condition, options: inlineContext, inTable, to
 	}
 }
 
-function processSection(section, condition, options = {}, toggleOn) {
+function processSection(section, condition, options = {}, toggleOn, resultIsUndefined) {
 	//console.log('processing section for condition: ', condition)
 	for (let i = 0; i < section.blocks.length; ) {
-		if (!processBlock(section.blocks, i, condition, options, false, toggleOn)) i++;
+		if (!processBlock(section.blocks, i, condition, options, false, toggleOn, resultIsUndefined)) i++;
 	}
 }
 
@@ -171,8 +192,8 @@ function processSection(section, condition, options = {}, toggleOn) {
  *
  * @returns {Object} updatedSFDT
  */
-function toggleBookmark(sfdt, name, toggleOn = true) {
-	sfdt.sections.forEach((section) => processSection(section, name, {}, toggleOn));
+function toggleBookmark(sfdt, name, toggleOn = true, resultIsUndefined) {
+	sfdt.sections.forEach((section) => processSection(section, name, {}, toggleOn, resultIsUndefined));
 	return sfdt;
 }
 
