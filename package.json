@@ -1,6 +1,6 @@
 {
 	"private": false,
-	"version": "0.4.32",
+	"version": "0.4.33",
 	"name": "@zegal/sfdt-utils",
 	"description": "SFDT Utils",
 	"author": "Adam Tombleson <rekarnar@gmail.com>",
