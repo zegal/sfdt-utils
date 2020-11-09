@@ -45,30 +45,28 @@ function processParagraph(paraBlock, condition, options: inlineContext, toggleOn
 				options.withinBookmarkContext = true;
 			} else if (inline.bookmarkType == 1) {
 				//console.log('FOUND END CONDITION', condition, paraBlock)
-                if(resultIsUndefined) {    // HC ADDED
-                    options.firstTextInline.text = '[' + options.firstTextInline.text;
-                    if(options.lastTextInline) {
-                        options.lastTextInline.text = options.lastTextInline.text + ']';
-                    }
-                } else {
+				if (!resultIsUndefined) {
+					// HC ADDED - Remove [] brackets
+
 					if (!toggleOn) {
 						delete options.withinDeleteContext;
 						inline.markDelete = true;
 					}
 				}
 				delete options.withinBookmarkContext;
-                delete options.firstTextInline;
-                delete options.lastTextInline;
+				delete options.firstTextInline;
+				delete options.lastTextInline;
 			}
 		} else {
-            if(resultIsUndefined) { // HC ADDED
-                if(!options.firstTextInline && inline.text && options.withinBookmarkContext) {
-                    options.firstTextInline = inline;
-                }
-                if(inline.text)
-                    options.lastTextInline = inline;
-            }
-			if (!toggleOn && !resultIsUndefined) { // HC ADDED "&& !resultIsUndefined"
+			if (resultIsUndefined) {
+				// HC ADDED
+				if (!options.firstTextInline && inline.text && options.withinBookmarkContext) {
+					options.firstTextInline = inline;
+				}
+				if (inline.text) options.lastTextInline = inline;
+			}
+			if (!toggleOn && !resultIsUndefined) {
+				// HC ADDED "&& !resultIsUndefined"
 				if (options.withinDeleteContext) {
 					inline.markDelete = true;
 				}
@@ -117,16 +115,14 @@ function processBlock(blocks, i, condition, options, inTable, toggleOn, resultIs
 	const block = blocks[i];
 	if (block.rows) {
 		if (processTable(block, condition, options, inTable, toggleOn, resultIsUndefined)) {
-			if(!resultIsUndefined)
-				blocks.splice(i, 1);
+			if (!resultIsUndefined) blocks.splice(i, 1);
 			return true;
 		}
 	} else {
 		if (processParagraph(block, condition, options, toggleOn, resultIsUndefined)) {
 			// if inlines is empty, remove block
 			if (checkInlinesEmpty(block)) {
-				if(!resultIsUndefined)
-					blocks.splice(i, 1);
+				if (!resultIsUndefined) blocks.splice(i, 1);
 				return true;
 			}
 		}
