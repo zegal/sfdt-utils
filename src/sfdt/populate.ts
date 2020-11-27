@@ -95,14 +95,12 @@ export default (data, sfdt, prefixes = allowedPrefix, blankDataCallback) => {
 							if (inline.name === currentlyProcessing && inline.bookmarkType === 1)
 								doneProcessing[currentlyProcessing] = true;
 							else {
-								if(blankDataCallback) {
-									const blankInline: any = {};
-									blankInline.text = (blankDataCallback && blankDataCallback(currentlyProcessing, inline)) || newInline.text;
-									updateTextFormatFields(blankInline);
-									newInlines.push(blankInline);
-								} else {
-									newInlines.push(newInline);
+								if (blankDataCallback) { 
+									newInline.text = blankDataCallback(currentlyProcessing, inline);
+									updateTextFormatFields(newInline);
 								}
+								
+								newInlines.push(newInline);
 							}
 						}
 					} else {
