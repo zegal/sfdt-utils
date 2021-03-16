@@ -14,6 +14,8 @@ export default {
 		unselect: 'src/unselect.ts',
 
 		getCrossRefData: 'src/sfdt/crossReference.ts',
+		loop: 'src/sfdt/loopCondition.ts',
+
 		updateBookmarkContent: 'src/updateBookmarkContent.ts',
 		insertBookmark: 'src/insertBookmark.ts',
 		queryBookmark: 'src/queryBookmark.ts',
