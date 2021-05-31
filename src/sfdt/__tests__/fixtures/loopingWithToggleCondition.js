@@ -27,21 +27,51 @@ module.exports = {
 						{characterFormat: {bidi: false}, text: 'for first loop '},
 						{characterFormat: {}, bookmarkType: 0, name: 'DATA::1234::entity.name'},
 						{characterFormat: {bidi: false}, text: 'entity1'},
-						{characterFormat: {}, bookmarkType: 1, name: 'DATA::1234::entity.name'}
+						{characterFormat: {}, bookmarkType: 1, name: 'DATA::1234::entity.name'},
+						{
+							characterFormat: {
+								highlightColor: ''
+							},
+							bookmarkType: 0,
+							name: 'COND::showOneonOne'
+						},
+						{
+							characterFormat: {
+								bidi: false
+							},
+							text: 'One'
+						},
+						{
+							characterFormat: {
+								highlightColor: ''
+							},
+							bookmarkType: 1,
+							name: 'COND::showOneonOne'
+						},
+						{
+							characterFormat: {
+								highlightColor: ''
+							},
+							bookmarkType: 0,
+							name: 'COND::showTwoonTwo'
+						},
+						{
+							characterFormat: {
+								highlightColor: '',
+								bidi: false
+							},
+							text: 'Two'
+						},
+						{
+							characterFormat: {
+								highlightColor: ''
+							},
+							bookmarkType: 1,
+							name: 'COND::showTwoonTwo'
+						}
 					]
 				},
-				{
-					paragraphFormat: {
-						leftIndent: 36,
-						firstLineIndent: -18,
-						listFormat: {listId: 0, listLevelNumber: 0}
-					},
-					characterFormat: {},
-					inlines: [{characterFormat: {bidi: false}, text: 'for second loop '},
-          {characterFormat: {}, bookmarkType: 0, name: 'DATA::5678::entity.name'},
-          {characterFormat: {bidi: false}, text: 'entity1'},
-          {characterFormat: {}, bookmarkType: 1, name: 'DATA::5678::entity.name'}]
-				},
+
 				{
 					paragraphFormat: {
 						leftIndent: 36,

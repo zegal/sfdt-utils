@@ -1,18 +1,19 @@
 import {isNullOrUndefined} from './sfdtHelpers/utils';
 
-const debug = true;
+// const debug = true;
 
 // populate DATA in loop duplication
 // Example:
 // Bookmark: entity.name, entity.pk
 // assumption: entity is unique, so calculate it before calling this function
-// const entities = [
-// 	{name: 'name1', pk: 'pk1'},
-// 	{name: 'name2', pk: 'pk2'}
-// ];
+// const loopArrDatas = {
+//  entity: [
+// 	  {name: 'name1', pk: 'pk1'},
+// 	  {name: 'name2', pk: 'pk2'}
+// ]};
 
 /**
- * @param entities entity data from client. Sent as array of objects
+ * @param loopArrDatas looping array datas from client (to loop). Sent as obj: array of objects
  */
 
 // for any entity based name, make sure the prefix is entity; eg. entity.name, entity.passport etc.
@@ -53,11 +54,13 @@ const processInline = (inlines = [], i) => {
 };
 
 // For now loop depends on block
-export default (sfdt, entities = []) => {
+export default (sfdt, loopArrDatas = {}) => {
 	if (!sfdt) {
 		return;
 	}
 
+	// get all Object keys from loopArrDatas
+	const loopArrKeys = Object.keys(loopArrDatas);
 	sfdt.sections.forEach((section) => {
 		const loopBlocks = [];
 		const newBlocks = [];
@@ -78,12 +81,16 @@ export default (sfdt, entities = []) => {
 					dataMode = false;
 					currentlyProcessing = '';
 					loopBlocks.push(loopBlock);
-					entities.forEach((e, i) => {
-						loopBlocks.forEach((loopBlock) => {
-							const temp = JSON.parse(JSON.stringify(loopBlock));
-							newBlocks.push({...loopBlock, inlines: processInline(temp.inlines, i)});
+					const endBkKey = end && end.split('::') && end.split('::')[end.split('::').length - 1];
+					if (loopArrKeys.includes(endBkKey)) {
+						const key = loopArrDatas[endBkKey];
+						key.forEach((e, i) => {
+							loopBlocks.forEach((loopBlock) => {
+								const temp = JSON.parse(JSON.stringify(loopBlock));
+								newBlocks.push({...loopBlock, inlines: processInline(temp.inlines, i)});
+							});
 						});
-					});
+					}
 					return;
 				}
 				if (dataMode) {
@@ -91,7 +98,7 @@ export default (sfdt, entities = []) => {
 						loopBlocks.push(loopBlock);
 
 						// do this if need loop in individual block; else just add in end bk as being done currently
-						// entities.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
+						// key.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
 						doneProcessing[currentlyProcessing] = true;
 					}
 					return;
@@ -102,12 +109,12 @@ export default (sfdt, entities = []) => {
 					processing[start] = true;
 					loopBlocks.push(loopBlock);
 					// do this if need loop in individual block; else just add in end bk as being done currently
-					// entities.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
+					// key.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
 					return;
 				}
 				loopBlocks.push(loopBlock);
 			});
-		section.blocks = newBlocks;
+		section.blocks = newBlocks.length ? newBlocks : section.blocks;
 	});
 	return sfdt;
 };

@@ -109,7 +109,6 @@ const getCrossRefData = (sfdt) => {
 		};
 		return processBlock(block, callbackInline, callbackBlock);
 	});
-
 	return refData;
 };
 
