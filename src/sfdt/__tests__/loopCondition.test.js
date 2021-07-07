@@ -51,8 +51,6 @@ describe('SFDT Loop and condition Parser', function() {
 			false,
 			false
 		);
-		console.log(JSON.stringify(afterToggleDonotShowOne));
-
 		// in loopSfdt - there will be "for first loop entity1OneTwo"
 		// after toggle - "for first loop entity1Two"
 		const OneText = (obj) => obj.sections[0].blocks[0].inlines.filter((i) => i.text === 'One');
