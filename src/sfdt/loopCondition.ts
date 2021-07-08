@@ -19,6 +19,7 @@ import {block as BlockType} from '../../types/sfdt';
 
 const LOOP_PREFIX = 'LOOP::';
 const DATA_PREFIX = 'DATA::';
+const LOOP_FIELD = 'LOOP';
 
 const loopBkInInline = (i) => i.name && i.name.includes(LOOP_PREFIX);
 
@@ -38,7 +39,7 @@ const populateEntityData = (inline, index, key) => {
 	if (!isNullOrUndefined(inline.bookmarkType) && inline.name.includes(DATA_PREFIX)) {
 		// check if it is entity or not
 		// make entity object into dot object to calculate it => entity[0].name
-		inline.name = inline.name.replace(key, `${key}[${index}]`);
+		inline.name = inline.name.replace(LOOP_FIELD, `${key}[${index}]`);
 	}
 	return inline;
 };
@@ -50,7 +51,6 @@ const processInline = (inlines = [], index, key) => {
 			isLoopBk = true;
 			inlines.splice(i, 1);
 		}
-
 		populateEntityData(inline, index, key);
 	});
 
