@@ -1,25 +1,25 @@
+import get from 'lodash/get';
 import {isNullOrUndefined} from './sfdtHelpers/utils';
+
+import {block as BlockType} from '../../types/sfdt';
 
 // const debug = true;
 
 // populate DATA in loop duplication
 // Example:
 // Bookmark: entity.name, entity.pk
-// assumption: entity is unique, so calculate it before calling this function
-// const loopArrDatas = {
-//  entity: [
-// 	  {name: 'name1', pk: 'pk1'},
-// 	  {name: 'name2', pk: 'pk2'}
-// ]};
+// assumption: the data being sent includes loop bookmark in proper dot object notation. Eg. for data {parent:{child1:{child2:{data:[array]}}}}, the loop bookmark is parent.child1.child2.data i.e perfect key with array value from given object
+// const data  = normalized data in form of object
 
 /**
- * @param loopArrDatas looping array datas from client (to loop). Sent as obj: array of objects
+ * @param data looping array datas from client (to loop). Sent as obj: array of objects
  */
 
 // for any entity based name, make sure the prefix is entity; eg. entity.name, entity.passport etc.
 
 const LOOP_PREFIX = 'LOOP::';
 const DATA_PREFIX = 'DATA::';
+const LOOP_FIELD = 'LOOP';
 
 const loopBkInInline = (i) => i.name && i.name.includes(LOOP_PREFIX);
 
@@ -35,32 +35,40 @@ const loopBkInBlock = (block: any, flag = 0) => {
 };
 
 // For inline DATA fields. populate sfdt bookmark correctly; and then populate function will be used to correctly populate info
-const populateEntityData = (inline, i) => {
+const populateEntityData = (inline, index, key) => {
 	if (!isNullOrUndefined(inline.bookmarkType) && inline.name.includes(DATA_PREFIX)) {
 		// check if it is entity or not
 		// make entity object into dot object to calculate it => entity[0].name
-		inline.name = inline.name.replace('entity.', `entity[${i}].`);
+		inline.name = inline.name.replace(LOOP_FIELD, `${key}[${index}]`);
 	}
 	return inline;
 };
-const processInline = (inlines = [], i) => {
+const processInline = (inlines = [], index, key) => {
 	// also remove loop inline
-	inlines.forEach((inline, index) => {
-		if (loopBkInInline(inline)) inlines.splice(index, 1);
-
-		populateEntityData(inline, i);
+	let isLoopBk = false;
+	inlines.forEach((inline, i) => {
+		if (loopBkInInline(inline)) {
+			isLoopBk = true;
+			inlines.splice(i, 1);
+		}
+		populateEntityData(inline, index, key);
 	});
-	return inlines;
+
+	return {inlines, isLoopBk};
 };
 
+const processBlock = (block: BlockType, index, key) => {
+	const temp = JSON.parse(JSON.stringify(block));
+	// note that if block has only 1 inline with loop bookmark, then we need to remove the block- as in processInline, we remove loop inline, and since there is only loop bk, inline will return [] which will give line break in sfdt
+	const {inlines, isLoopBk} = processInline(temp.inlines, index, key);
+	if (isLoopBk && (!inlines || !inlines.length)) return;
+	return {...block, inlines};
+};
 // For now loop depends on block
-export default (sfdt, loopArrDatas = {}) => {
+export default (sfdt, data = {}) => {
 	if (!sfdt) {
 		return;
 	}
-
-	// get all Object keys from loopArrDatas
-	const loopArrKeys = Object.keys(loopArrDatas);
 	sfdt.sections.forEach((section) => {
 		const loopBlocks = [];
 		const newBlocks = [];
@@ -82,12 +90,12 @@ export default (sfdt, loopArrDatas = {}) => {
 					currentlyProcessing = '';
 					loopBlocks.push(loopBlock);
 					const endBkKey = end && end.split('::') && end.split('::')[end.split('::').length - 1];
-					if (loopArrKeys.includes(endBkKey)) {
-						const key = loopArrDatas[endBkKey];
-						key.forEach((e, i) => {
+					const loopData: any = get(data, endBkKey);
+					if (loopData) {
+						loopData.forEach((_, i) => {
 							loopBlocks.forEach((loopBlock) => {
-								const temp = JSON.parse(JSON.stringify(loopBlock));
-								newBlocks.push({...loopBlock, inlines: processInline(temp.inlines, i)});
+								const block = processBlock(loopBlock, i, endBkKey);
+								if (block) newBlocks.push(block);
 							});
 						});
 					}
@@ -112,7 +120,7 @@ export default (sfdt, loopArrDatas = {}) => {
 					// key.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
 					return;
 				}
-				loopBlocks.push(loopBlock);
+				newBlocks.push(loopBlock);
 			});
 		section.blocks = newBlocks.length ? newBlocks : section.blocks;
 	});
