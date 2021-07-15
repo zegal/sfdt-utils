@@ -46,14 +46,14 @@ const populateEntityData = (inline, index, key) => {
 const processInline = (inlines = [], index, key) => {
 	// also remove loop inline
 	let isLoopBk = false;
-	inlines.forEach((inline, i) => {
+	inlines = inlines.filter(function(inline, i) {
+		populateEntityData(inline, index, key);
 		if (loopBkInInline(inline)) {
 			isLoopBk = true;
-			inlines.splice(i, 1);
+			return false;
 		}
-		populateEntityData(inline, index, key);
+		return true;
 	});
-
 	return {inlines, isLoopBk};
 };
 
@@ -89,6 +89,7 @@ export default (sfdt, data = {}) => {
 					dataMode = false;
 					currentlyProcessing = '';
 					loopBlocks.push(loopBlock);
+
 					const endBkKey = end && end.split('::') && end.split('::')[end.split('::').length - 1];
 					const loopData: any = get(data, endBkKey);
 					if (loopData) {

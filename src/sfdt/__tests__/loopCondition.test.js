@@ -22,10 +22,13 @@ const dottedEntities = {
 describe('SFDT Loop Parser', function() {
 	test('loop condition', function() {
 		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingCondition)), entities);
-
 		// check if loop bk is removed
 		// console.log(loopSfdt);
 		expect(loopSfdt.sections[0].blocks[0].inlines[0].bookmarkType).toBeUndefined();
+		// change LOOP to entity.name with proper index
+		expect(loopSfdt.sections[0].blocks[0].inlines[1].name).toEqual(
+			loopSfdt.sections[0].blocks[0].inlines[1].name.replace('LOOP', 'entity[1].name')
+		);
 		// the block is looped 2 times as same as entity.length
 		expect(loopSfdt.sections[0].blocks.length).toEqual(
 			entities['entity'].length * loopingCondition.sections[0].blocks.length

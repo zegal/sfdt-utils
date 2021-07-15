@@ -25,9 +25,9 @@ module.exports = {
 					inlines: [
 						{characterFormat: {}, bookmarkType: 0, name: 'LOOP::1c300d80-8143-47d6-b771-0836ea44d6ac::entity'},
 						{characterFormat: {bidi: false}, text: 'for first loop '},
-						{characterFormat: {}, bookmarkType: 0, name: 'DATA::1234::entity.name'},
-						{characterFormat: {bidi: false}, text: 'entity1'},
-						{characterFormat: {}, bookmarkType: 1, name: 'DATA::1234::entity.name'},
+						{characterFormat: {}, bookmarkType: 0, name: 'DATA::1234::LOOP.name'},
+						{characterFormat: {bidi: false}, text: 'entity1name'},
+						{characterFormat: {}, bookmarkType: 1, name: 'DATA::1234::LOOP.name'},
 						{
 							characterFormat: {
 								highlightColor: ''
