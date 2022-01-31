@@ -99,7 +99,7 @@ export default (sfdt, data = {}) => {
 								if (block) newBlocks.push(block);
 							});
 						});
-					}
+					} else newBlocks.push(block); // if not done this, then if no data is sent, whole block gets removed. We may need to still show the block with no data like ____ of ____
 					return;
 				}
 				if (dataMode) {
