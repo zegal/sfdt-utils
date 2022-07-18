@@ -60,8 +60,16 @@ const processInline = (inlines = [], index, key) => {
 const processBlock = (block: BlockType, index, key) => {
 	const temp = JSON.parse(JSON.stringify(block));
 	// note that if block has only 1 inline with loop bookmark, then we need to remove the block- as in processInline, we remove loop inline, and since there is only loop bk, inline will return [] which will give line break in sfdt
+	// apparently if we need specific line break then we need to do it. Such case is when listCondition is given with -1 itself
 	const {inlines, isLoopBk} = processInline(temp.inlines, index, key);
-	if (isLoopBk && (!inlines || !inlines.length)) return;
+	if (isLoopBk && (!inlines || !inlines.length)) {
+		const blockParagraphFormat = get(block, 'paragraphFormat');
+		const listFormat = get(blockParagraphFormat, 'listFormat');
+		if (listFormat && listFormat.listId < 0) {
+		} else {
+			return;
+		}
+	}
 	return {...block, inlines};
 };
 // For now loop depends on block
