@@ -2,6 +2,7 @@ import loopCondition from '../loopCondition';
 import populate from '../populate';
 import toggleBookmark from '../toggleBookmark';
 import loopingCondition from './fixtures/loopingCondition';
+import loopingMultipleLoops from './fixtures/loopingMultipleLoops';
 import loopingWithToggleCondition from './fixtures/loopingWithToggleCondition';
 
 const entities = {
@@ -19,6 +20,20 @@ const dottedEntities = {
 	'entity[0].name': 'entity1',
 	'entity[1].name': 'entity2'
 };
+
+const multipleLoopData = {
+	customer: {
+		details: [
+			{name: 'anki', address: 'pkr'},
+			{name: 'shar', address: 'par'}
+		]
+	},
+	seller_details: [
+		{name1: 'tanki', address1: 'ktm'},
+		{name1: 'tar', address1: 'ptm'}
+	]
+};
+
 describe('SFDT Loop Parser', function() {
 	test('loop condition', function() {
 		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingCondition)), entities);
@@ -59,5 +74,12 @@ describe('SFDT Loop and condition Parser', function() {
 		const OneText = (obj) => obj.sections[0].blocks[0].inlines.filter((i) => i.text === 'One');
 		expect(OneText(loopSfdt)[0].text).toEqual('One');
 		expect(OneText(afterToggleDonotShowOne)[0]).toBeUndefined;
+	});
+});
+
+describe('Multiple Loop and condition Parser', function() {
+	test('multiple loop with toggle condition', function() {
+		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingMultipleLoops)), multipleLoopData);
+		expect(loopSfdt.sections[0].blocks.length).toBe(5);
 	});
 });

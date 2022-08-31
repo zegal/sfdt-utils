@@ -78,7 +78,7 @@ export default (sfdt, data = {}) => {
 		return;
 	}
 	sfdt.sections.forEach((section) => {
-		const loopBlocks = [];
+		let loopBlocks = [];
 		const newBlocks = [];
 		let dataMode = false;
 		const processing = {};
@@ -95,6 +95,7 @@ export default (sfdt, data = {}) => {
 				if (end) {
 					processing[end] = false;
 					dataMode = false;
+					if (currentlyProcessing !== end) loopBlocks = [];
 					currentlyProcessing = '';
 					loopBlocks.push(loopBlock);
 
