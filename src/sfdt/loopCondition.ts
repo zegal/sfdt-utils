@@ -44,7 +44,7 @@ const populateEntityData = (inline, index, key) => {
 	return inline;
 };
 const processInline = (inlines = [], index, key) => {
-	// also remove loop inline
+	// also remove loop inline if with text but if only 1 inline - loop inline, that is also line break so not to remove it
 	let isLoopBk = false;
 	inlines = inlines.filter(function(inline, i) {
 		populateEntityData(inline, index, key);
@@ -60,9 +60,9 @@ const processInline = (inlines = [], index, key) => {
 const processBlock = (block: BlockType, index, key) => {
 	const temp = JSON.parse(JSON.stringify(block));
 	// note that if block has only 1 inline with loop bookmark, then we need to remove the block- as in processInline, we remove loop inline, and since there is only loop bk, inline will return [] which will give line break in sfdt
-	// apparently if we need specific line break then we need to do it. Such case is when listCondition is given with -1 itself
+	// apparently if we need specific line break then we need to do it. Such case is when listCondition is given with -1 itself, or when the inline is only loop bookmark
 	const {inlines, isLoopBk} = processInline(temp.inlines, index, key);
-	if (isLoopBk && (!inlines || !inlines.length)) {
+	if (isLoopBk && !inlines) {
 		const blockParagraphFormat = get(block, 'paragraphFormat');
 		const listFormat = get(blockParagraphFormat, 'listFormat');
 		if (listFormat && listFormat.listId < 0) {
@@ -70,6 +70,7 @@ const processBlock = (block: BlockType, index, key) => {
 			return;
 		}
 	}
+
 	return {...block, inlines};
 };
 // For now loop depends on block
@@ -86,7 +87,7 @@ export default (sfdt, data = {}) => {
 		let currentlyProcessing;
 		section.blocks &&
 			section.blocks.length &&
-			section.blocks.forEach((block) => {
+			section.blocks.forEach((block, i) => {
 				const loopBlock = {...block};
 
 				// containes loop bookmark start
@@ -125,6 +126,7 @@ export default (sfdt, data = {}) => {
 					dataMode = true;
 					currentlyProcessing = start;
 					processing[start] = true;
+					if (currentlyProcessing === start) loopBlocks = [];
 					loopBlocks.push(loopBlock);
 					// do this if need loop in individual block; else just add in end bk as being done currently
 					// key.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));

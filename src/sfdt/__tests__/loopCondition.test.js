@@ -4,6 +4,7 @@ import toggleBookmark from '../toggleBookmark';
 import loopingCondition from './fixtures/loopingCondition';
 import loopingMultipleLoops from './fixtures/loopingMultipleLoops';
 import loopingWithToggleCondition from './fixtures/loopingWithToggleCondition';
+import loopingMultipleLoopsForDiffBlock from './fixtures/loopingMultipleLoopsForDiffBlock';
 
 const entities = {
 	entity: [
@@ -19,6 +20,10 @@ const entities = {
 const dottedEntities = {
 	'entity[0].name': 'entity1',
 	'entity[1].name': 'entity2'
+};
+
+const multipleLoopDataForDiffBlock = {
+	testing: {one: [{name: 'uiuiui', address: 'uiuiui999'}], two: [{nameOne: 'er', addressOne: 'er4'}]}
 };
 
 const multipleLoopData = {
@@ -80,6 +85,17 @@ describe('SFDT Loop and condition Parser', function() {
 describe('Multiple Loop and condition Parser', function() {
 	test('multiple loop with toggle condition', function() {
 		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingMultipleLoops)), multipleLoopData);
+		// console.log(JSON.stringify(loopSfdt));
 		expect(loopSfdt.sections[0].blocks.length).toBe(5);
+	});
+	test('multiple loop with different block bookmark', function() {
+		const loopSfdt = loopCondition(
+			JSON.parse(JSON.stringify(loopingMultipleLoopsForDiffBlock)),
+			multipleLoopDataForDiffBlock
+		);
+		// console.log(JSON.stringify(loopSfdt));
+		const blocklength = loopSfdt.sections[0].blocks.length;
+		expect(loopSfdt.sections[0].blocks[blocklength - 2].inlines).toBeDefined;
+		expect(loopSfdt.sections[0].blocks[blocklength - 2].inlines.length).toBe(0);
 	});
 });
