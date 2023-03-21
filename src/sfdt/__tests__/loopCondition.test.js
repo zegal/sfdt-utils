@@ -5,6 +5,7 @@ import loopingCondition from './fixtures/loopingCondition';
 import loopingMultipleLoops from './fixtures/loopingMultipleLoops';
 import loopingWithToggleCondition from './fixtures/loopingWithToggleCondition';
 import loopingMultipleLoopsForDiffBlock from './fixtures/loopingMultipleLoopsForDiffBlock';
+import loopingWithLineBreak from './fixtures/loopingWithLineBreak';
 
 const entities = {
 	entity: [
@@ -39,6 +40,38 @@ const multipleLoopData = {
 	]
 };
 
+const lineBreakLoopData = {
+	subsidiaries: {
+		table: [
+			{
+				name: 'hjhj',
+				dateOfIncorporation: '',
+				registrationNumber: '5656',
+				authorisedShareCapital: '',
+				issuedShareCapital: '',
+				mainShareholders: '',
+				registeredAddress: '',
+				directors: '',
+				secretary: '',
+				accountingReferenceDate: '',
+				riskFinanceInformation: ''
+			},
+			{
+				name: 'jk',
+				dateOfIncorporation: '',
+				registrationNumber: '89',
+				authorisedShareCapital: '',
+				issuedShareCapital: '',
+				mainShareholders: '',
+				registeredAddress: '',
+				directors: '',
+				secretary: '',
+				accountingReferenceDate: '',
+				riskFinanceInformation: ''
+			}
+		]
+	}
+};
 describe('SFDT Loop Parser', function() {
 	test('loop condition', function() {
 		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingCondition)), entities);
@@ -97,5 +130,15 @@ describe('Multiple Loop and condition Parser', function() {
 		const blocklength = loopSfdt.sections[0].blocks.length;
 		expect(loopSfdt.sections[0].blocks[blocklength - 2].inlines).toBeDefined;
 		expect(loopSfdt.sections[0].blocks[blocklength - 2].inlines.length).toBe(0);
+	});
+});
+
+describe('Loop with line break', function() {
+	test('Loop with line break to include all blocks', function() {
+		const loopSfdt = loopCondition(JSON.parse(JSON.stringify(loopingWithLineBreak)), lineBreakLoopData);
+		const blocklengthAfter = loopSfdt.sections[0].blocks.length - 3;
+		// in given example, there are 3 blocks not inside loop so we subtract 3 from length
+		const blocklengthBefore = loopingWithLineBreak.sections[0].blocks.length - 3;
+		expect(blocklengthAfter).toEqual(blocklengthBefore * 2);
 	});
 });
