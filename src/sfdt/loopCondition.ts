@@ -65,8 +65,7 @@ const processBlock = (block: BlockType, index, key) => {
 	if (isLoopBk && !inlines) {
 		const blockParagraphFormat = get(block, 'paragraphFormat');
 		const listFormat = get(blockParagraphFormat, 'listFormat');
-		if (listFormat && listFormat.listId < 0) {
-		} else {
+		if (!(listFormat && listFormat.listId < 0)) {
 			return;
 		}
 	}
