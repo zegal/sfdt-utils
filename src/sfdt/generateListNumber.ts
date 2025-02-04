@@ -22,7 +22,7 @@ export function getFullListLevelText(levels: Map<any, any>): string {
 		const {format, number} = level;
 		const {numberFormat} = format;
 		// placeHolder is a collection of format placeHolder "%1" (without it's format- dot or braces), to know how many list levels does a numberFormat contain (%1.%2...)
-		const placeHolder = numberFormat.match(/%\d/g);
+		const placeHolder = (typeof numberFormat === 'string') ? numberFormat.match(/%\d/g) : null;
 		// if matched, returns array else null. If null, skip
 		if (placeHolder) {
 			/*if multiple placeHolders, need to remove the prev calculated level
