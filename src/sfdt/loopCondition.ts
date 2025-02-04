@@ -112,12 +112,11 @@ export default (sfdt, data = {}) => {
 					return;
 				}
 				if (dataMode) {
-					if (!doneProcessing[currentlyProcessing]) {
+					if (processing[currentlyProcessing]) {
 						loopBlocks.push(loopBlock);
 
 						// do this if need loop in individual block; else just add in end bk as being done currently
 						// key.forEach((e, i) => loopBlocks.push(processInline(loopBlock.inlines, i)));
-						doneProcessing[currentlyProcessing] = true;
 					}
 					return;
 				}
